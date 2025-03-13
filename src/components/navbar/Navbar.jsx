@@ -13,7 +13,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false); // Mobile menu state
 
   return (
-    <nav className="bg-blue-600 text-white p-4">
+    <nav className=" text-white shadow-2xl h-20">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left: Logo + Website Name */}
         <Link href="/" className="flex items-center space-x-2 text-lg font-bold">
@@ -48,9 +48,9 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold flex items-center space-x-2"
+              className=" t px-4 py-2 rounded-lg font-semibold flex items-center space-x-2"
             >
-              <FaUserCircle className="text-2xl" /> <span>Login / SignUp</span>
+              <FaUserCircle className="text-2xl" /> <span>Login</span>
             </Link>
           )}
         </div>

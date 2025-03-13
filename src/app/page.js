@@ -1,10 +1,10 @@
 
-import Image from "next/image";
+import HomePageContainer from "@/components/home/HomePageContainer";
 
 export default function Home() {
   return (
     <div>
-      <h1>Home</h1>
+     <HomePageContainer />
 
     </div>
   );
