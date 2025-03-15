@@ -28,14 +28,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>
+      <body
+        className={`${poppins.variable} antialiased flex flex-col min-h-screen`}
+      >
         <Providers>
-          <div className="bg-[#18191b]">
-            <div className="container mx-auto">
+          <div className="bg-[#18191b] flex flex-col flex-grow">
+            <div className="container mx-auto flex-1">
               <Navbar />
-              <main className="h-[calc(100vh-80px)]">{children}</main>
-              {/* <Footer /> */}
+              <main className="mt-24">{children}</main>
             </div>
+            <Footer />
           </div>
         </Providers>
       </body>
