@@ -156,3 +156,9 @@ color:#A3A3A3F5
 }
 
 
+h1, h2, h3 {
+  font-family: var(--font-geist-mono);
+}
+
+
+

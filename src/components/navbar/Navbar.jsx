@@ -11,7 +11,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-gray-900 text-white fixed w-full top-0 left-0 shadow-lg z-50">
+    <nav className=" text-white fixed w-full top-0 left-0 shadow-lg z-50">
       <div className="container mx-auto flex justify-between items-center h-20 px-4">
         {/* Left: Logo */}
         <Link

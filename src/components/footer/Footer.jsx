@@ -5,9 +5,9 @@ import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <footer className=" text-white py-12">
+    <footer className="bg-[#0F201C99] text-white py-12">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Categories Section */}
           <div>
             <Image
@@ -72,7 +72,7 @@ const Footer = () => {
 
           {/* Stay Updated Section */}
           <div
-            className="bg-cover bg-center p-8 h-64"
+            className="bg-cover bg-center  h-64"
             style={{ backgroundImage: "url(/assests/footerPic.png)" }}
           >
             <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
