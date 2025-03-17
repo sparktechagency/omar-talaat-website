@@ -69,7 +69,7 @@ export default function Navbar() {
         {/* Right: Cart Icon & Profile Icon */}
         <div className="flex items-center space-x-4 relative">
           <Link href="/cart" className="text-2xl">
-            <FaShoppingCart />
+            <FaShoppingCart size={28}/>
           </Link>
 
           {/* Profile Dropdown */}
@@ -78,7 +78,7 @@ export default function Navbar() {
               className="text-2xl"
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             >
-              <FaUserCircle />
+              <FaUserCircle size={40}/>
             </button>
             {isProfileOpen && (
               <div className="absolute right-0 mt-2 w-60 border-2 border-[#2E2E2EF5] bg-[#222] text-white shadow-md rounded-md">

@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { Button } from "../ui/button";
-import image15 from "../.../../../../public/assests/banner-bg.jpg";
-import banner from "../.../../../../public/assests/banner.jpg";
+import banner from "../.../../../../public/assests/banner1.png";
+import banner1 from "../.../../../../public/assests/banner.png";
 
 export default function Banner() {
   return (
@@ -11,7 +11,7 @@ export default function Banner() {
       {/* Background Image */}
       <div className="relative w-full h-full overflow-hidden rounded-b-[50px]">
         <Image
-          src={image15}
+          src={banner1}
           alt="Banner Image"
           layout="fill"
           objectFit="cover"

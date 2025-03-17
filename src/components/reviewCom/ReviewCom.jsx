@@ -4,21 +4,37 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Star } from "lucide-react";
+import { toast } from "sonner"; // ✅ Sonner Toast
 
 export default function ReviewCom() {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
 
+  // Handle review submission
+  const handleSubmit = () => {
+    if (!rating || !review) {
+      toast.error("❌ Please provide a rating and review.");
+      return;
+    }
+
+    toast.success("✅ Review submitted successfully!");
+
+    setRating(0);
+    setReview("");
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-[#121212] p-4">
-      <Card className="w-full max-w-lg bg-[#1E1E1E] text-white border border-gray-700 shadow-lg">
+    <div className="flex justify-center items-center mt-28 mb-10">
+      <Card className="w-full max-w-lg bg-[#222] text-white border border-[#2E2E2EF5] shadow-lg">
         <CardHeader className="text-center">
-          <CardTitle className="text-lg font-bold">Review</CardTitle>
+          <CardTitle className="text-lg font-bold">
+            Give Your Feedback
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {/* Rating Summary */}
           <div className="text-center mb-4">
-            <p className="text-3xl font-bold">4.8 ★</p>
+            <p className="text-3xl font-bold text-yellow-400">4.8 ★</p>
             <p className="text-gray-400 text-sm">
               1,64,002 Ratings & 5,922 Reviews
             </p>
@@ -42,7 +58,7 @@ export default function ReviewCom() {
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}
-                className={`w-8 h-8 cursor-pointer ${
+                className={`w-8 h-8 cursor-pointer transition-all duration-200 ${
                   star <= rating ? "text-yellow-400" : "text-gray-500"
                 }`}
                 onClick={() => setRating(star)}
@@ -57,15 +73,15 @@ export default function ReviewCom() {
             </label>
             <Textarea
               placeholder="Your review"
-              className="bg-[#2A2A2A] border border-gray-600 text-white"
-              rows={4}
+              className="bg-[#00000040] border border-[#2E2E2EF5] text-white min-h-32"
+           
               value={review}
               onChange={(e) => setReview(e.target.value)}
             />
           </div>
 
           {/* Submit Button */}
-          <Button className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold">
+          <Button onClick={handleSubmit} className="w-full bg-button mt-6 h-12">
             Send Review
           </Button>
         </CardContent>
