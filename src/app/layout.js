@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
           <div className="bg-[#18191b] flex flex-col flex-grow">
             <div className="container mx-auto flex-1">
               <Navbar />
-              <main className="mt-24">{children}</main>
+              <main className="mt-20">{children}</main>
             </div>
             <Footer />
           </div>
