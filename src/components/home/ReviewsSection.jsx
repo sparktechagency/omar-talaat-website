@@ -61,7 +61,7 @@ function StarIcon(props) {
 
 export default function ReviewsSection() {
   return (
-    <section className="py-12 mx-6 md:mx-16 lg:mx-24 xl:mx-32 2xl:mx-40 text-white ">
+    <section className="py-12 mx-2 md:mx-16 lg:mx-24 xl:mx-32 2xl:mx-40 text-white ">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-8">
           What Are People Saying About Peace Haven

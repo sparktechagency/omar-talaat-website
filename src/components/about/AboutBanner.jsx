@@ -30,12 +30,12 @@ export default function AboutBanner() {
             className="rounded-lg"
           />
           {/* Second Image - Positioned relative to the first image */}
-          <div className="absolute bottom-10 -right-8 md-right-16 lg:right-24">
+          <div className="absolute bottom-2 -right-0 md-right-16 lg:right-32">
             <Image
               src="/assests/aboutPage2.png"
               alt="Image 2"
-              height={150}
-              width={200}
+              height={120}
+              width={150}
               objectFit="cover"
               className="rounded-full"
             />

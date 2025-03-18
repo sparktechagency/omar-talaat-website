@@ -92,7 +92,6 @@ export default function ProductsList() {
     });
   };
 
-
   // Filter products by selected criteria
   const filteredProducts = products.filter((product) => {
     const matchesPotency =
@@ -112,154 +111,153 @@ export default function ProductsList() {
   });
 
   return (
-    <div className=" text-white min-h-screen ">
-      <div className="">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Showing All Product</h2>
-          {/* Sorting */}
-          <div className="mb-4">
-            <h3 className="mb-2">Sort By:</h3>
-            <Select defaultValue={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48 bg-black border-gray-700">
-                <SelectValue placeholder="Sort By" />
-              </SelectTrigger>
-              <SelectContent className="bg-black text-white border-gray-700">
-                <SelectItem value="popularity">Popularity</SelectItem>
-                <SelectItem value="price-low">Price: Low to High</SelectItem>
-                <SelectItem value="price-high">Price: High to Low</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        {/* Filtering and Sorting Section */}
-        <div className="mb-8 flex justify-between">
-          {/* View Section */}
-          <div className="mb-4">
-            <h3 className="mb-2">View:</h3>
-            <div className="flex space-x-2">
-              <Button
-                className={`bg-black border ${
-                  gridCols === 3 ? "border-2" : "border"
-                }`}
-                onClick={() => setGridCols(3)}
-              >
-                3
-              </Button>
-              <Button
-                className={`bg-black border ${
-                  gridCols === 4 ? "border-2" : "border"
-                }`}
-                onClick={() => setGridCols(4)}
-              >
-                4
-              </Button>
-            </div>
-          </div>{" "}
-          {/* ✅ Closed "View Section" div */}
-          {/* Potency Filter */}
-          <div className="mb-4">
-            <h3 className="mb-2">Filter by Potency:</h3>
-            <div className="flex space-x-2">
-              {potencyOptions.map((potency) => (
-                <Button
-                  key={potency}
-                  className={`bg-black border ${
-                    filteredPotency === potency ? "border-2" : "border"
-                  }`}
-                  onClick={() =>
-                    setFilteredPotency(
-                      filteredPotency === potency ? null : potency
-                    )
-                  }
-                >
-                  {potency}
-                </Button>
-              ))}
-            </div>
-          </div>
-          {/* Mood Tags Filter */}
-          <div className="mb-4">
-            <h3 className="mb-2">Filter by Mood:</h3>
-            <div className="flex flex-wrap gap-2">
-              {allMoodTags.map((tag) => (
-                <Button
-                  key={tag}
-                  className={`bg-black border ${
-                    selectedMoodTags.includes(tag) ? "border-2" : "border"
-                  }`}
-                  onClick={() => toggleMoodTag(tag)}
-                >
-                  {tag}
-                </Button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Product Grid */}
+    <div className="text-white min-h-screen">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold">Showing All Products</h2>
+        {/* Sorting */}
         <div>
-          <h2 className="text-xl font-bold mb-4">Products</h2>
-          <div
-            className={`grid grid-cols-1 sm:grid-cols-2 lg:${
-              gridCols === 3 ? "grid-cols-3 gap-10" : "grid-cols-4"
-            } gap-6`}
-          >
-            {sortedProducts.map((product) => (
-              <Link
-                href={`/shop/${product.id}`}
-                key={product.id}
-                className="block"
+          <h3 className="mb-2">Sort By:</h3>
+          <Select defaultValue={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-48 bg-black border-gray-700">
+              <SelectValue placeholder="Sort By" />
+            </SelectTrigger>
+            <SelectContent className="bg-black text-white border-gray-700">
+              <SelectItem value="popularity">Popularity</SelectItem>
+              <SelectItem value="price-low">Price: Low to High</SelectItem>
+              <SelectItem value="price-high">Price: High to Low</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Filtering Section */}
+      <div className="mb-8 flex justify-between items-start">
+        {/* View Section */}
+        <div className="mb-4">
+          <h3 className="mb-2">View:</h3>
+          <div className="flex space-x-2">
+            <Button
+              className={`bg-black border ${
+                gridCols === 3 ? "border-2" : "border"
+              }`}
+              onClick={() => setGridCols(3)}
+            >
+              3
+            </Button>
+            <Button
+              className={`bg-black border ${
+                gridCols === 4 ? "border-2" : "border"
+              }`}
+              onClick={() => setGridCols(4)}
+            >
+              4
+            </Button>
+          </div>
+        </div>
+
+        {/* Potency Filter */}
+        <div className="mb-4">
+          <h3 className="mb-2">Filter by Potency:</h3>
+          <div className="flex space-x-2">
+            {potencyOptions.map((potency) => (
+              <Button
+                key={potency}
+                className={`bg-black border ${
+                  filteredPotency === potency ? "border-2" : "border"
+                }`}
+                onClick={() =>
+                  setFilteredPotency(
+                    filteredPotency === potency ? null : potency
+                  )
+                }
               >
-                <div className="rounded-lg overflow-hidden border-2 border-[#2E2E2EF5] transition-all">
-                  <div className="relative">
-                    {/* Mood Tags */}
-                    <div className="absolute top-2 left-2 z-10">
-                      {product.moodTags.map((tag) => (
-                        <Badge key={tag} className="mr-2">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
+                {potency}
+              </Button>
+            ))}
+          </div>
+        </div>
 
-                    {/* Sold Out Badge */}
-                    {!product.inStock && (
-                      <div className="absolute top-2 right-2 bg-white text-black px-2 py-1 text-xs font-bold rounded">
-                        SOLD OUT
-                      </div>
-                    )}
+        {/* Mood Tags Filter */}
+        <div className="mb-4">
+          <h3 className="mb-2">Filter by Mood:</h3>
+          <div className="flex flex-wrap gap-2">
+            {allMoodTags.map((tag) => (
+              <Button
+                key={tag}
+                className={`bg-black border ${
+                  selectedMoodTags.includes(tag) ? "border-2" : "border"
+                }`}
+                onClick={() => toggleMoodTag(tag)}
+              >
+                {tag}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-                    {/* Product Image */}
-                    <div className="aspect-square flex items-center justify-center">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        height={150}
-                        width={300}
-                        className="w-full rounded-xl object-contain"
-                        
-                      />
-                    </div>
+      {/* Product Grid */}
+      <div>
+        <h2 className="text-xl font-bold mb-4">Products</h2>
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:${
+            gridCols === 3 ? "grid-cols-3 gap-10" : "grid-cols-4"
+          } gap-6`}
+        >
+          {sortedProducts.map((product) => (
+            <Link
+              href={`/shop/${product.id}`}
+              key={product.id}
+              className="block"
+            >
+              <div className="rounded-lg overflow-hidden border-2 border-[#2E2E2EF5] transition-all">
+                <div className="relative">
+                  {/* Mood Tags */}
+                  <div className="absolute top-2 left-2 z-10">
+                    {product.moodTags.map((tag) => (
+                      <Badge key={tag} className="mr-2">
+                        {tag}
+                      </Badge>
+                    ))}
                   </div>
 
-                  {/* Product Details */}
-                  <div className="px-4 py-2">
-                    <h3 className="text-lg font-medium">{product.name}</h3>
-                    <p className="text-sm text-gray-400 line-clamp-3">
-                      {product.description}
-                    </p>
-                    <div className="flex justify-between items-center mt-2">
-                      <div className="text-lg font-bold">
-                        ${product.price.toFixed(2)}
-                      </div>
-                      <div className="text-sm text-gray-400">
-                        {product.potency}
-                      </div>
+                  {/* Sold Out Badge */}
+                  {!product.inStock && (
+                    <div className="absolute top-2 right-2 bg-white text-black px-2 py-1 text-xs font-bold rounded">
+                      SOLD OUT
+                    </div>
+                  )}
+
+                  {/* Product Image */}
+                  <div className="aspect-square flex items-center justify-center">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      height={150}
+                      width={300}
+                      className="w-full rounded-xl object-contain"
+                    />
+                  </div>
+                </div>
+
+                {/* Product Details */}
+                <div className="px-4 py-2">
+                  <h3 className="text-lg font-medium">{product.name}</h3>
+                  <p className="text-sm text-gray-400 line-clamp-3">
+                    {product.description}
+                  </p>
+                  <div className="flex justify-between items-center mt-2">
+                    <div className="text-lg font-bold">
+                      ${product.price.toFixed(2)}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {product.potency}
                     </div>
                   </div>
                 </div>
-              </Link>
-            ))}
-          </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import Banner  from './Banner'
 const HomePageContainer = () => {
   return (
     <div>
-      <Banner />
+      {/* <Banner /> */}
       <Products />
       <OurShop />
       <ReviewsSection />

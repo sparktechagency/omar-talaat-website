@@ -48,20 +48,20 @@ export default function FAQSection() {
           <Image
             src={image15}
             alt="Image 1"
-            height={400}
-            width={500}
+            height={200}
+            width={200}
             objectFit="cover"
-            className="rounded-lg"
+            className="rounded-lg w-80 h-80 md:w-[550px] md:h-[550px] "
           />
           {/* Second Image - Positioned relative to the first image */}
           <div className="absolute top-24 -right-8 md-right-16 lg:-right-32">
             <Image
               src={image5}
               alt="Image 2"
-              height={350}
-              width={400}
+              height={200}
+              width={200}
               objectFit="cover"
-              className="rounded-lg"
+              className="rounded-lg w-60 h-48 md:w-96 md:h-80"
             />
           </div>
         </div>

@@ -54,19 +54,35 @@ const products = [
     category: "Hybrid",
     image: "/assests/fresh-food.jpg",
   },
+  {
+    id: 7,
+    name: "Indica Bliss",
+    price: "$50",
+    rating: 4.5,
+    category: "Indica",
+    image: "/assests/image5.png",
+  },
+  {
+    id: 8,
+    name: "Sativa Sunrise",
+    price: "$60",
+    rating: 4.7,
+    category: "Sativa",
+    image: "/assests/fresh-food.jpg",
+  },
 ];
 
 export default function Products() {
-//   const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleAddToCart = (product) => {
     // dispatch(addToCart(product));
   };
 
   return (
-    <section className="py-12">
+    <section className="py-12 bg-gray-800">
       <div className="container mx-auto px-4">
-        <div className="w-[550px] text-center mx-auto mb-10">
+        <div className="w-full text-center mx-auto mb-10">
           <h2 className="text-3xl font-bold text-center mb-8 text-white">
             All Products
           </h2>
@@ -75,20 +91,21 @@ export default function Products() {
             quality, potency, variety, and an exceptional experience.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <Card
               key={product.id}
               className="p-4 shadow-lg rounded-xl bg-transparent"
             >
               <div className="relative">
-                <div>
+                <div className="overflow-hidden">
                   <Image
                     src={product.image}
                     alt={product.name}
                     height={200}
                     width={200}
-                    className="w-2/3 h-60 object-cover rounded-full mx-auto"
+                    className="w-full h-60 object-cover rounded-lg mx-auto"
+                    priority={product.id === 1}
                   />
                 </div>
                 <p className="text-xl font-bold mt-2 absolute top-5 right-5 text-white">
