@@ -102,6 +102,15 @@ const similarProducts = [
     potency: "Medium",
     inStock: false,
   },
+  {
+    id: 5,
+    name: "Zkittles",
+    price: 107.57,
+    image: "/assests/ourShop3.png",
+    moodTags: ["Happy"],
+    potency: "Medium",
+    inStock: false,
+  },
 ];
 
 export default function ProductDetails({ params }) {
@@ -118,7 +127,7 @@ export default function ProductDetails({ params }) {
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   return (
-    <div className=" text-white mb-10 ">
+    <div className=" text-white mb-10 md:mt-32">
      
   
 
@@ -127,7 +136,7 @@ export default function ProductDetails({ params }) {
        
 
         {/* Product Details */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-4">
           {/* Product Images */}
           <div className="space-y-4">
             <div className="  rounded-lg overflow-hidden mb-2">
@@ -143,10 +152,10 @@ export default function ProductDetails({ params }) {
           </div>
 
           {/* Product Info */}
-          <div>
+          <div className="mx-4">
             <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
             <div className="flex items-center mb-8">
-              <div className="text-3xl font-bold text-red">
+              <div className="text-3xl font-bold text-yellow-500">
                 ${product.price.toFixed(2)}
               </div>
               {!product.inStock && (
@@ -225,7 +234,7 @@ export default function ProductDetails({ params }) {
         </div>
 
         {/* Reviews */}
-        <div className="mt-12">
+        <div className="mt-12 mx-4">
           <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
           <hr
             className="border-t"
@@ -274,9 +283,9 @@ export default function ProductDetails({ params }) {
         </div>
 
         {/* Similar Products */}
-        <div className="mt-12">
+        <div className="mt-12 mx-4">
           <h2 className="text-2xl font-bold mb-6">Similar Products</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
             {similarProducts.map((product) => (
               <Link
                 href={`/shop/${product.id}`}

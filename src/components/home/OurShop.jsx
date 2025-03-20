@@ -128,7 +128,7 @@ export default function OurShop() {
   );
 
   return (
-    <section className="relative w-full h-[1050px] md:h-[600px] bg-[#18191b] my-12">
+    <section className="relative w-full h-[1050px] sm:h-[700px] lg:h-[600px] bg-[#18191b] my-12">
       {/* Background Image with Opacity Layer */}
       <div className="relative w-full h-full overflow-hidden rounded-b-[50px]">
         <Image
@@ -169,9 +169,9 @@ export default function OurShop() {
             </div>
 
             {/* Product Cards */}
-            <div className="md:w-3/4 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 gap-y-4  md:gap-6 mt-6">
+            <div className="md:w-3/4 w-full grid grid-cols-1 sm:grid-cols-2 sm:gap-10 md:grid-cols-2 lg:grid-cols-3 gap-2 gap-y-4  md:gap-6 mt-6">
               {filteredProducts
-                .slice(0, window.innerWidth < 768 ? 2 : 3) // Show 2 items on small screens, 3 on md+
+                .slice(0, window.innerWidth < 1080 ? 2 : 3) // Show 2 items on small screens, 3 on md+
                 .map((product) => (
                   <Card
                     key={product.id}
@@ -194,7 +194,7 @@ export default function OurShop() {
                         {product.description}
                       </p>
 
-                      <div className="flex justify-between gap-12 items-start">
+                      <div className="flex justify-between w-full">
                         <div className="flex flex-col items-start">
                           <p className="text-white font-bold mt-2">
                             {product.price}
@@ -202,30 +202,12 @@ export default function OurShop() {
 
                           {/* Star Rating */}
                           <div className="flex items-center mt-2 space-x-1">
-                            {Array.from({
-                              length: Math.floor(product.rating),
-                            }).map((_, index) => (
-                              <FaStar key={index} className="text-yellow-500" />
-                            ))}
-
-                            {/* Handle fractional part dynamically */}
-                            {product.rating % 1 !== 0 && (
-                              <div className="relative w-4 h-4 flex items-start justify-center">
-                                <FaStar className="text-gray-500" />
-                                <FaStar
-                                  className="text-yellow-500 absolute left-0 top-0"
-                                  style={{
-                                    clipPath: `inset(0 ${
-                                      100 - (product.rating % 1) * 100
-                                    }% 0 0)`,
-                                  }}
-                                />
-                              </div>
-                            )}
+                         
 
                             <span className="ml-1 text-gray-300">
                               {product.rating}
                             </span>
+                            <FaStar  className="text-yellow-500"/>
                           </div>
                         </div>
 

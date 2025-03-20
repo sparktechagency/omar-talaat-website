@@ -5,11 +5,13 @@ import ReviewsSection from './ReviewsSection'
 import Products from './Products'
 import OurShop from './OurShop'
 import Banner  from './Banner'
+import BannerSection from './BannerSection'
 
 const HomePageContainer = () => {
   return (
     <div>
       {/* <Banner /> */}
+      <BannerSection />
       <Products />
       <OurShop />
       <ReviewsSection />

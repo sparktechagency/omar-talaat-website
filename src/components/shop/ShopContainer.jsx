@@ -4,7 +4,7 @@ import ProductsList from './ProductsList'
 
 const ShopContainer = () => {
   return (
-    <div>
+    <div className=''>
       <ShopBanner />
       <ProductsList />
     </div>

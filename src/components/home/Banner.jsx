@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "../ui/button";
@@ -70,7 +69,7 @@ export default function Banner() {
     <section className="relative w-full h-[500px] bg-[#18191b] my-12 overflow-hidden">
       {/* Carousel Container */}
       <div
-        className="flex transition-all ease-in-out duration-700 h-full"
+        className="flex transition-transform ease-in-out duration-700 h-full"
         style={{
           transform: `translateX(-${currentSlide * 100}%)`,
           width: `${banners.length * 100}%`,
@@ -78,24 +77,24 @@ export default function Banner() {
       >
         {banners.map((banner, index) => (
           <div key={index} className="relative w-full h-full flex-shrink-0">
-          
             {/* Background Image */}
-            <div className="relative h-full w-full overflow-hidden">
+            <div className="relative h-full w-[32%] overflow-hidden ">
               <Image
                 src={banner.image}
                 alt={`Banner Image ${index + 1}`}
                 layout="fill"
-                objectFit="cover"
-                className="w-full h-full"
+                // objectFit=""
+                className=" h-full  object-cover"
                 priority={index === 0}
               />
             </div>
 
             {/* Text Overlay - Ensures text stays centered */}
-            <div className="absolute inset-0 flex items-center justify-center text-center text-white px-6 sm:px-12">
+            <div className="absolute inset-0 flex items-center justify-center text-center text-white px-6 sm:px-12 z-10">
               <div className="max-w-2xl">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
-                  {banner.title}
+                  {/* {banner.title} */}
+                  askjghsglkjasfhasdfhfsd  aasfgsa 
                 </h1>
                 <p className="text-lg sm:text-xl md:text-2xl font-medium leading-snug">
                   {banner.description}
@@ -128,6 +127,22 @@ export default function Banner() {
           ))}
         </div>
       </div>
+
+      {/* Left and Right Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full"
+        aria-label="Previous Slide"
+      >
+        <ChevronLeft />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full"
+        aria-label="Next Slide"
+      >
+        <ChevronRight />
+      </button>
     </section>
   );
 }

@@ -143,7 +143,7 @@ export default function ShopBanner() {
       {/* Content Section */}
       <div className="absolute inset-0 p-10">
         {/* Title and Description */}
-        <div className="flex flex-col justify-center h-full w-[500px]">
+        <div className="flex flex-col justify-center h-full md:w-[500px]">
           <h2 className="text-4xl font-bold text-white mb-10">
             Find Your <br /> Strain
           </h2>

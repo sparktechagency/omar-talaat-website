@@ -69,7 +69,7 @@ export default function Navbar() {
         {/* Right: Cart Icon & Profile Icon */}
         <div className="flex items-center space-x-4 relative">
           <Link href="/cart" className="text-2xl">
-            <FaShoppingCart size={28}/>
+            <FaShoppingCart size={28} />
           </Link>
 
           {/* Profile Dropdown */}
@@ -78,7 +78,7 @@ export default function Navbar() {
               className="text-2xl"
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             >
-              <FaUserCircle size={40}/>
+              <FaUserCircle size={40} />
             </button>
             {isProfileOpen && (
               <div className="absolute right-0 mt-2 w-60 border-2 border-[#2E2E2EF5] bg-[#222] text-white shadow-md rounded-md">
@@ -125,7 +125,14 @@ export default function Navbar() {
                     )}
                   </li>
                   <li>
-                    <Link href="/logout" className="block px-4 py-2 mt-10">
+                    <Link
+                      href="/logout"
+                      onClick={() => {
+                        localStorage.removeItem("user");
+                        localStorage.removeItem("token");
+                      }}
+                      className="block px-4 py-2 mt-10"
+                    >
                       Logout
                     </Link>
                   </li>
@@ -146,7 +153,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <ul className="md:hidden bg-gray-800 p-4 text-center space-y-3">
+        <ul className="md:hidden bg-[#222] p-4 text-center space-y-3">
           {[
             { name: "Home", path: "/" },
             { name: "About", path: "/about" },

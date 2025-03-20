@@ -111,7 +111,7 @@ export default function ProductsList() {
   });
 
   return (
-    <div className="text-white min-h-screen">
+    <div className="text-white min-h-screen mx-4">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold">Showing All Products</h2>
         {/* Sorting */}
@@ -178,7 +178,7 @@ export default function ProductsList() {
         </div>
 
         {/* Mood Tags Filter */}
-        <div className="mb-4">
+        <div className="mb-4 hidden lg:block">
           <h3 className="mb-2">Filter by Mood:</h3>
           <div className="flex flex-wrap gap-2">
             {allMoodTags.map((tag) => (
@@ -196,11 +196,29 @@ export default function ProductsList() {
         </div>
       </div>
 
+      {/* Mood Tags Filter */}
+      <div className="mb-4 block lg:hidden">
+        <h3 className="mb-2">Filter by Mood:</h3>
+        <div className="flex flex-wrap gap-2">
+          {allMoodTags.map((tag) => (
+            <Button
+              key={tag}
+              className={`bg-black border ${
+                selectedMoodTags.includes(tag) ? "border-2" : "border"
+              }`}
+              onClick={() => toggleMoodTag(tag)}
+            >
+              {tag}
+            </Button>
+          ))}
+        </div>
+      </div>
+
       {/* Product Grid */}
       <div>
         <h2 className="text-xl font-bold mb-4">Products</h2>
         <div
-          className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:${
+          className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:${
             gridCols === 3 ? "grid-cols-3 gap-10" : "grid-cols-4"
           } gap-6`}
         >

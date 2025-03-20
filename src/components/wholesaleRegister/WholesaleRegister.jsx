@@ -47,7 +47,7 @@ export default function WholesaleRegisterForm() {
   ];
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-12 rounded-2xl my-10  border border-[#2E2E2EF5] text-gray-200">
+    <div className="w-full max-w-3xl mx-auto p-4 md:p-12 rounded-2xl my-10  border border-[#2E2E2EF5] text-gray-200">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
           <div>
