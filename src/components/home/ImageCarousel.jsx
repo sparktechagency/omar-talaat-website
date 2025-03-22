@@ -17,7 +17,8 @@ export function ImageCarousel({
   autoPlay = false,
   autoPlayInterval = 5000,
   aspectRatio = "video",
-  height = 600,
+  height = 700, // Main Banner height set to 700px
+  imageHeight = 600, // Reduced default height to 400px (adjustable)
   showControls = true,
   showIndicators = true,
   textStyle = "dark",
@@ -82,8 +83,8 @@ export function ImageCarousel({
                   src={image.src || "/placeholder.svg"}
                   alt={image.alt}
                   width={1440}
-                  height={height}
-                  className="h-full w-full object-cover"
+                  height={height} // Dynamically set height here
+                  className=" w-full object-cover" // Make sure it covers the space properly
                 />
                 {(image.title || image.description) && textStyle !== "none" && (
                   <div

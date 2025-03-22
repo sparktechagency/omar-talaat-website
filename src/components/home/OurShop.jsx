@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsFillCaretRightFill } from "react-icons/bs";
 import Image from "next/image";
 import { Button } from "../ui/button";
@@ -120,7 +120,20 @@ const allProducts = [
 ];
 
 export default function OurShop() {
-  const [activeTab, setActiveTab] = useState("Cannabis"); // Default active tab is "Cannabis"
+  const [activeTab, setActiveTab] = useState("Cannabis");
+  const [itemsToShow, setItemsToShow] = useState(2);
+
+  // Update itemsToShow based on screen width
+  useEffect(() => {
+    const updateItemsToShow = () => {
+      setItemsToShow(window.innerWidth < 1080 ? 2 : 3);
+    };
+
+    updateItemsToShow(); // Initial check
+    window.addEventListener("resize", updateItemsToShow); // Listen for resize
+
+    return () => window.removeEventListener("resize", updateItemsToShow);
+  }, []);
 
   // Filter products based on the active tab
   const filteredProducts = allProducts.filter(
@@ -171,7 +184,7 @@ export default function OurShop() {
             {/* Product Cards */}
             <div className="md:w-3/4 w-full grid grid-cols-1 sm:grid-cols-2 sm:gap-10 md:grid-cols-2 lg:grid-cols-3 gap-2 gap-y-4  md:gap-6 mt-6">
               {filteredProducts
-                .slice(0, window.innerWidth < 1080 ? 2 : 3) // Show 2 items on small screens, 3 on md+
+                .slice(0, itemsToShow < 1080 ? 2 : 3) // Show 2 items on small screens, 3 on md+
                 .map((product) => (
                   <Card
                     key={product.id}
@@ -202,12 +215,10 @@ export default function OurShop() {
 
                           {/* Star Rating */}
                           <div className="flex items-center mt-2 space-x-1">
-                         
-
                             <span className="ml-1 text-gray-300">
                               {product.rating}
                             </span>
-                            <FaStar  className="text-yellow-500"/>
+                            <FaStar className="text-yellow-500" />
                           </div>
                         </div>
 
