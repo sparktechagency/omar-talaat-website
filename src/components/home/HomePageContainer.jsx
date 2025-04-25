@@ -11,7 +11,7 @@ const HomePageContainer = () => {
   return (
     <div>
       {/* <Banner /> */}
-      <BannerSection />
+      {/* <BannerSection /> */}
       <Products />
       <OurShop />
       <ReviewsSection />

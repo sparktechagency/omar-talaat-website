@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"; // Assuming you're using ShadCN
 import { Input } from "@/components/ui/input"; // Assuming you're using ShadCN's Input component
 import { FaShoppingCart, FaRegStar } from "react-icons/fa"; // Icons for features like easy checkout, track orders
 import Link from "next/link";
+import Image from "next/image";
 
 export default function UserCreate() {
   // Form handling with React Hook Form
@@ -23,17 +24,42 @@ export default function UserCreate() {
   };
 
   return (
-    <div className=" text-white  py-12">
-      <div className="container mx-auto px-4">
-        {/* Form Section */}
-        <div className="max-w-xl mx-auto bg-[#222] p-8 rounded-lg shadow-lg">
+    <div>
+      <div className="flex justify-between mx-40 h-screen items-center">
+        <div className="h-[900px]  w-[900px] ">
+          <Image
+            src="/assests/registerImage.png"
+            alt="Side Illustration"
+            height={700}
+            width={900}
+            className="object-cover w-full h-full"
+          />
+        </div>
+
+        <div
+          style={{
+            background: "#FCFCFC3B",
+            padding: 30,
+            paddingBottom: 40,
+            borderRadius: 15,
+            maxWidth: 500,
+            width: "100%",
+            zIndex: 1,
+            border: "2px solid #A92C2C",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          <div>
+            <Image
+              src="/assests/logo.png"
+              height={150}
+              width={200}
+              className="m-2 mx-auto"
+            ></Image>
+          </div>
           <h2 className="text-4xl font-bold mb-6 text-center">
             Create an account
           </h2>
-          <p className="text-sm text-center mb-6">
-            Password must have 8 characters
-          </p>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Full Name */}
             <div>
@@ -44,7 +70,7 @@ export default function UserCreate() {
                 id="fullName"
                 placeholder="Enter your full name"
                 {...register("fullName", { required: "Full Name is required" })}
-                className="w-full py-6 text-black"
+                className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
               />
               {errors.fullName && (
                 <p className="text-red-500 text-xs">
@@ -69,7 +95,7 @@ export default function UserCreate() {
                     message: "Please enter a valid email address",
                   },
                 })}
-                className="w-full py-6 text-black"
+                className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
               />
               {errors.email && (
                 <p className="text-red-500 text-xs">{errors.email.message}</p>
@@ -92,7 +118,7 @@ export default function UserCreate() {
                     message: "Password must have at least 8 characters",
                   },
                 })}
-                className="w-full py-6 text-black"
+                className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
               />
               {errors.password && (
                 <p className="text-red-500 text-xs">
@@ -102,7 +128,7 @@ export default function UserCreate() {
             </div>
 
             {/* Signup Benefits */}
-            <div className="flex flex-col items-center mt-6">
+            {/* <div className="flex flex-col items-center mt-6">
               <p className="text-yellow-400 font-semibold mb-4">
                 <FaRegStar className="inline-block mr-2" />
                 Signup and earn 50 points!
@@ -126,13 +152,7 @@ export default function UserCreate() {
                   <span>Earn Discounts</span>
                 </div>
               </div>
-
-              <p className="text-xs text-center text-gray-400">
-                Your personal data will be used to support your experience
-                throughout this website, to manage access to your account, and
-                for other purposes described in our privacy policy.
-              </p>
-            </div>
+            </div> */}
 
             {/* Submit Button */}
             <Button
@@ -149,8 +169,11 @@ export default function UserCreate() {
             </p>
           )}
           <p>
-            If your already have a account please{" "}
-            <Link className="text-blue-600 font-black text-2xl ml-2" href="/login">
+            If you already have an account, please{" "}
+            <Link
+              className="text-blue-600 font-black text-2xl ml-2"
+              href="/login"
+            >
               Login
             </Link>
           </p>

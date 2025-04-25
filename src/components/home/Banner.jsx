@@ -94,7 +94,7 @@ export default function Banner() {
               <div className="max-w-2xl">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
                   {/* {banner.title} */}
-                  askjghsglkjasfhasdfhfsd  aasfgsa 
+                  askjghsglkjasfhasdfhfsd aasfgsa
                 </h1>
                 <p className="text-lg sm:text-xl md:text-2xl font-medium leading-snug">
                   {banner.description}
