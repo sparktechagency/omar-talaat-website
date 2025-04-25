@@ -1,14 +1,12 @@
 "use client";
 import { useState } from "react";
-import { useForm } from "react-hook-form"; // Importing react-hook-form
-import { Button } from "@/components/ui/button"; // Assuming you're using ShadCN's Button component
-import { Input } from "@/components/ui/input"; // Assuming you're using ShadCN's Input component
-import { FaShoppingCart, FaRegStar } from "react-icons/fa"; // Icons for features like easy checkout, track orders
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function UserCreate() {
-  // Form handling with React Hook Form
   const {
     register,
     handleSubmit,
@@ -17,50 +15,45 @@ export default function UserCreate() {
 
   const [registrationStatus, setRegistrationStatus] = useState("");
 
-  // Simple user registration function (replace with actual logic in production)
   const onSubmit = (data) => {
     console.log(data);
     setRegistrationStatus("Account created successfully!");
   };
 
   return (
-    <div>
-      <div className="flex justify-between mx-40 h-screen items-center">
-        <div className="h-[900px]  w-[900px] ">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row  justify-center">
+      {/* Left side image - hidden on small devices */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center ">
+        <div className="h-auto max-h-[900px] w-full max-w-[900px] p-4">
           <Image
             src="/assests/registerImage.png"
             alt="Side Illustration"
-            height={700}
             width={900}
+            height={700}
             className="object-cover w-full h-full"
+            priority
           />
         </div>
+      </div>
 
-        <div
-          style={{
-            background: "#FCFCFC3B",
-            padding: 30,
-            paddingBottom: 40,
-            borderRadius: 15,
-            maxWidth: 500,
-            width: "100%",
-            zIndex: 1,
-            border: "2px solid #A92C2C",
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <div>
+      {/* Right side form - full width on small devices */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8">
+        <div className="bg-[#FCFCFC3B] border-2 border-[#A92C2C] backdrop-blur-md rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
+          <div className="flex justify-center mb-4">
             <Image
               src="/assests/logo.png"
-              height={150}
-              width={200}
-              className="m-2 mx-auto"
-            ></Image>
+              height={120}
+              width={160}
+              alt="Logo"
+              className="mx-auto"
+            />
           </div>
-          <h2 className="text-4xl font-bold mb-6 text-center">
+
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">
             Create an account
           </h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Full Name */}
             <div>
               <label htmlFor="fullName" className="block text-sm mb-2">
@@ -73,7 +66,7 @@ export default function UserCreate() {
                 className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
               />
               {errors.fullName && (
-                <p className="text-red-500 text-xs">
+                <p className="text-red-500 text-xs mt-1">
                   {errors.fullName.message}
                 </p>
               )}
@@ -98,7 +91,9 @@ export default function UserCreate() {
                 className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
               />
               {errors.email && (
-                <p className="text-red-500 text-xs">{errors.email.message}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -121,43 +116,16 @@ export default function UserCreate() {
                 className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
               />
               {errors.password && (
-                <p className="text-red-500 text-xs">
+                <p className="text-red-500 text-xs mt-1">
                   {errors.password.message}
                 </p>
               )}
             </div>
 
-            {/* Signup Benefits */}
-            {/* <div className="flex flex-col items-center mt-6">
-              <p className="text-yellow-400 font-semibold mb-4">
-                <FaRegStar className="inline-block mr-2" />
-                Signup and earn 50 points!
-              </p>
-
-              <div className="grid grid-cols-2 gap-x-12 gap-y-6 md:gap-x-20 text-sm text-white mb-6">
-                <div className="flex items-center gap-2">
-                  <FaShoppingCart />
-                  <span>Easy Checkout</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaRegStar />
-                  <span>Order History</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaShoppingCart />
-                  <span>Track Orders</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaRegStar />
-                  <span>Earn Discounts</span>
-                </div>
-              </div>
-            </div> */}
-
             {/* Submit Button */}
             <Button
               type="submit"
-              className="bg-button text-white w-full h-12 rounded-md my-6"
+              className="bg-button text-white w-full h-10 md:h-12 rounded-md my-4 md:my-6"
             >
               Create account
             </Button>
@@ -168,10 +136,11 @@ export default function UserCreate() {
               {registrationStatus}
             </p>
           )}
-          <p>
+
+          <p className="text-sm md:text-base mt-4 text-center">
             If you already have an account, please{" "}
             <Link
-              className="text-blue-600 font-black text-2xl ml-2"
+              className="text-white font-bold md:font-black md:text-2xl ml-1"
               href="/login"
             >
               Login

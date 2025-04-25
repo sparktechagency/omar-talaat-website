@@ -9,7 +9,7 @@ const CommonLayout = ({ children }) => {
       <Navbar />
       {/* Main content */}
       <div className="bg-[#18191b] flex flex-col flex-grow">
-        <main className="container mx-auto flex-1">
+        <main className="container mx-auto mt-20 flex-1">
           <div className="">{children}</div>
         </main>
       </div>

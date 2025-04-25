@@ -1,0 +1,140 @@
+"use client";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Heart, Download, ArrowLeft, Play } from "lucide-react";
+import { useParams } from "next/navigation";
+
+export default function DetailsComponents() {
+  const params = useParams();
+  const id = params?.id;
+
+  const [liked, setLiked] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // Ensure we have an ID
+  if (!id) {
+    return <div className="container mx-auto py-8 px-4">Loading...</div>;
+  }
+
+  // Video details
+  const videoDetails = {
+    id: id,
+    title: "Gentle Morning Stretch",
+    duration: "11 Min",
+    videoUrl:
+      "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/rTl3vg0veiylgd0ih/67b9b23cbe35d27f504d4bb7-p3-m41wef7__95cf3e9af7013f8c30516ea56660faae__P360.mp4",
+    description:
+      "A holistic practice that blends physical postures, breath control, meditation, and ethical principles to promote overall well-being.",
+    equipmentNeeded: "None",
+  };
+
+  const togglePlayback = () => {
+    setIsPlaying(true);
+  };
+
+  const toggleLike = () => {
+    setLiked(!liked);
+  };
+
+  return (
+    <div className="container mx-auto py-8 px-4">
+      <Link
+        href="/"
+        className="flex items-center mb-6 text-gray-600 hover:text-gray-900"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Back to all videos
+      </Link>
+
+      <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+        <div className="relative aspect-video bg-black">
+          {isPlaying ? (
+            // Video player
+            <div className="w-full h-full flex items-center justify-center">
+              <video className="w-full h-full" controls autoPlay>
+                <source src={videoDetails.videoUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          ) : (
+            // Video thumbnail with play button
+            <div className="w-full h-full relative">
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-400">Video Thumbnail</span>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <button
+                  onClick={togglePlayback}
+                  className="w-16 h-16 bg-white bg-opacity-75 rounded-full flex items-center justify-center"
+                >
+                  <Play className="h-8 w-8 text-rose-500 ml-1" fill="none" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">{videoDetails.title}</h1>
+            <div className="flex space-x-3">
+              <button onClick={toggleLike}>
+                <Heart
+                  className={`h-6 w-6 ${
+                    liked ? "fill-rose-500 text-rose-500" : "text-rose-500"
+                  }`}
+                />
+              </button>
+              <button>
+                <Download className="h-6 w-6 text-gray-500" />
+              </button>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <span className="text-sm text-gray-500">
+              {videoDetails.duration}
+            </span>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="text-lg font-medium mb-2">About this Class</h2>
+            <p className="text-gray-700">
+              Yoga is a holistic practice that blends physical postures, breath
+              control, meditation, and ethical principles to promote overall
+              well-being. Rooted in ancient Indian traditions, yoga offers a
+              pathway to connect the mind, body, and spirit, fostering balance
+              and harmony in daily life.
+            </p>
+            <p className="text-gray-700 mt-2">
+              Through a variety of physical poses (asanas), yoga strengthens and
+              tones the body, enhances flexibility, and improves posture. The
+              focus on conscious breathing (pranayama) helps calm the nervous
+              system, reduce stress, and increase mental clarity. Additionally,
+              yoga encourages mindfulness and self-awareness, cultivating a
+              sense of inner peace and relaxation.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-medium mb-2">
+              Proper Equipment Needed
+            </h2>
+            <p className="text-gray-700">{videoDetails.equipmentNeeded}</p>
+          </div>
+
+          {!isPlaying && (
+            <div className="mt-6">
+              <button
+                onClick={togglePlayback}
+                className="px-6 py-2 bg-rose-500 text-white rounded hover:bg-rose-600 w-full"
+              >
+                Watch Now
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

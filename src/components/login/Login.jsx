@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,43 +17,38 @@ export default function LoginUser() {
   };
 
   return (
-    <div>
-      <div className="flex justify-between mx-60 h-screen items-center">
-        <div className="h-[700px]  w-[700px] ">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row justify-center">
+      {/* Left side image - hidden on small devices */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center">
+        <div className="h-auto max-h-[700px] w-full max-w-[700px] p-4">
           <Image
             src="/assests/loginImage.png"
             alt="Side Illustration"
-            height={700}
             width={700}
+            height={700}
             className="object-cover w-full h-full"
+            priority
           />
         </div>
+      </div>
 
-        <div
-          style={{
-            background: "#FCFCFC3B",
-            padding: 30,
-            paddingBottom: 40,
-            borderRadius: 15,
-            maxWidth: 500,
-            width: "100%",
-
-            zIndex: 1,
-            border: "2px solid #A92C2C",
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <div>
+      {/* Right side form - full width on small devices */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8">
+        <div className="bg-[#FCFCFC3B] border-2 border-[#A92C2C] backdrop-blur-md rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
+          <div className="flex justify-center mb-4">
             <Image
               src="/assests/logo.png"
-              height={150}
-              width={200}
-              className="m-2 mx-auto"
-            ></Image>
+              height={120}
+              width={160}
+              alt="Logo"
+              className="mx-auto"
+            />
           </div>
-          <h2 className=" font-bold text-center mb-6 text-white">
-            Welcome back! Inter you information
+
+          <h2 className="font-bold text-center mb-6 text-white text-xl md:text-2xl">
+            Welcome back! Enter your information
           </h2>
+
           <form onSubmit={handleSubmit}>
             {/* User Name or Email */}
             <div className="mb-4">
@@ -65,12 +59,12 @@ export default function LoginUser() {
                 id="email"
                 type="email"
                 placeholder="Enter your email"
-                className="w-full py-6 text-white"
+                className="w-full py-2 md:py-6 text-white"
               />
             </div>
 
             {/* Password */}
-            <div className="mb-4">
+            <div className="mb-6">
               <label htmlFor="password" className="block text-sm mb-2">
                 Password
               </label>
@@ -79,7 +73,7 @@ export default function LoginUser() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="w-full py-6 text-black"
+                  className="w-full py-2 md:py-6 text-black"
                 />
                 <button
                   type="button"
@@ -94,13 +88,13 @@ export default function LoginUser() {
             {/* Sign In Button */}
             <Button
               type="submit"
-              className="w-full h-12 bg-button text-white rounded-md"
+              className="w-full h-10 md:h-12 bg-button text-white rounded-md"
             >
               Sign In
             </Button>
 
             {/* Links */}
-            <div className="flex justify-between text-sm text-center mt-8">
+            <div className="flex  justify-between text-sm text-center mt-6 md:mt-8 gap-4 md:gap-0">
               <Link href="/register" className="text-white hover:text-red-400">
                 Create account
               </Link>
