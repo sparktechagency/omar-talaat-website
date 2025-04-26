@@ -1,7 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { Heart, Download, ArrowLeft, Play } from "lucide-react";
+import { Heart, ArrowLeft, Play } from "lucide-react";
 import { useParams } from "next/navigation";
 
 export default function DetailsComponents() {
@@ -9,7 +9,7 @@ export default function DetailsComponents() {
   const id = params?.id;
 
   const [liked, setLiked] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   // Ensure we have an ID
   if (!id) {
@@ -22,7 +22,7 @@ export default function DetailsComponents() {
     title: "Gentle Morning Stretch",
     duration: "11 Min",
     videoUrl:
-      "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/rTl3vg0veiylgd0ih/67b9b23cbe35d27f504d4bb7-p3-m41wef7__95cf3e9af7013f8c30516ea56660faae__P360.mp4",
+      "https://media.istockphoto.com/id/1410441629/video/fit-females-doing-warmup-exercises-in-a-fitness-class-at-a-center-training-coach-guiding-a.mp4?s=mp4-640x640-is&k=20&c=FDSJfxJGUgTijKHrIxDFL4RJYCE7V3rTG98I4JqTRQc=",
     description:
       "A holistic practice that blends physical postures, breath control, meditation, and ethical principles to promote overall well-being.",
     equipmentNeeded: "None",
@@ -36,22 +36,32 @@ export default function DetailsComponents() {
     setLiked(!liked);
   };
 
+  // Prevent right-clicking on the video player
+  const preventRightClick = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="container mx-auto py-8 px-4">
-      <Link
-        href="/"
+      {/* <Link
+        href="/favorite"
         className="flex items-center mb-6 text-gray-600 hover:text-gray-900"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to all videos
-      </Link>
+      </Link> */}
 
       <div className="bg-white rounded-lg overflow-hidden shadow-lg">
         <div className="relative aspect-video bg-black">
           {isPlaying ? (
-            // Video player
+            // Video player with controls and right-click disabled
             <div className="w-full h-full flex items-center justify-center">
-              <video className="w-full h-full" controls autoPlay>
+              <video
+                className="w-full h-full"
+                controls
+                autoPlay
+                onContextMenu={preventRightClick}
+              >
                 <source src={videoDetails.videoUrl} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
@@ -84,9 +94,6 @@ export default function DetailsComponents() {
                     liked ? "fill-rose-500 text-rose-500" : "text-rose-500"
                   }`}
                 />
-              </button>
-              <button>
-                <Download className="h-6 w-6 text-gray-500" />
               </button>
             </div>
           </div>
@@ -123,16 +130,7 @@ export default function DetailsComponents() {
             <p className="text-gray-700">{videoDetails.equipmentNeeded}</p>
           </div>
 
-          {!isPlaying && (
-            <div className="mt-6">
-              <button
-                onClick={togglePlayback}
-                className="px-6 py-2 bg-rose-500 text-white rounded hover:bg-rose-600 w-full"
-              >
-                Watch Now
-              </button>
-            </div>
-          )}
+          {/* You can add custom buttons here if needed */}
         </div>
       </div>
     </div>

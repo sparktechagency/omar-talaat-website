@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaUserCircle, FaShoppingCart } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
+import { IoNotificationsOutline } from "react-icons/io5";
 import { FiMenu } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -28,36 +29,31 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className=" text-white fixed w-full top-0 left-0 shadow-lg z-50 bg-[#222]">
+    <nav className=" text-white fixed w-full top-0 left-0 shadow-lg z-50 bg-[#fff]">
       <div className="container mx-auto flex justify-between items-center h-20 px-4">
         {/* Left: Logo */}
         <Link
           href="/"
           className="flex items-center space-x-2 text-lg font-bold"
         >
-          <img
-            src="/assests/qiloco-logo.png"
-            alt="Logo"
-            className="w-10 h-10"
-          />
+          <img src="/assests/logo.png" alt="Logo" className="w-16 h-10" />
         </Link>
 
         {/* Middle: Navigation Links (Hidden on mobile) */}
         <ul className="hidden md:flex space-x-6">
           {[
             { name: "Home", path: "/" },
-            { name: "About", path: "/about" },
             { name: "Favorite", path: "/favorite" },
-            { name: "Contact Us", path: "/contact" },
-            { name: "Wholesale", path: "/wholesale" },
+            { name: "Explore", path: "/explore" },
+            { name: "Community", path: "/community" },
           ].map((item) => (
             <li key={item.name}>
               <Link
                 href={item.path}
-                className={`relative pb-1 transition-all duration-300 ease-in-out ${
+                className={`relative pb-1 text-black transition-all duration-300 ease-in-out ${
                   pathname === item.path
-                    ? "border-b-2 border-red-500"
-                    : "hover:border-b-2 hover:border-red-500"
+                    ? "border-b-2 border-red-500 text-black"
+                    : "hover:border-b-2 hover:border-red-500 text-black"
                 }`}
               >
                 {item.name}
@@ -68,8 +64,8 @@ export default function Navbar() {
 
         {/* Right: Cart Icon & Profile Icon */}
         <div className="flex items-center space-x-4 relative">
-          <Link href="/cart" className="text-2xl">
-            <FaShoppingCart size={28} />
+          <Link href="/cart" className="text-2xl text-black">
+            <IoNotificationsOutline size={28} />
           </Link>
 
           {/* Profile Dropdown */}
@@ -78,10 +74,10 @@ export default function Navbar() {
               className="text-2xl"
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             >
-              <FaUserCircle size={40} />
+              <FaUserCircle size={40} className="text-black" />
             </button>
             {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-60 border-2 border-[#2E2E2EF5] bg-[#222] text-white shadow-md rounded-md">
+              <div className="absolute right-0 mt-2 w-60 border-2 border-[#2E2E2EF5] bg-[#fff] text-black shadow-md rounded-md">
                 <ul className="py-2">
                   <li>
                     <Link href="/edit-profile" className="block px-4 py-2">
@@ -146,20 +142,23 @@ export default function Navbar() {
             className="md:hidden text-2xl"
             onClick={() => setIsOpen(!isOpen)}
           >
-            {isOpen ? <AiOutlineClose /> : <FiMenu />}
+            {isOpen ? (
+              <AiOutlineClose className="text-black" />
+            ) : (
+              <FiMenu className="text-black" />
+            )}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <ul className="md:hidden bg-[#222] p-4 text-center space-y-3">
+        <ul className="md:hidden bg-[#fff] text-black p-4 text-center space-y-3">
           {[
             { name: "Home", path: "/" },
-            { name: "About", path: "/about" },
-            { name: "Shop", path: "/shop" },
-            { name: "Contact Us", path: "/contact" },
-            { name: "Wholesale", path: "/wholesale" },
+            { name: "Favorite", path: "/favorite" },
+            { name: "Explore", path: "/explore" },
+            { name: "Community", path: "/community" },
           ].map((item) => (
             <li key={item.name}>
               <Link

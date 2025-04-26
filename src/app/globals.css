@@ -127,12 +127,12 @@
 
 html {
   background-color: #18191b;
-  font-family: 'Poppins', cursive;
-  color: white
+  font-family: "Poppins", cursive;
+  color: white;
 }
 
 .bg-button {
-  background: #A11D26;
+  background: #a92c2c;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -149,17 +149,17 @@ html {
   background: #8c1921;
   transform: scale(1.05);
 }
-.text-red{
-  color:#8c1921
+.text-red {
+  color: #a92c2c;
 }
-.text-description{
-color:#A3A3A3F5
+.text-description {
+  color: #a3a3a3f5;
 }
-
-
-h1, h2, h3 {
+.bg-red {
+  background-color: #ca3939;
+}
+h1,
+h2,
+h3 {
   font-family: var(--font-geist-mono);
 }
-
-
-

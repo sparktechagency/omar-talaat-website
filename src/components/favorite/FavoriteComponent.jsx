@@ -24,7 +24,7 @@ export default function FavoriteComponents() {
       id: "2",
       title: "Gentle Morning Stretch",
       duration: "11 Min",
-      thumbnail: "/assests/favoritePage.png",
+      thumbnail: "/assests/payerImage.png",
       videoUrl:
         "https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/rTl3vg0veiylgd0ih/67b9b23cbe35d27f504d4bb7-p3-m41wef7__95cf3e9af7013f8c30516ea56660faae__P360.mp4",
       description:
@@ -87,9 +87,9 @@ export default function FavoriteComponents() {
             </div>
 
             {/* Right Side - Content */}
-            <div className="w-full md:w-2/3 p-4 flex flex-col">
-              <div className="flex justify-between items-start mb-2">
-                <h2 className="text-xl font-bold text-gray-900">
+            <div className="w-full md:w-2/3 p-4 flex flex-col relative">
+              <div className="items-start ">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">
                   {video.title}
                 </h2>
                 <span className="text-sm font-medium text-gray-500">
@@ -97,8 +97,8 @@ export default function FavoriteComponents() {
                 </span>
               </div>
 
-              <div className="mt-1">
-                <h3 className="text-sm text-rose-500 font-medium mb-1">
+              <div className="absolute border bottom-10 p-4 rounded-xl">
+                <h3 className="text-sm text-red font-medium mb-1">
                   About this Class
                 </h3>
                 <p className="text-xs text-gray-700 line-clamp-3 mb-1">
@@ -118,7 +118,7 @@ export default function FavoriteComponents() {
               {/* Action Buttons */}
             </div>
             <div className="flex flex-col h-full py-10 justify-between items-center ">
-              <div className="flex space-x-2">
+              <div className="flex space-x-12 items-center justify-center">
                 <button
                   onClick={() => toggleLike(video.id)}
                   className="flex items-center"
@@ -141,15 +141,15 @@ export default function FavoriteComponents() {
               </div>
 
               <div className="">
-                <div className="flex flex-col gap-5">
-                  <Link href={`/favorite/${video.id}`}>
-                    <button className="px-4 py-4 bg-red-500 text-white rounded text-xs font-medium hover:bg-red-600">
+                <div className="flex flex-col gap-5 w-40">
+                  <Link href={`/favorite/${video.id}`} className="mx-auto">
+                    <button className="px-4 py-3 w-[104px]  bg-red-500 text-white rounded text-xs font-medium hover:bg-red-600">
                       Details
                     </button>
                   </Link>
                   <button
                     onClick={() => openVideoModal(video)}
-                    className="px-4 py-1 bg-red-500 text-white rounded text-xs font-medium hover:bg-red-600"
+                    className="px-4 py-3 w-2/3 mx-auto bg-red-500 text-white rounded text-xs font-medium hover:bg-red-600"
                   >
                     Watch Now
                   </button>

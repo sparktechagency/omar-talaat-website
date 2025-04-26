@@ -8,8 +8,6 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import image15 from "../../../public/assests/image15.png";
-import image5 from "../../../public/assests/image5.png";
-
 const faqs = [
   {
     question: "What is Next.js?",
@@ -56,7 +54,7 @@ export default function FAQSection() {
           {/* Second Image - Positioned relative to the first image */}
           <div className="absolute top-24 -right-8 xl-right-16 lg:-right-32">
             <Image
-              src={image5}
+              src={image15}
               alt="Image 2"
               height={200}
               width={200}

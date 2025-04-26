@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 // import Banner from './Banner'
-import FAQSection from './FaqSection'
-import ReviewsSection from './ReviewsSection'
-import Products from './Products'
-import OurShop from './OurShop'
-import Banner  from './Banner'
-import BannerSection from './BannerSection'
+import FAQSection from "./FaqSection";
+import ReviewsSection from "./ReviewsSection";
+import Products from "./Products";
+import OurShop from "./OurShop";
+import Banner from "./Banner";
+import BannerSection from "./BannerSection";
 
 const HomePageContainer = () => {
   return (
@@ -15,9 +15,9 @@ const HomePageContainer = () => {
       <Products />
       <OurShop />
       <ReviewsSection />
-      <FAQSection />
+      {/* <FAQSection /> */}
     </div>
-  )
-}
+  );
+};
 
-export default HomePageContainer
+export default HomePageContainer;
