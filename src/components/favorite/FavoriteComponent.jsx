@@ -70,7 +70,7 @@ export default function FavoriteComponents() {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto py-8 px-4 sm:px-6">
       <div className="grid grid-cols-1 gap-6">
         {meditationVideos.map((video) => (
           <div
@@ -88,7 +88,7 @@ export default function FavoriteComponents() {
 
             {/* Right Side - Content */}
             <div className="w-full md:w-2/3 p-4 flex flex-col relative">
-              <div className="items-start ">
+              <div className="items-start">
                 <h2 className="text-xl font-bold text-gray-900 mb-6">
                   {video.title}
                 </h2>
@@ -114,10 +114,10 @@ export default function FavoriteComponents() {
                   relaxation.
                 </p>
               </div>
-
-              {/* Action Buttons */}
             </div>
-            <div className="flex flex-col h-full py-10 justify-between items-center ">
+
+            {/* Action Buttons - Right Side (Desktop) */}
+            <div className="hidden md:flex flex-col h-full py-10 justify-between items-center">
               <div className="flex space-x-12 items-center justify-center">
                 <button
                   onClick={() => toggleLike(video.id)}
@@ -143,7 +143,7 @@ export default function FavoriteComponents() {
               <div className="">
                 <div className="flex flex-col gap-5 w-40">
                   <Link href={`/favorite/${video.id}`} className="mx-auto">
-                    <button className="px-4 py-3 w-[104px]  bg-red-500 text-white rounded text-xs font-medium hover:bg-red-600">
+                    <button className="px-4 py-3 w-[104px] bg-red-500 text-white rounded text-xs font-medium hover:bg-red-600">
                       Details
                     </button>
                   </Link>
@@ -156,6 +156,44 @@ export default function FavoriteComponents() {
                 </div>
               </div>
             </div>
+
+            {/* Action Buttons - Bottom (Mobile) */}
+            <div className="md:hidden flex justify-between items-center p-4 w-full">
+              <div className="flex space-x-4">
+                <button
+                  onClick={() => toggleLike(video.id)}
+                  className="flex items-center"
+                  aria-label="Like video"
+                >
+                  <Heart
+                    className={`h-5 w-5 ${
+                      likedVideos[video.id]
+                        ? "fill-rose-500 text-rose-500"
+                        : "text-rose-500"
+                    }`}
+                  />
+                </button>
+                <button
+                  className="flex items-center"
+                  aria-label="Download video"
+                >
+                  <Download className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+              <div className="flex space-x-2">
+                <Link href={`/favorite/${video.id}`}>
+                  <button className="px-3 py-2 bg-red-500 text-white rounded text-xs font-medium hover:bg-red-600">
+                    Details
+                  </button>
+                </Link>
+                <button
+                  onClick={() => openVideoModal(video)}
+                  className="px-3 py-2 bg-red-500 text-white rounded text-xs font-medium hover:bg-red-600"
+                >
+                  Watch
+                </button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -163,7 +201,7 @@ export default function FavoriteComponents() {
       {/* Video Modal */}
       {showModal && currentVideo && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg overflow-hidden w-full max-w-5xl relative">
+          <div className="bg-white rounded-lg overflow-hidden w-full max-w-4xl relative">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 z-10 p-1 bg-black bg-opacity-50 rounded-full"

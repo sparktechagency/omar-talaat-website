@@ -1,10 +1,10 @@
-import MyFeedData from "@/components/myFeed/MyFeedData";
+import Terms from "@/components/terms/Terms";
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <MyFeedData />
+      <Terms />
     </div>
   );
 };

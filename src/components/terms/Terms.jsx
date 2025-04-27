@@ -1,7 +1,7 @@
 export default function Terms() {
   return (
-    <div className=" mx-auto p-6 text-white">
-      <h1 className="text-3xl font-bold text-white mb-4 border-b border-[#2E2E2EF5] pb-6">
+    <div className=" mx-auto p-6 text-black border rounded-lg mt-6">
+      <h1 className="text-3xl font-bold text-black mb-4 border-b border-[#2E2E2EF5] pb-6">
         Terms & Conditions
       </h1>
       <p className="mb-4">
@@ -11,7 +11,7 @@ export default function Terms() {
 
       <div className="space-y-4">
         <section>
-          <h2 className="text-xl font-semibold text-white">
+          <h2 className="text-xl font-semibold text-black">
             1. Acceptance of Terms
           </h2>
           <p>
@@ -21,7 +21,7 @@ export default function Terms() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-white">
+          <h2 className="text-xl font-semibold text-black">
             2. Use of Services
           </h2>
           <p>
@@ -31,7 +31,7 @@ export default function Terms() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-white">
+          <h2 className="text-xl font-semibold text-black">
             3. Account Responsibilities
           </h2>
           <p>
@@ -41,7 +41,7 @@ export default function Terms() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-white">4. Termination</h2>
+          <h2 className="text-xl font-semibold text-black">4. Termination</h2>
           <p>
             We reserve the right to terminate accounts that violate our
             policies.
@@ -49,7 +49,7 @@ export default function Terms() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-white">
+          <h2 className="text-xl font-semibold text-black">
             5. Changes to Terms
           </h2>
           <p>

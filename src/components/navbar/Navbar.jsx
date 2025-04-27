@@ -91,7 +91,7 @@ export default function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/download-video" className="block px-4 py-2 ">
+                    <Link href="/my-download" className="block px-4 py-2 ">
                       Daownload Video
                     </Link>
                   </li>
@@ -109,10 +109,12 @@ export default function Navbar() {
                     {isSettingsOpen && (
                       <ul className="pl-4">
                         <li>
-                          <Link
-                            href="/setting/terms"
-                            className="block px-4 py-2 "
-                          >
+                          <Link href="/contact" className="block px-4 py-2 ">
+                            Contact us
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/terms" className="block px-4 py-2 ">
                             Terms & Conditions
                           </Link>
                         </li>
@@ -125,10 +127,7 @@ export default function Navbar() {
                           </Link>
                         </li>
                         <li>
-                          <Link
-                            href="/setting/privacy"
-                            className="block px-4 py-2 "
-                          >
+                          <Link href="/policy" className="block px-4 py-2 ">
                             Privacy Policy
                           </Link>
                         </li>

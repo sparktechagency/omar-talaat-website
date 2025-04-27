@@ -2,10 +2,16 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import Image from "next/image";
 
-export default function EditProfile() {
+export default function ProfileWithEditModal() {
   // State for user data
   const [user, setUser] = useState(null);
   const [formData, setFormData] = useState({
@@ -14,6 +20,7 @@ export default function EditProfile() {
     contact: "",
     profilePicture: "",
   });
+  const [open, setOpen] = useState(false);
 
   // Load user data (Demo user for now)
   useEffect(() => {
@@ -49,84 +56,118 @@ export default function EditProfile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Updated Data:", formData);
-    // alert("Profile updated successfully!");
+    setUser(formData);
+    setOpen(false); // Close the modal after submission
   };
 
   return (
-    <div className="flex justify-center items-center ">
-      <Card className="w-full max-w-lg shadow-lg bg-[#222] text-white border border-[#2E2E2EF5] my-3">
-        <CardHeader className="text-center">
-          <CardTitle>Edit Profile</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {user ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Profile Picture */}
-              <div className="flex justify-center">
-                <Image
-                  src={formData.profilePicture}
-                  alt="Profile"
-                  height={100}
-                  width={100}
-                  className="w-24 h-24 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
-                  onClick={handleProfileClick}
-                />
-              </div>
-              <input
-                type="file"
-                id="profileInput"
-                className="hidden"
-                onChange={handleFileChange}
+    <div className="flex flex-col items-center p-8 bg-gray-100 min-h-screen">
+      {/* User Profile Display */}
+      <div className="w-full max-w-lg bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="flex flex-col items-center">
+          <div className="mb-4">
+            {user && (
+              <Image
+                src={user.profilePicture}
+                alt="Profile"
+                height={120}
+                width={120}
+                className="rounded-full object-cover"
               />
+            )}
+          </div>
+          <h2 className="text-2xl font-bold mb-2">{user?.name}</h2>
+          <p className="text-gray-600 mb-1">{user?.email}</p>
+          <p className="text-gray-600">{user?.contact}</p>
 
-              {/* Name Field */}
-              <div>
-                <label className="block text-sm font-medium">Name</label>
-                <Input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              {/* Email Field */}
-              <div>
-                <label className="block text-sm font-medium">Email</label>
-                <Input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              {/* Contact Number Field */}
-              <div>
-                <label className="block text-sm font-medium">
-                  Contact Number
-                </label>
-                <Input
-                  type="text"
-                  name="contact"
-                  value={formData.contact}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              {/* Submit Button */}
-              <Button type="submit" className="w-full bg-button">
-                Update Profile
+          {/* Edit Profile Button - Now opens a modal */}
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="destructive"
+                className="mt-4 bg-red-500 hover:bg-red-600"
+              >
+                Edit Profile
               </Button>
-            </form>
-          ) : (
-            <p className="text-center text-gray-500">No user found!</p>
-          )}
-        </CardContent>
-      </Card>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-lg">
+              <DialogHeader>
+                <DialogTitle>Edit Profile</DialogTitle>
+              </DialogHeader>
+
+              {user ? (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Profile Picture */}
+                  <div className="flex justify-center">
+                    <Image
+                      src={formData.profilePicture}
+                      alt="Profile"
+                      height={100}
+                      width={100}
+                      className="w-24 h-24 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
+                      onClick={handleProfileClick}
+                    />
+                  </div>
+                  <input
+                    type="file"
+                    id="profileInput"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+
+                  {/* Name Field */}
+                  <div>
+                    <label className="block text-sm font-medium">Name</label>
+                    <Input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  {/* Email Field */}
+                  <div>
+                    <label className="block text-sm font-medium">Email</label>
+                    <Input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  {/* Contact Number Field */}
+                  <div>
+                    <label className="block text-sm font-medium">
+                      Contact Number
+                    </label>
+                    <Input
+                      type="text"
+                      name="contact"
+                      value={formData.contact}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    className="w-full bg-blue-500 hover:bg-blue-600"
+                  >
+                    Update Profile
+                  </Button>
+                </form>
+              ) : (
+                <p className="text-center text-gray-500">No user found!</p>
+              )}
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
     </div>
   );
 }

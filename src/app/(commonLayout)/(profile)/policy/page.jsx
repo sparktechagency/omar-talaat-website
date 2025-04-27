@@ -1,10 +1,10 @@
-import MyFeedData from "@/components/myFeed/MyFeedData";
+import PrivacyPolicy from "@/components/privacyPolicy/PrivacyPolicy";
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <MyFeedData />
+      <PrivacyPolicy />
     </div>
   );
 };

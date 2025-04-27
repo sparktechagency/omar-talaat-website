@@ -1,86 +1,129 @@
+// ContactForm.jsx
+
 "use client";
-import { Button } from "@/components/ui/button"; // Assuming you're using ShadCN's Button component
-import { Input } from "@/components/ui/input"; // Assuming you're using ShadCN's Input component
-import { Textarea } from "@/components/ui/textarea"; // Assuming you're using ShadCN's Textarea component
-import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt } from "react-icons/fa"; // Import React Icons
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
 
-export default function ContactUs() {
+export default function ContactForm() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      toast.success("Message sent successfully!");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+      setLoading(false);
+    }, 1000);
+  };
+
   return (
-    <div className="text-white  py-12 max-w-7xl mx-auto">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          {/* Left Section */}
-          <div className="md:w-1/2 mb-12 md:mb-0 text-center md:text-left">
-            <h2 className="text-4xl font-bold mb-4">Contact Us</h2>
-            <p className="text-lg mb-6">
-              High there. We're here if you need us.
-            </p>
-            <h3 className="text-lg font-semibold mb-4">Ask Us Anything</h3>
-            <div className="space-y-3">
-              <div className="flex items-center">
-                <FaMapMarkerAlt className="mr-2 text-lg" />
-                <p className="text-sm">
-                  No: 57A, East Madison street, Baltimore, MD , USA 4807
-                </p>
-              </div>
-              <div className="flex items-center">
-                <FaEnvelope className="mr-2 text-lg" />
-                <p className="text-sm">abc@gmail.com</p>
-              </div>
-              <div className="flex items-center">
-                <FaPhoneAlt className="mr-2 text-lg" />
-                <p className="text-sm">+99-01548975148</p>
-              </div>
-            </div>
+    <Card className="w-full max-w-5xl mx-auto border border-gray-200 shadow-sm rounded-lg my-10">
+      <CardContent className="p-6">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold flex items-center">
+            <span className="mr-2 text-gray-700">♦</span> Get In Touch
+          </h2>
+          <p className="text-gray-600 text-sm mt-1">
+            Unleash a range of possibilities enriches life, blending vigor with
+            balance. The result is a lifestyle that's not only dynamic but also
+            deeply rewarding.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              name="firstName"
+              placeholder="First Name"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+              className="rounded-md py-7 "
+            />
+            <Input
+              name="lastName"
+              placeholder="Last Name"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+              className="rounded-md py-7"
+            />
           </div>
 
-          {/* Right Section (Contact Form) */}
-          <div className="w-full md:w-1/2 bg-[#222] p-4 md:p-8 rounded-lg shadow-lg">
-            <form className="space-y-12">
-              <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm mb-2">Full Name</label>
-                    <Input
-                      placeholder="Enter your full name"
-                      className="w-full py-6 text-black"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-2">Email Address</label>
-                    <Input
-                      placeholder="Enter your email address"
-                      className="w-full py-6 text-black"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-2">Address</label>
-                    <Input
-                      placeholder="Enter your Address"
-                      className="w-full py-6 text-black"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-2">Contact Number</label>
-                    <Input
-                      placeholder="Enter your contact number"
-                      className="w-full py-6 text-black"
-                    />
-                  </div>
-                </div>
-                <label className="block text-sm mb-2 mt-4">Comments</label>
-                <Textarea
-                  placeholder="Write here...."
-                  className="w-full h-24 text-black"
-                />
-              </div>
-              <Button className="bg-button text-white w-full h-12 rounded-md">
-                Send Message
-              </Button>
-            </form>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              name="email"
+              type="email"
+              placeholder="example@gmail.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="rounded-md py-7"
+            />
+            <Input
+              name="phone"
+              type="tel"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="rounded-md py-7"
+            />
           </div>
-        </div>
-      </div>
-    </div>
+
+          <Input
+            name="subject"
+            placeholder="Write Your Subject"
+            value={formData.subject}
+            onChange={handleChange}
+            required
+            className="rounded-md py-7"
+          />
+
+          <Textarea
+            name="message"
+            placeholder="Write Your Message"
+            value={formData.message}
+            onChange={handleChange}
+            required
+            className="min-h-32 rounded-md py-7"
+          />
+
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-red  text-white rounded-md py-7 mt-10"
+          >
+            {loading ? "Sending..." : "Send Message"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,10 +1,10 @@
-import MyFeedData from "@/components/myFeed/MyFeedData";
+import ContactForm from "@/components/contactUs/ContactUs";
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <MyFeedData />
+      <ContactForm />
     </div>
   );
 };

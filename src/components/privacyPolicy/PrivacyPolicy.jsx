@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default function PrivacyPolicy() {
   return (
     <div className="flex  justify-center items-center my-12">
-      <Card className="w-full px-4 bg-[#18191b]   text-white shadow-lg">
+      <Card className="w-full px-4   text-black ">
         <CardHeader className=" border-b border-[#2E2E2EF5]">
           <CardTitle>Privacy Policy</CardTitle>
         </CardHeader>

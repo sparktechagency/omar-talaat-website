@@ -1,10 +1,10 @@
-import MyFeedData from "@/components/myFeed/MyFeedData";
+import ChangePassword from "@/components/changePassword/ChangePassword";
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <MyFeedData />
+      <ChangePassword />
     </div>
   );
 };
