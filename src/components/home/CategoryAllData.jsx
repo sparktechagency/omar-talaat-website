@@ -1,11 +1,13 @@
-"use client";
+import { useRouter } from "next/router";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export default function BrowseByCategory({ onSeeMore, onClassClick }) {
-  // Sample data for category browsing
-  const categorizedClasses = [
+export default function AllCategoriesPage() {
+  const router = useRouter();
+
+  // Sample data - could be expanded from the homepage data
+  const allCategories = [
     {
       id: 1,
       title: "Cooling Yoga Flow",
@@ -16,23 +18,47 @@ export default function BrowseByCategory({ onSeeMore, onClassClick }) {
     { id: 4, title: "Cooling Yoga Flow", image: "/assests/Rectangle (11).png" },
     { id: 5, title: "Cooling Yoga Flow", image: "/assests/Rectangle (12).png" },
     { id: 6, title: "Cooling Yoga Flow", image: "/assests/Rectangle (13).png" },
+    { id: 7, title: "Cooling Yoga Flow", image: "/assests/Rectangle (15).png" },
+    { id: 8, title: "Cooling Yoga Flow", image: "/assests/Rectangle (7).png" },
+    { id: 9, title: "Cooling Yoga Flow", image: "/assests/Rectangle (9).png" },
+    {
+      id: 10,
+      title: "Cooling Yoga Flow",
+      image: "/assests/Rectangle (11).png",
+    },
+    {
+      id: 11,
+      title: "Cooling Yoga Flow",
+      image: "/assests/Rectangle (12).png",
+    },
+    {
+      id: 12,
+      title: "Cooling Yoga Flow",
+      image: "/assests/Rectangle (13).png",
+    },
   ];
 
   return (
-    <section className="mb-10 mx-3">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Browse By Categories</h2>
+    <div className="container mx-auto py-6">
+      <div className="flex items-center mb-6 mx-3">
+        <Button
+          variant="ghost"
+          className="text-gray-600"
+          onClick={() => router.back()}
+        >
+          ← Back
+        </Button>
+        <h1 className="text-2xl font-bold ml-2">All Categories</h1>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-5 gap-x-10">
-        {categorizedClasses.map((yogaClass) => (
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-5 gap-x-4 mx-3">
+        {allCategories.map((yogaClass) => (
           <div
             key={yogaClass.id}
-            className="relative h-80 rounded-lg overflow-hidden cursor-pointer group"
-            onClick={() => onClassClick(yogaClass.id)}
+            className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group"
           >
-            <Link href={`/favorite/${yogaClass.id}`}>
+            <Link href={`/category/${yogaClass.id}`}>
               <div className="relative w-full h-full">
-                {/* Image displayed on top */}
                 <Image
                   src={yogaClass.image}
                   alt={yogaClass.title}
@@ -40,7 +66,6 @@ export default function BrowseByCategory({ onSeeMore, onClassClick }) {
                   objectFit="cover"
                   className="absolute inset-0 w-full h-full"
                 />
-                {/* Gradient Overlay on top of the image */}
                 <div
                   className="absolute inset-0 bg-gradient-to-t"
                   style={{
@@ -58,16 +83,6 @@ export default function BrowseByCategory({ onSeeMore, onClassClick }) {
           </div>
         ))}
       </div>
-
-      <div className="flex justify-end">
-        <Button
-          variant="link"
-          className="text-rose-500 hover:text-rose-600"
-          onClick={onSeeMore}
-        >
-          See More
-        </Button>
-      </div>
-    </section>
+    </div>
   );
 }

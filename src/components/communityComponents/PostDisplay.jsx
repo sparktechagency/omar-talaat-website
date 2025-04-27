@@ -122,35 +122,35 @@ const PostDisplay = ({
                 <img src={post.user.avatar} alt="User" />
               </Avatar>
               <div className="flex flex-col gap-2">
-                <span className="text- font-medium">{post.user.name}</span>
+                <span className="text- font-bold">{post.user.name}</span>
                 <span className="text-xs text-gray-500 ml-2">
                   {post.timeAgo} ago
                 </span>
               </div>
             </div>
             <div
-              className="text-xs mb-3"
+              className="text- mb-3 max-w-2xl"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
             <div className="flex items-center space-x-10">
               <button
-                className="flex items-center text-xs"
+                className="flex items-center text-xl"
                 onClick={() => handleLike(post.id)}
               >
                 <HeartIcon
-                  className={`h-4 w-4 mr-1 ${
+                  className={`h-8 w-8 mr-1 ${
                     post.likedBy.includes(currentUserId)
                       ? "text-white fill-red-500"
-                      : "text-red-500"
+                      : "text-red-500 "
                   }`}
                 />
                 {post.likes}
               </button>
               <button
-                className="flex items-center text-xs"
+                className="flex items-center text-xl"
                 onClick={() => setSelectedPostId(post.id)}
               >
-                <MessageSquare className="h-4 w-4 mr-1" />
+                <MessageSquare className="h-6 w-6 mr-1" />
                 {post.comments.length}
               </button>
             </div>

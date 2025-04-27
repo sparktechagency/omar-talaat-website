@@ -80,15 +80,22 @@ export default function Navbar() {
               <div className="absolute right-0 mt-2 w-60 border-2 border-[#2E2E2EF5] bg-[#fff] text-black shadow-md rounded-md">
                 <ul className="py-2">
                   <li>
-                    <Link href="/edit-profile" className="block px-4 py-2">
-                      Edit Profile
+                    <Link href="/profile-dashboard" className="block px-4 py-2">
+                      Profile Dashboard
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link href="/my-feed" className="block px-4 py-2">
+                      My Feed
                     </Link>
                   </li>
                   <li>
-                    <Link href="/change-password" className="block px-4 py-2 ">
-                      Change Password
+                    <Link href="/download-video" className="block px-4 py-2 ">
+                      Daownload Video
                     </Link>
                   </li>
+
                   <li>
                     <button
                       className="block w-full text-left px-4 py-2 "
@@ -107,6 +114,14 @@ export default function Navbar() {
                             className="block px-4 py-2 "
                           >
                             Terms & Conditions
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/change-password"
+                            className="block px-4 py-2 "
+                          >
+                            Change Password
                           </Link>
                         </li>
                         <li>

@@ -125,7 +125,7 @@ export default function CommunityComponents() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center mt-6">
+    <main className="flex min-h-screen flex-col items-center mt-6 mx-3">
       <div className="">
         <PostCreate onPostCreate={handleNewPost} />
 

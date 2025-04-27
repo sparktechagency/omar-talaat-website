@@ -61,7 +61,7 @@ export const CommentsModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="min-w-3xl max-h-[60vh] overflow-y-auto">
+      <DialogContent className="w-96 md:min-w-xl lg:min-w-3xl max-h-[60vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Comments</DialogTitle>
         </DialogHeader>
