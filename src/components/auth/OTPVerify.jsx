@@ -1,38 +1,115 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { registerSuccess } from "@/redux/featured/auth/authSlice";
+import { useOtpVerifyMutation } from "@/redux/featured/auth/authApi";
 
 export default function OTPVerify() {
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", ""]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState("");
+  const [verifyType, setVerifyType] = useState("");
+  const [otpVerify] = useOtpVerifyMutation();
+  const [verificationStatus, setVerificationStatus] = useState("");
+
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Get email and verification type from URL parameters
+    const emailParam = searchParams.get("email");
+    const typeParam = searchParams.get("type");
+
+    if (emailParam) {
+      setEmail(emailParam);
+    } else {
+      router.push("/login");
+    }
+
+    if (typeParam) {
+      setVerifyType(typeParam);
+    }
+  }, [searchParams, router]);
 
   // Handle OTP change
   const handleOtpChange = (e, index) => {
     const value = e.target.value;
+
+    // Only allow digits
+    if (value && !/^\d+$/.test(value)) {
+      return;
+    }
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
     // Move to next input after entering a digit
-    if (value && index < 5) {
-      document.getElementById(`otp-${index + 1}`).focus(); // Automatically focus on next input
+    if (value && index < 3) {
+      document.getElementById(`otp-${index + 1}`).focus();
     } else if (!value && index > 0) {
-      document.getElementById(`otp-${index - 1}`).focus(); // Move to previous input if value is deleted
+      document.getElementById(`otp-${index - 1}`).focus();
+    }
+  };
+
+  // Handle resend OTP
+  const handleResendOTP = async () => {
+    try {
+      // Here you would call your API to resend the OTP
+      // For example: await resendOTP(email);
+      setVerificationStatus(
+        "A new verification code has been sent to your email."
+      );
+    } catch (error) {
+      setVerificationStatus(
+        "Failed to resend verification code. Please try again."
+      );
     }
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Do OTP validation and then navigate
-    if (otp.join("").length === 6) {
-      router.push("/reset-password");
-    } else {
-      alert("Please enter the full OTP.");
+    setIsSubmitting(true);
+
+    try {
+      const otpValue = Number(otp.join(""));
+
+      // 🛠 Call your otpVerify API mutation
+      const res = await otpVerify({ email, oneTimeCode: otpValue }).unwrap();
+      console.log(res);
+      if (res.success) {
+        const { accessToken } = res.data;
+
+        if (verifyType === "registration") {
+          // Save token to localStorage
+          localStorage.setItem("token", accessToken);
+
+          // Dispatch to Redux
+          dispatch(registerSuccess({ user: null, accessToken }));
+
+          // Redirect to Home Page
+          router.push("/");
+        } else if (verifyType === "forgot-password") {
+          // Forgot Password flow: move to reset-password page
+          router.push(`/reset-password?email=${encodeURIComponent(email)}`);
+        } else {
+          // Default fallback
+          router.push("/login");
+        }
+      } else {
+        setVerificationStatus("Invalid verification code. Please try again.");
+      }
+    } catch (error) {
+      console.error("Verification failed:", error);
+      setVerificationStatus("Verification failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -81,15 +158,33 @@ export default function OTPVerify() {
               Enter Verification Code
             </h2>
 
+            {email && (
+              <p className="text-center mb-4 text-white">
+                We've sent a verification code to <strong>{email}</strong>
+              </p>
+            )}
+
             <div className="text-center mb-4 md:mb-6 text-sm md:text-base text-white">
               <p>
                 If you didn't receive a code.{" "}
-                <span className="text-blue-400 cursor-pointer">Resend</span>
+                <span
+                  className="text-blue-400 cursor-pointer hover:underline"
+                  onClick={handleResendOTP}
+                >
+                  Resend
+                </span>
               </p>
             </div>
 
+            {verificationStatus && (
+              <div className="text-center mb-4 text-yellow-400">
+                {verificationStatus}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit}>
               <div className="flex justify-around mb-4 mx-2 md:mx-10 gap-1 md:gap-2">
+                {/* Changed from 6 digits to 4 digits */}
                 {otp.map((digit, index) => (
                   <Input
                     key={index}

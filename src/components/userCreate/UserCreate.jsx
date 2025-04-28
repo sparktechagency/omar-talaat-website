@@ -1,29 +1,55 @@
 "use client";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
+import { useRegisterMutation } from "@/redux/featured/auth/authApi";
+import { useDispatch } from "react-redux";
+import { registerSuccess } from "@/redux/featured/auth/authSlice";
+import { useRouter } from "next/navigation";
 
 export default function UserCreate() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm();
+  const [registerUser, { isLoading }] = useRegisterMutation();
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   const [registrationStatus, setRegistrationStatus] = useState("");
 
-  const onSubmit = (data) => {
-    console.log(data);
-    setRegistrationStatus("Account created successfully!");
+  const onSubmit = async (data) => {
+    try {
+      // First register the user
+      const res = await registerUser(data).unwrap();
+
+      // Instead of directly saving token and redirecting to dashboard,
+      // redirect to the OTP verification page with email in URL
+      const email = encodeURIComponent(data.email);
+
+      // Here we're setting a verification type parameter so OTP page knows this is for account creation
+      router.push(`/otp-verify?email=${email}&type=registration`);
+
+      // You might want to show a success message before redirecting
+      setRegistrationStatus("Account created! Please verify your email.");
+
+      // Note: We'll store the token and user data only after OTP verification
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setRegistrationStatus("Failed to create account. Please try again.");
+    }
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row  justify-center">
-      {/* Left side image - hidden on small devices */}
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center ">
+    <div className="min-h-screen w-full flex flex-col lg:flex-row justify-center">
+      {/* Left side image */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center">
         <div className="h-auto max-h-[900px] w-full max-w-[900px] p-4">
           <Image
             src="/assests/registerImage.png"
@@ -36,7 +62,7 @@ export default function UserCreate() {
         </div>
       </div>
 
-      {/* Right side form - full width on small devices */}
+      {/* Right side form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8">
         <div className="bg-[#FCFCFC3B] border-2 border-[#A92C2C] backdrop-blur-md rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
           <div className="flex justify-center mb-4">
@@ -49,32 +75,32 @@ export default function UserCreate() {
             />
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center text-white">
             Create an account
           </h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-sm mb-2">
-                Full Name*
+              <label htmlFor="name" className="block text-sm mb-2 text-white">
+                Name*
               </label>
               <Input
-                id="fullName"
+                id="name"
                 placeholder="Enter your full name"
-                {...register("fullName", { required: "Full Name is required" })}
+                {...register("name", { required: " Name is required" })}
                 className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
               />
-              {errors.fullName && (
+              {errors.name && (
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.fullName.message}
+                  {errors.name.message}
                 </p>
               )}
             </div>
 
-            {/* Email Address */}
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm mb-2">
+              <label htmlFor="email" className="block text-sm mb-2 text-white">
                 Email Address*
               </label>
               <Input
@@ -99,7 +125,10 @@ export default function UserCreate() {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm mb-2 text-white"
+              >
                 Password*
               </label>
               <Input
@@ -126,21 +155,22 @@ export default function UserCreate() {
             <Button
               type="submit"
               className="bg-button text-white w-full h-10 md:h-12 rounded-md my-4 md:my-6"
+              disabled={isLoading}
             >
-              Create account
+              {isLoading ? "Creating..." : "Create account"}
             </Button>
           </form>
 
           {registrationStatus && (
-            <p className="text-center mt-4 text-green-500">
+            <p className="text-center mt-4 text-red-500">
               {registrationStatus}
             </p>
           )}
 
-          <p className="text-sm md:text-base mt-4 text-center">
+          <p className="text-sm md:text-base mt-4 text-center text-white">
             If you already have an account, please{" "}
             <Link
-              className="text-white font-bold md:font-black md:text-2xl ml-1"
+              className="text-white font-bold md:font-black md:text-2xl ml-1 hover:text-red-400"
               href="/login"
             >
               Login

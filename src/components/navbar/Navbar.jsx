@@ -91,6 +91,11 @@ export default function Navbar() {
                     </Link>
                   </li>
                   <li>
+                    <Link href="/my-post" className="block px-4 py-2">
+                      My Post
+                    </Link>
+                  </li>
+                  <li>
                     <Link href="/my-download" className="block px-4 py-2 ">
                       Daownload Video
                     </Link>
@@ -136,7 +141,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      href="/logout"
+                      href="/login"
                       onClick={() => {
                         localStorage.removeItem("user");
                         localStorage.removeItem("token");
