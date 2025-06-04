@@ -1,18 +1,22 @@
 import React from "react";
-import { TodaysVideo } from "./TodaysVideo";
-import { ComingSoon } from "./ComingSoon";
-import { DailyInspiration } from "./DailyInspiration";
-import NewClasses from "../exploreComponents/NewClasses";
-import BrowseByCategory from "../exploreComponents/BrowseByCategory";
+import CountdownProgressTracker from "./TimeSection";
+import ShopCategory from "./ShopCategory";
+import RecentAdded from "./RecentAded";
+import RecentView from "./RecentView";
 
 const HomePageContainer = () => {
   return (
     <div>
-      <TodaysVideo />
+      <CountdownProgressTracker />
+      <ShopCategory />
+      <RecentAdded />
+      <RecentView />
+      {/* <Banner /> */}
+      {/* <TodaysVideo />
       <ComingSoon />
       <DailyInspiration />
       <NewClasses />
-      <BrowseByCategory />
+      <BrowseByCategory /> */}
     </div>
   );
 };

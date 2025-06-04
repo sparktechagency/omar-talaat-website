@@ -4,6 +4,7 @@ import Providers from "@/components/share/provider";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 import { Toaster } from "sonner";
+import { UserProvider } from "@/components/share/UserProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,14 +33,16 @@ export default function RootLayout({ children }) {
       <body
         className={`${poppins.variable} ${geistMono.variable} antialiased `}
       >
-        <Providers>
-          <div>
-            <div className="">
-              <Toaster richColors position="top-center" />
-              <main>{children}</main>
+        <UserProvider>
+          <Providers>
+            <div>
+              <div className="">
+                <Toaster richColors position="top-center" />
+                <main>{children}</main>
+              </div>
             </div>
-          </div>
-        </Providers>
+          </Providers>
+        </UserProvider>
       </body>
     </html>
   );

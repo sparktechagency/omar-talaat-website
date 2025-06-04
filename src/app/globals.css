@@ -79,6 +79,12 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --primary: #000000;
+  --primary-foreground: #fff;
+  --primary-hover: #7a141a;
+  --button-primary:#E8505B;
+  --text-primary:#191820;
+
 }
 
 .dark {
@@ -156,7 +162,7 @@ html {
   color: #a3a3a3f5;
 }
 .bg-red {
-  background-color: #ca3939;
+  background-color: #0000004D;
 }
 h1,
 h2,

@@ -1,19 +1,54 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { FaUserCircle } from "react-icons/fa";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { FaUserCircle, FaSearch } from "react-icons/fa";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { FiMenu } from "react-icons/fi";
+import { FiMenu, FiShoppingCart } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { Button } from "../ui/button";
+import { HiOutlineChartBar } from "react-icons/hi";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // Initialize search query from URL params
+  useEffect(() => {
+    const query = searchParams.get("search") || "";
+    setSearchQuery(query);
+  }, [searchParams]);
+
+  // Debounced search function for real-time URL update
+  const debounceTimer = useRef(null);
+
+  const updateSearchUrl = useCallback(
+    (query) => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+
+      debounceTimer.current = setTimeout(() => {
+        const params = new URLSearchParams(searchParams);
+        if (query.trim()) {
+          params.set("search", query.trim());
+        } else {
+          params.delete("search");
+        }
+        const queryString = params.toString();
+        router.push(`${pathname}${queryString ? `?${queryString}` : ""}`, {
+          scroll: false,
+        });
+      }, 300); // 300ms delay
+    },
+    [pathname, router, searchParams]
+  );
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -28,111 +63,211 @@ export default function Navbar() {
     };
   }, []);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Form submit is now handled by real-time search
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    updateSearchUrl(value); // Real-time URL update
+  };
+
+  const handleKeyPress = (e) => {
+    // Remove enter key requirement - search is now real-time
+  };
+
   return (
-    <nav className=" text-white fixed w-full top-0 left-0 shadow-lg z-50 bg-[#fff]">
-      <div className="container mx-auto flex justify-between items-center h-20 px-4">
+    <nav className="bg-primary text-white fixed w-full top-0 left-0 shadow-lg z-50">
+      <div className="container mx-auto flex justify-between items-center h-16 px-4 lg:px-6">
         {/* Left: Logo */}
         <Link
           href="/"
           className="flex items-center space-x-2 text-lg font-bold"
         >
-          <img src="/assests/logo.png" alt="Logo" className="w-16 h-10" />
+          {/* Coral/Tree icon placeholder - replace with your logo */}
+          <div className="w-8 h-8 text-white">🪸</div>
         </Link>
 
-        {/* Middle: Navigation Links (Hidden on mobile) */}
-        <ul className="hidden md:flex space-x-6">
-          {[
-            { name: "Home", path: "/" },
-            { name: "Favorite", path: "/favorite" },
-            { name: "Explore", path: "/explore" },
-            { name: "Community", path: "/community" },
-          ].map((item) => (
-            <li key={item.name}>
-              <Link
-                href={item.path}
-                className={`relative pb-1 text-black transition-all duration-300 ease-in-out ${
-                  pathname === item.path
-                    ? "border-b-2 border-red-500 text-black"
-                    : "hover:border-b-2 hover:border-red-500 text-black"
+        {/* Middle: Navigation Links & Search */}
+        <div className="hidden lg:flex items-center space-x-8 flex-1 justify-center">
+          {/* Navigation Links */}
+          <ul className="flex space-x-6">
+            {[
+              { name: "Home", path: "/" },
+              { name: "Shop", path: "/shop" },
+              { name: "Auctions", path: "/auctions" },
+            ].map((item) => (
+              <li key={item.name}>
+                <Link
+                  href={item.path}
+                  className={`relative pb-1 transition-all duration-300 ease-in-out ${
+                    pathname === item.path
+                      ? "border-b-2 border-white text-white"
+                      : "hover:border-b-2 hover:border-white text-gray-300 hover:text-white"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Search Bar */}
+          <div className="relative ml-8">
+            <form onSubmit={handleSearch} className="relative">
+              <div
+                className={`flex items-center bg-gray-800 rounded-full px-4 py-2 transition-all duration-300 ${
+                  isSearchFocused ? "ring-2 ring-white" : ""
                 }`}
               >
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+                <FaSearch className="text-gray-400 mr-3" />
+                <input
+                  type="text"
+                  placeholder="Search Corals"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onKeyPress={handleKeyPress}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setIsSearchFocused(false)}
+                  className="bg-transparent text-white placeholder-gray-400 outline-none w-64"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
 
-        {/* Right: Cart Icon & Profile Icon */}
-        <div className="flex items-center space-x-4 relative">
-          <Link href="/cart" className="text-2xl text-black">
-            <IoNotificationsOutline size={28} />
+        {/* Right: Stats & Profile Icons */}
+        <div className="flex items-center space-x-4">
+          {/* Stats Icons (Hidden on mobile) */}
+          <div className="hidden md:flex items-center space-x-4 text-sm">
+            {/* Calendar Icon with number */}
+            <div className="flex items-center space-x-1">
+              <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
+                <span className="text-xs font-bold text-black">📅</span>
+              </div>
+              <span className="text-white">7</span>
+            </div>
+
+            {/* Coral Icon with number */}
+            <div className="flex items-center space-x-1">
+              <div className="w-6 h-6 text-white">🪸</div>
+              <span className="text-white">512</span>
+            </div>
+
+            {/* Coin Icon with number */}
+            <div className="flex items-center space-x-1">
+              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-black">C</span>
+              </div>
+              <span className="text-white">235</span>
+            </div>
+
+            {/* Chart Icon */}
+            <HiOutlineChartBar className="text-white text-xl" />
+          </div>
+
+          {/* Notification Icon */}
+          <Link
+            href="/notifications"
+            className="text-xl text-white hover:text-gray-300"
+          >
+            <FiShoppingCart size={24} />
           </Link>
 
           {/* Profile Dropdown */}
           <div className="relative profile-menu">
             <button
-              className="text-2xl"
+              className="text-xl"
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             >
-              <FaUserCircle size={40} className="text-black" />
+              <FaUserCircle
+                size={32}
+                className="text-white hover:text-gray-300"
+              />
             </button>
             {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-60 border-2 border-[#2E2E2EF5] bg-[#fff] text-black shadow-md rounded-md">
+              <div className="absolute right-0 mt-2 w-60 border border-gray-700 bg-gray-900 text-white shadow-lg rounded-md">
                 <ul className="py-2">
                   <li>
-                    <Link href="/profile-dashboard" className="block px-4 py-2">
+                    <Link
+                      href="/profile-dashboard"
+                      className="block px-4 py-2 hover:bg-gray-800"
+                    >
                       Profile Dashboard
                     </Link>
                   </li>
-
                   <li>
-                    <Link href="/my-feed" className="block px-4 py-2">
+                    <Link
+                      href="/my-feed"
+                      className="block px-4 py-2 hover:bg-gray-800"
+                    >
                       My Feed
                     </Link>
                   </li>
                   <li>
-                    <Link href="/my-post" className="block px-4 py-2">
+                    <Link
+                      href="/my-post"
+                      className="block px-4 py-2 hover:bg-gray-800"
+                    >
                       My Post
                     </Link>
                   </li>
                   <li>
-                    <Link href="/my-download" className="block px-4 py-2 ">
-                      Daownload Video
+                    <Link
+                      href="/my-download"
+                      className="block px-4 py-2 hover:bg-gray-800"
+                    >
+                      Download Video
                     </Link>
                   </li>
 
                   <li>
                     <button
-                      className="block w-full text-left px-4 py-2 "
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-800"
                       onClick={() => setIsSettingsOpen(!isSettingsOpen)}
                     >
                       <div className="flex justify-between items-center">
                         Settings
-                        <MdKeyboardArrowDown />
+                        <MdKeyboardArrowDown
+                          className={`transform transition-transform ${
+                            isSettingsOpen ? "rotate-180" : ""
+                          }`}
+                        />
                       </div>
                     </button>
                     {isSettingsOpen && (
-                      <ul className="pl-4">
+                      <ul className="pl-4 bg-gray-800">
                         <li>
-                          <Link href="/contact" className="block px-4 py-2 ">
+                          <Link
+                            href="/contact"
+                            className="block px-4 py-2 hover:bg-gray-700"
+                          >
                             Contact us
                           </Link>
                         </li>
                         <li>
-                          <Link href="/terms" className="block px-4 py-2 ">
+                          <Link
+                            href="/terms"
+                            className="block px-4 py-2 hover:bg-gray-700"
+                          >
                             Terms & Conditions
                           </Link>
                         </li>
                         <li>
                           <Link
                             href="/change-password"
-                            className="block px-4 py-2 "
+                            className="block px-4 py-2 hover:bg-gray-700"
                           >
                             Change Password
                           </Link>
                         </li>
                         <li>
-                          <Link href="/policy" className="block px-4 py-2 ">
+                          <Link
+                            href="/policy"
+                            className="block px-4 py-2 hover:bg-gray-700"
+                          >
                             Privacy Policy
                           </Link>
                         </li>
@@ -143,10 +278,12 @@ export default function Navbar() {
                     <Link
                       href="/login"
                       onClick={() => {
-                        localStorage.removeItem("user");
-                        localStorage.removeItem("token");
+                        if (typeof window !== "undefined") {
+                          localStorage.removeItem("user");
+                          localStorage.removeItem("token");
+                        }
                       }}
-                      className="block px-4 py-2 mt-10"
+                      className="block px-4 py-2 mt-2 border-t border-gray-700 hover:bg-gray-800 text-red-400"
                     >
                       Logout
                     </Link>
@@ -158,13 +295,13 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-2xl"
+            className="lg:hidden text-xl"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? (
-              <AiOutlineClose className="text-black" />
+              <AiOutlineClose className="text-white" />
             ) : (
-              <FiMenu className="text-black" />
+              <FiMenu className="text-white" />
             )}
           </button>
         </div>
@@ -172,24 +309,69 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <ul className="md:hidden bg-[#fff] text-black p-4 text-center space-y-3">
-          {[
-            { name: "Home", path: "/" },
-            { name: "Favorite", path: "/favorite" },
-            { name: "Explore", path: "/explore" },
-            { name: "Community", path: "/community" },
-          ].map((item) => (
-            <li key={item.name}>
-              <Link
-                href={item.path}
-                className="block hover:underline"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="lg:hidden bg-gray-900 text-white">
+          {/* Mobile Search */}
+          <div className="p-4 border-b border-gray-700">
+            <form onSubmit={handleSearch} className="relative">
+              <div className="flex items-center bg-gray-800 rounded-full px-4 py-2">
+                <FaSearch className="text-gray-400 mr-3" />
+                <input
+                  type="text"
+                  placeholder="Search Corals"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onKeyPress={handleKeyPress}
+                  className="bg-transparent text-white placeholder-gray-400 outline-none flex-1"
+                />
+              </div>
+            </form>
+          </div>
+
+          {/* Mobile Navigation Links */}
+          <ul className="p-4 space-y-3">
+            {[
+              { name: "Home", path: "/" },
+              { name: "Shop", path: "/shop" },
+              { name: "Auctions", path: "/auctions" },
+            ].map((item) => (
+              <li key={item.name}>
+                <Link
+                  href={item.path}
+                  className={`block py-2 px-4 rounded transition-colors ${
+                    pathname === item.path
+                      ? "bg-white text-black"
+                      : "hover:bg-gray-800"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Mobile Stats */}
+          <div className="p-4 border-t border-gray-700">
+            <div className="flex items-center justify-center space-x-6 text-sm">
+              <div className="flex items-center space-x-1">
+                <div className="w-6 h-6 bg-orange-400 rounded flex items-center justify-center">
+                  <span className="text-xs font-bold text-black">📅</span>
+                </div>
+                <span>7</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <div className="w-6 h-6 text-orange-400">🪸</div>
+                <span>512</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-bold text-black">C</span>
+                </div>
+                <span>235</span>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </nav>
   );
