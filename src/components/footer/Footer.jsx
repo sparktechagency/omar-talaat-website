@@ -5,191 +5,225 @@ import { Input } from "@/components/ui/input";
 
 export default function Footer() {
   return (
-    <div className="flex flex-col border-t mt-12 md:mt-20">
-      {/* Header */}
-      <header className="container mx-auto py-10 px-4 rounded-md">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-          {/* Logo and Mobile Navigation */}
-          <div className="flex flex-col items-center lg:items-start w-full lg:w-auto">
-            <Image
-              src="/assests/logo.png"
-              width={150}
-              height={150}
-              alt="logo"
-            />
+    <div className="bg-gray-900 text-white">
+      {/* Main Footer Content */}
+      <footer className="container mx-auto py-12 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          {/* Logo and Contact Section */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center mb-6">
+              <div className="w-12 h-12 mr-4">
+                {/* Coral Logo SVG */}
+                <svg
+                  viewBox="0 0 100 100"
+                  className="w-full h-full text-white fill-current"
+                >
+                  <path d="M20 80 Q30 60 25 40 Q35 30 45 35 Q55 25 65 40 Q75 30 80 50 Q70 70 60 75 Q50 85 40 80 Q30 90 20 80 Z" />
+                  <path d="M35 45 Q40 35 45 45 Q50 40 55 50 Q45 55 40 50 Q35 55 35 45 Z" />
+                  <path d="M25 60 Q30 50 35 60 Q40 55 45 65 Q35 70 30 65 Q25 70 25 60 Z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">Coral Stash</h2>
+              </div>
+            </div>
 
-            {/* Mobile Navigation - Shows on small screens */}
-            <nav className="mt-4 lg:hidden grid grid-cols-3 gap-4">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3">
+                Have any Questions or Requests?
+              </h3>
+              <p className="text-gray-300 mb-4">
+                Feel free to message us on WhatsApp
+              </p>
               <Link
-                href="/"
-                className="text-gray-800 hover:text-gray-600 text-sm"
-              >
-                Home
-              </Link>
-              <Link
-                href="/community"
-                className="text-gray-800 hover:text-gray-600 text-sm"
-              >
-                Community
-              </Link>
-              <Link
-                href="/favorite"
-                className="text-gray-800 hover:text-gray-600 text-sm"
-              >
-                Favorite
-              </Link>
-              <Link
-                href="/explore"
-                className="text-gray-800 hover:text-gray-600 text-sm"
-              >
-                Explore
-              </Link>
-              <Link
-                href="/contact"
-                className="text-gray-800 hover:text-gray-600 text-sm"
-              >
-                Contact us
-              </Link>
-            </nav>
-          </div>
-
-          {/* Desktop Navigation - Shows on larger screens */}
-          <nav className="hidden lg:grid grid-cols-2 gap-4 md:gap-8 lg:gap-x-12 lg:gap-y-6">
-            <Link href="/" className="text-gray-800 hover:text-gray-600">
-              Home
-            </Link>
-            <Link
-              href="/community"
-              className="text-gray-800 hover:text-gray-600"
-            >
-              Community
-            </Link>
-            <Link
-              href="/favorite"
-              className="text-gray-800 hover:text-gray-600"
-            >
-              Favorite
-            </Link>
-            <Link href="/explore" className="text-gray-800 hover:text-gray-600">
-              Explore
-            </Link>
-            <Link href="/contact" className="text-gray-800 hover:text-gray-600">
-              Contact us
-            </Link>
-          </nav>
-
-          {/* Mobile App Section - Stacked on mobile, side by side on larger screens */}
-          <div className="w-full lg:w-auto">
-            <h3 className="text-lg font-medium mb-3 text-center lg:text-left">
-              Our Mobile App
-            </h3>
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-4">
-              <Link
-                href="https://apps.apple.com"
+                href="https://wa.me/your-number"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-1/2 sm:mx-0 lg:w-full"
+                className="inline-flex items-center justify-center w-12 h-12 bg-green-500 rounded-full hover:bg-green-600 transition-colors"
               >
-                <Button
-                  variant="outline"
-                  className="w-full border-gray-300 items-center justify-center h-16"
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <div className="flex items-center justify-center text-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="40"
-                      height="40"
-                      viewBox="0 0 24 24"
-                      className="shrink-0 mr-2"
-                    >
-                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-                    </svg>
-                    <span className="text-center font-bold">
-                      Download on the
-                      <br />
-                      Apple Store
-                    </span>
-                  </div>
-                </Button>
-              </Link>
-              <Link
-                href="https://play.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-1/2 sm:mx-0 lg:w-full"
-              >
-                <Button
-                  variant="outline"
-                  className="w-full border-gray-300 items-center justify-center h-16"
-                >
-                  <div className="flex items-center justify-center text-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="40"
-                      height="40"
-                      viewBox="0 0 24 24"
-                      className="shrink-0 mr-2"
-                    >
-                      <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
-                    </svg>
-                    <span className="text-center font-bold">
-                      Get it on
-                      <br />
-                      Google Play
-                    </span>
-                  </div>
-                </Button>
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516" />
+                </svg>
               </Link>
             </div>
           </div>
 
-          {/* Email Signup Form - Full width on mobile, fixed width on larger screens */}
-          <div className="w-full lg:w-96">
-            <h3 className="text-xl lg:text-2xl font-medium mb-4 text-center lg:text-left">
-              Join Our Yoga Community
-            </h3>
-            <div className="flex flex-col sm:flex-row">
+          {/* Quick Links */}
+          <div className="lg:col-span-1">
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <div className="space-y-2">
+              <Link
+                href="/all-coral"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                All Coral
+              </Link>
+              <Link
+                href="/zoanthids"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                Zoanthids
+              </Link>
+              <Link
+                href="/sps"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                SPS
+              </Link>
+              <Link
+                href="/lps"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                LPS
+              </Link>
+              <Link
+                href="/acropora"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                Acropora
+              </Link>
+            </div>
+          </div>
+
+          {/* More Quick Links */}
+          <div className="lg:col-span-1">
+            <h3 className="text-lg font-semibold mb-4">&nbsp;</h3>
+            <div className="space-y-2">
+              <Link
+                href="/montipora"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                Montipora
+              </Link>
+              <Link
+                href="/soft-corals"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                Soft Corals
+              </Link>
+              <Link
+                href="/wysiwyg"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                WYSIWYG
+              </Link>
+              <Link
+                href="/live-food"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                Live Food
+              </Link>
+              <Link
+                href="/the-vault"
+                className="block text-gray-300 hover:text-white transition-colors"
+              >
+                The Vault
+              </Link>
+            </div>
+          </div>
+
+          {/* Information Links & WhatsApp */}
+          <div className="lg:col-span-1">
+            <h3 className="text-lg font-semibold mb-4">Information Links</h3>
+            <div className="space-y-4">
+              <Link
+                href="/doa-form"
+                className="block text-gray-300 hover:text-white transition-colors font-medium"
+              >
+                DOA Form
+              </Link>
+
+              <div className="mt-8">
+                <h4 className="text-lg font-semibold mb-3">
+                  Join our WhatsApp Group
+                </h4>
+                <p className="text-gray-300 text-sm mb-4">
+                  Through our WhatsApp group, you can get access to useful
+                  information, latest frag drops and other useful services!
+                </p>
+                <Link
+                  href="https://wa.me/your-group-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-12 h-12 bg-green-500 rounded-full hover:bg-green-600 transition-colors"
+                >
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Newsletter */}
+          <div className="lg:col-span-1">
+            <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
+            <p className="text-gray-300 text-sm mb-4">
+              Sign up for exclusive offers, additions and more.
+            </p>
+
+            <div className="flex">
               <Input
                 type="email"
                 placeholder="Your email"
-                className="py-6 flex-grow md:rounded-r-none"
+                className="bg-gray-800 border-gray-700 text-white placeholder-gray-400 rounded-r-none focus:border-gray-600"
               />
-              <Button className="h-12 mt-4 md:mt-0 bg-red md:rounded-l-none">
-                Sign Up
+              <Button className="bg-white text-gray-900 hover:bg-gray-100 rounded-l-none px-4">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
               </Button>
             </div>
           </div>
         </div>
-      </header>
+      </footer>
 
-      {/* Footer */}
-      <footer className="py-6 border-t border-gray-200">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="order-2 md:order-1">
-              <p className="text-sm text-gray-600 text-center md:text-left">
-                © {new Date().getFullYear()} jowelahmed@gmail.com. All rights
-                reserved.
-              </p>
+      {/* Bottom Footer */}
+      <div className="border-t border-gray-800">
+        <div className="container mx-auto py-4 px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-4 md:mb-0">
+              <p className="text-sm text-gray-400">© 2025 coral-Stash.com</p>
             </div>
-            <div className="order-1 md:order-2 flex flex-wrap justify-center gap-x-4 gap-y-2">
-              <Link
-                href="/terms"
-                className="text-sm text-gray-600 hover:text-gray-900"
-              >
-                Terms & Conditions
-              </Link>
-              <span className="text-gray-600 hidden md:inline">•</span>
-              <Link
-                href="/privacy"
-                className="text-sm text-gray-600 hover:text-gray-900"
-              >
-                Privacy Notice
-              </Link>
+
+            <div className="flex items-center space-x-4">
+              {/* Payment Icons */}
+              <div className="flex space-x-2">
+                <div className="w-8 h-5 bg-blue-600 rounded flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">AE</span>
+                </div>
+                <div className="w-8 h-5 bg-gray-600 rounded flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">AP</span>
+                </div>
+                <div className="w-8 h-5 bg-red-600 rounded flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">MC</span>
+                </div>
+                <div className="w-8 h-5 bg-blue-800 rounded flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">V</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }

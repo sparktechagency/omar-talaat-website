@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useMemo } from "react";
 import { Search, Filter, ChevronDown, Lock } from "lucide-react";
+import Link from "next/link";
 
 const CoralShopGrid = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -236,7 +237,11 @@ const CoralShopGrid = () => {
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredAndSortedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <Link key={product.id} href={`/shop/${product.id}`}>
+            
+                <ProductCard product={product} />
+            
+            </Link>
           ))}
         </div>
 

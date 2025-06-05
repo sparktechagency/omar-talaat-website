@@ -170,7 +170,7 @@ export default function Navbar() {
 
           {/* Notification Icon */}
           <Link
-            href="/notifications"
+            href="/cart"
             className="text-xl text-white hover:text-gray-300"
           >
             <FiShoppingCart size={24} />
