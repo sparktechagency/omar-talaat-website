@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "../share/UserProvider";
 import { getUserStyles } from "../share/utils/userStyles";
+import { MainLogo } from "../share/svg/Logo";
 
 const Banner = () => {
     const { userType } = useUser();
-    const { bg, text, button } = getUserStyles(userType);
+    const { bg, text, border, logo, buttonBg, buttonText } =
+      getUserStyles(userType);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -42,8 +44,7 @@ const Banner = () => {
     // {`min-h-screen p-6 ${bg} ${text}`}
 
   return (
-    <div className={`relative min-h-screen ${bg}  overflow-hidden`}>
-      {/* Coral Background Pattern */}
+    <div className={`h-[1222px] mt-40 ${bg}  overflow-hidden`}>
       <div className="absolute inset-0 opacity-20">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -53,61 +54,15 @@ const Banner = () => {
         ></div>
       </div>
 
-      {/* Coral Polyp Circles */}
-      {/* <div className="absolute inset-0">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className={`absolute rounded-full border-2 ${
-              i % 3 === 0
-                ? "border-green-400"
-                : i % 3 === 1
-                ? "border-blue-400"
-                : "border-purple-400"
-            } opacity-30`}
-            style={{
-              width: `${Math.random() * 60 + 40}px`,
-              height: `${Math.random() * 60 + 40}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              transform: "translate(-50%, -50%)",
-              animation: `pulse ${
-                2 + Math.random() * 3
-              }s ease-in-out infinite alternate`,
-            }}
-          >
-            <div className="w-full h-full rounded-full bg-gradient-to-br from-green-500/20 via-blue-500/20 to-purple-500/20"></div>
-          </div>
-        ))}
-      </div> */}
-
       {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         {/* Logo */}
         <div className="mb-8">
-          {/* <div className="flex items-center justify-center mb-4">
-            <svg
-              width="80"
-              height="80"
-              viewBox="0 0 100 100"
-              className="text-white"
-              fill="currentColor"
-            >
-              <path
-                d="M50 10 C30 10, 20 25, 25 45 C20 50, 25 60, 35 55 C40 65, 60 65, 65 55 C75 60, 80 50, 75 45 C80 25, 70 10, 50 10 Z"
-                stroke="currentColor"
-                strokeWidth="3"
-                fill="none"
-              />
-              <path d="M35 35 C40 30, 45 35, 40 40 C35 45, 30 40, 35 35 Z" />
-              <path d="M60 35 C65 30, 70 35, 65 40 C60 45, 55 40, 60 35 Z" />
-              <path d="M45 50 C50 45, 55 50, 50 55 C45 60, 40 55, 45 50 Z" />
-            </svg>
-          </div> */}
-          <h1
-            className="text-5xl md:text-6xl font-bold text-white mb-2"
-            style={{ fontFamily: "cursive" }}
-          >
+          <MainLogo
+            className="w-[168px] h-[182px] mx-auto mb-6"
+            color={`${logo}`}
+          />
+          <h1 className="text-5xl md:text-6xl font-bold font-brush text-white mb-10">
             Coral Stash
           </h1>
         </div>
@@ -170,14 +125,14 @@ const Banner = () => {
 
         {/* Discount Offers */}
         <div className="space-y-4 w-full max-w-2xl">
-          <div className="flex items-center justify-between bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-4">
+          <div className="flex items-center justify-between bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 h-[67px] py-4">
             <span className="text-white font-medium">
               10% Off for orders AED600 or above
             </span>
             <Button
               variant="outline"
               size="sm"
-              className="bg-transparent border-white text-white hover:bg-white hover:text-primary"
+              className="bg-transparent border-white rounded-3xl text-white hover:bg-white hover:text-primary"
             >
               Get Code
             </Button>
@@ -189,7 +144,7 @@ const Banner = () => {
             <Button
               variant="outline"
               size="sm"
-              className="bg-transparent border-white text-white hover:bg-white hover:text-primary"
+              className="bg-transparent rounded-3xl border-white text-white hover:bg-white hover:text-primary"
             >
               Get Code
             </Button>
@@ -201,7 +156,7 @@ const Banner = () => {
             <Button
               variant="outline"
               size="sm"
-              className="bg-transparent border-white text-white hover:bg-white hover:text-primary"
+              className="bg-transparent border-white text-white hover:bg-white rounded-3xl hover:text-primary"
             >
               Get Code
             </Button>

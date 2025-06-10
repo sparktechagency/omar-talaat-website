@@ -8,6 +8,7 @@ import { FiMenu, FiShoppingCart } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { HiOutlineChartBar } from "react-icons/hi";
+import { CalenderLogo, CoinsLogo, Logo, MainLogo, MyBug, MyProfile, Ranking } from "../share/svg/Logo";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -80,14 +81,14 @@ export default function Navbar() {
 
   return (
     <nav className="bg-primary text-white fixed w-full top-0 left-0 shadow-lg z-50">
-      <div className="container mx-auto flex justify-between items-center h-16 px-4 lg:px-6">
+      <div className="container mx-auto flex justify-between items-center h-24 px-4 lg:px-6">
         {/* Left: Logo */}
         <Link
           href="/"
           className="flex items-center space-x-2 text-lg font-bold"
         >
           {/* Coral/Tree icon placeholder - replace with your logo */}
-          <div className="w-8 h-8 text-white">🪸</div>
+          <MainLogo color={`#fff`} width={65} height={70} />
         </Link>
 
         {/* Middle: Navigation Links & Search */}
@@ -144,36 +145,30 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4 text-sm">
             {/* Calendar Icon with number */}
             <div className="flex items-center space-x-1">
-              <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
-                <span className="text-xs font-bold text-black">📅</span>
-              </div>
-              <span className="text-white">7</span>
+              <CalenderLogo />
+
+              <span className="text-white text-4xl font-brush">7</span>
             </div>
 
             {/* Coral Icon with number */}
             <div className="flex items-center space-x-1">
-              <div className="w-6 h-6 text-white">🪸</div>
-              <span className="text-white">512</span>
+              <Logo />
+              <span className="text-white font-brush text-4xl">512</span>
             </div>
 
             {/* Coin Icon with number */}
             <div className="flex items-center space-x-1">
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                <span className="text-xs font-bold text-black">C</span>
-              </div>
-              <span className="text-white">235</span>
+              <CoinsLogo />
+              <span className="text-white font-brush text-4xl">235</span>
             </div>
 
             {/* Chart Icon */}
-            <HiOutlineChartBar className="text-white text-xl" />
+            <Ranking />
           </div>
 
-          {/* Notification Icon */}
-          <Link
-            href="/cart"
-            className="text-xl text-white hover:text-gray-300"
-          >
-            <FiShoppingCart size={24} />
+          {/* Cart Icon */}
+          <Link href="/cart" className="text-xl text-white hover:text-gray-300">
+            <MyBug />
           </Link>
 
           {/* Profile Dropdown */}
@@ -182,10 +177,7 @@ export default function Navbar() {
               className="text-xl"
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             >
-              <FaUserCircle
-                size={32}
-                className="text-white hover:text-gray-300"
-              />
+              <MyProfile />
             </button>
             {isProfileOpen && (
               <div className="absolute right-0 mt-2 w-60 border border-gray-700 bg-gray-900 text-white shadow-lg rounded-md">

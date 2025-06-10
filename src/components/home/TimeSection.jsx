@@ -143,7 +143,7 @@ export default function CountdownProgressTracker() {
                 <span className="text-white font-bold text-2xl">2</span>
               </div>
               <Card className="bg-black border-cyan-400 border-2 p-6 text-center min-w-[280px]">
-                <h3 className="text-white font-bold text-lg leading-tight">
+                <h3 className="text-white font-bold font-dm-sans text-lg leading-tight">
                   DOPAMINE
                   <br />
                   RECEPTOR GENE

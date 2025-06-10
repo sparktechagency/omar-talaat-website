@@ -1,4 +1,10 @@
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Poppins,
+  Comforter_Brush,
+  DM_Sans,
+} from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/share/provider";
 import Navbar from "@/components/navbar/Navbar";
@@ -21,6 +27,18 @@ const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
 });
+const comforterBrush = Comforter_Brush({
+  weight: "400", 
+  subsets: ["latin"],
+  variable: "--font-comforter-brush",
+});
+
+const dmSans = DM_Sans({
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+});
+
 
 export const metadata = {
   title: "Create Next App",
@@ -31,7 +49,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${geistMono.variable} antialiased `}
+        className={` ${dmSans.variable} ${comforterBrush.variable} antialiased `}
       >
         <UserProvider>
           <Providers>

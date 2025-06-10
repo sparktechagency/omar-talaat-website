@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -7,67 +7,74 @@ const ShopCategory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
 
-  // Mineral data with vibrant colors matching the fluorescent theme
+  // Available images to cycle through
+  const availableImages = [
+    "https://i.ibb.co/JR01nZWv/underwater-landscape-23-2150440386.jpg",
+    "https://i.ibb.co/JWgXSZcb/vibrant-coral-reef-aquarium-ornament-stunning-underwater-scene-191095-85646.jpg",
+    "https://i.ibb.co/3yVCq90L/Region-Gallery-Viewer.png",
+  ];
+
+  // Mineral data with images
   const minerals = [
     {
       id: 1,
       name: "Fluorite Crystal",
-      color: "from-yellow-400 to-orange-500",
-      bgColor: "bg-gradient-to-br from-yellow-300/20 to-orange-400/20",
+      image: availableImages[0],
+      description: "Beautiful fluorescent crystal that glows under UV light",
     },
     {
       id: 2,
       name: "Willemite",
-      color: "from-red-500 to-pink-600",
-      bgColor: "bg-gradient-to-br from-red-400/20 to-pink-500/20",
+      image: availableImages[1],
+      description: "Zinc silicate mineral with bright green fluorescence",
     },
     {
       id: 3,
       name: "Adamite",
-      color: "from-green-400 to-emerald-500",
-      bgColor: "bg-gradient-to-br from-green-300/20 to-emerald-400/20",
+      image: availableImages[2],
+      description: "Zinc arsenate hydroxide with lime-green glow",
     },
     {
       id: 4,
       name: "Calcite UV",
-      color: "from-red-600 to-orange-500",
-      bgColor: "bg-gradient-to-br from-red-500/20 to-orange-400/20",
+      image: availableImages[0],
+      description: "Calcium carbonate showing red fluorescence",
     },
     {
       id: 5,
       name: "Scheelite",
-      color: "from-purple-500 to-indigo-600",
-      bgColor: "bg-gradient-to-br from-purple-400/20 to-indigo-500/20",
+      image: availableImages[1],
+      description: "Tungsten mineral with blue-white fluorescence",
     },
     {
       id: 6,
       name: "Hyalite Opal",
-      color: "from-yellow-300 to-green-400",
-      bgColor: "bg-gradient-to-br from-yellow-200/20 to-green-300/20",
+      image: availableImages[2],
+      description: "Clear opal variety with bright green fluorescence",
     },
     {
       id: 7,
       name: "Sodalite",
-      color: "from-blue-500 to-cyan-400",
-      bgColor: "bg-gradient-to-br from-blue-400/20 to-cyan-300/20",
+      image: availableImages[0],
+      description: "Blue mineral with orange fluorescence under UV",
     },
     {
       id: 8,
       name: "Clinohedrite",
-      color: "from-orange-500 to-red-500",
-      bgColor: "bg-gradient-to-br from-orange-400/20 to-red-400/20",
+      image: availableImages[1],
+      description: "Rare zinc silicate with bright fluorescent properties",
     },
     {
       id: 9,
       name: "Aragonite",
-      color: "from-gray-300 to-gray-500",
-      bgColor: "bg-gradient-to-br from-gray-200/20 to-gray-400/20",
+      image: availableImages[2],
+      description: "Calcium carbonate polymorph with varied fluorescence",
     },
     {
       id: 10,
       name: "Autunite",
-      color: "from-green-400 to-blue-500",
-      bgColor: "bg-gradient-to-br from-green-300/20 to-blue-400/20",
+      image: availableImages[0],
+      description: "Uranium phosphate mineral with yellow-green glow",
     },
   ];
 
@@ -98,7 +105,7 @@ const ShopCategory = () => {
   };
 
   return (
-    <div className="w-full  mx-auto p-8 bg-black min-h-screen flex flex-col justify-center">
+    <div className="w-full mx-auto p-8 bg-black min-h-screen flex flex-col justify-center">
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
@@ -146,50 +153,38 @@ const ShopCategory = () => {
                 <div
                   className={`
                   aspect-square rounded-xl overflow-hidden relative
-                  ${mineral.bgColor}
                   border-2 border-white/10
                   transform transition-all duration-300
                   group-hover:scale-105 group-hover:border-white/30
                   shadow-2xl hover:shadow-cyan-500/20
                 `}
                 >
-                  {/* Glowing Effect */}
-                  <div
-                    className={`
-                    absolute inset-0 opacity-80
-                    bg-gradient-to-br ${mineral.color}
-                    rounded-xl
-                  `}
+                  {/* Background Image */}
+                  <img
+                    src={mineral.image}
+                    alt={mineral.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to gradient if image fails to load
+                      e.target.style.display = "none";
+                    }}
                   />
 
-                  {/* Mineral Pattern/Texture */}
-                  {/* <div className="absolute inset-0 bg-black/20">
-                    <div className="w-full h-full relative overflow-hidden">
-                    
-                      <div className="absolute inset-0 opacity-30">
-                        {[...Array(12)].map((_, i) => (
-                          <div
-                            key={i}
-                            className="absolute bg-white rounded-full animate-pulse"
-                            style={{
-                              width: `${Math.random() * 20 + 10}px`,
-                              height: `${Math.random() * 20 + 10}px`,
-                              top: `${Math.random() * 80 + 10}%`,
-                              left: `${Math.random() * 80 + 10}%`,
-                              animationDelay: `${Math.random() * 2}s`,
-                              animationDuration: `${Math.random() * 3 + 2}s`,
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div> */}
-
                   {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="text-white font-semibold text-sm text-center px-2">
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4">
+                    <span className="text-white font-bold text-lg text-center mb-2">
                       {mineral.name}
                     </span>
+                    <span className="text-gray-200 text-sm text-center leading-tight">
+                      {mineral.description}
+                    </span>
+                  </div>
+
+                  {/* Bottom Label */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                    <h3 className="text-white font-semibold text-sm truncate">
+                      {mineral.name}
+                    </h3>
                   </div>
                 </div>
               </div>
@@ -228,14 +223,17 @@ const ShopCategory = () => {
       </div>
 
       {/* Current Mineral Info */}
-      <div className="text-center mt-8">
+      {/* <div className="text-center mt-8">
         <h3 className="text-2xl font-bold text-white mb-2">
           {minerals[currentIndex]?.name}
         </h3>
-        <p className="text-gray-400">
+        <p className="text-gray-400 mb-2">
           Specimen {currentIndex + 1} of {minerals.length}
         </p>
-      </div>
+        <p className="text-gray-300 max-w-md mx-auto">
+          {minerals[currentIndex]?.description}
+        </p>
+      </div> */}
     </div>
   );
 };

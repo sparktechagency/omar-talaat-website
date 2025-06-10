@@ -84,6 +84,8 @@
   --primary-hover: #7a141a;
   --button-primary:#E8505B;
   --text-primary:#191820;
+  --font-dm-sans: 'DM Sans', sans-serif;
+  --font-comforter-brush: 'Comforter Brush', cursive;
 
 }
 
@@ -131,11 +133,7 @@
   }
 }
 
-html {
-  background-color: #18191b;
-  font-family: "Poppins", cursive;
-  color: white;
-}
+
 
 .bg-button {
   background: #a92c2c;
@@ -164,8 +162,14 @@ html {
 .bg-red {
   background-color: #0000004D;
 }
-h1,
-h2,
-h3 {
-  font-family: var(--font-geist-mono);
+
+
+.font-brush {
+  font-family: var(--font-comforter-brush);
+}
+body {
+  font-family: var(--font-dm-sans);
+}
+.font-dm-sans{
+  font-family: var(--font-dm-sans);
 }
