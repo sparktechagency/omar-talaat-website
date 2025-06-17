@@ -24,7 +24,7 @@ const CalenderLogo = () => (
     viewBox="0 0 40 40"
     fill="none"
   >
-    <g clip-path="url(#clip0_516_6590)">
+    <g clipPath="url(#clip0_516_6590)">
       <path
         d="M30.1562 17.9688C31.0192 17.9688 31.7188 17.2692 31.7188 16.4062C31.7188 15.5433 31.0192 14.8438 30.1562 14.8438C29.2933 14.8438 28.5938 15.5433 28.5938 16.4062C28.5938 17.2692 29.2933 17.9688 30.1562 17.9688Z"
         fill="white"
@@ -99,10 +99,10 @@ const Logo = () => (
         y2="22"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#A2A2A2" />
-        <stop offset="0.394284" stop-color="#F4F4F4" />
-        <stop offset="0.75" stop-color="#C5C5C5" />
-        <stop offset="1" stop-color="#F1F1F1" />
+        <stop stopColor="#A2A2A2" />
+        <stop offset="0.394284" stopColor="#F4F4F4" />
+        <stop offset="0.75" stopColor="#C5C5C5" />
+        <stop offset="1" stopColor="#F1F1F1" />
       </linearGradient>
     </defs>
   </svg>
@@ -116,7 +116,7 @@ const CoinsLogo = () => (
     viewBox="0 0 40 40"
     fill="none"
   >
-    <g clip-path="url(#clip0_489_33656)">
+    <g clipPath="url(#clip0_489_33656)">
       <path
         d="M35.1055 30.29H35.1058V26.1833L5.73844 28.5599V32.7773H5.73891C5.75508 34.7092 6.93352 36.5517 9.32219 37.9308C14.6312 40.9959 23.9045 40.6115 30.0348 37.0722C33.3959 35.1314 35.1141 32.6453 35.1055 30.29Z"
         fill="url(#paint0_linear_489_33656)"
@@ -287,15 +287,15 @@ const CoinsLogo = () => (
         y2="33.0916"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.222" stop-color="#FFC538" />
-        <stop offset="0.346" stop-color="#FFA538" />
-        <stop offset="0.465" stop-color="#FBC23C" />
-        <stop offset="0.584" stop-color="#F8D840" />
-        <stop offset="0.66" stop-color="#F7E041" />
-        <stop offset="0.752" stop-color="#F9D53F" />
-        <stop offset="0.915" stop-color="#FDB73B" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.222" stopColor="#FFC538" />
+        <stop offset="0.346" stopColor="#FFA538" />
+        <stop offset="0.465" stopColor="#FBC23C" />
+        <stop offset="0.584" stopColor="#F8D840" />
+        <stop offset="0.66" stopColor="#F7E041" />
+        <stop offset="0.752" stopColor="#F9D53F" />
+        <stop offset="0.915" stopColor="#FDB73B" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint1_linear_489_33656"
@@ -305,8 +305,8 @@ const CoinsLogo = () => (
         y2="33.9403"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="white" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint2_linear_489_33656"
@@ -316,8 +316,8 @@ const CoinsLogo = () => (
         y2="39.9572"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#8B451C" />
-        <stop offset="1" stop-color="#8B451C" stop-opacity="0" />
+        <stop stopColor="#8B451C" />
+        <stop offset="1" stopColor="#8B451C" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint3_linear_489_33656"
@@ -327,9 +327,9 @@ const CoinsLogo = () => (
         y2="34.1219"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#E37A34" />
-        <stop offset="0.549" stop-color="#FFA538" />
-        <stop offset="0.989" stop-color="#FFC538" />
+        <stop stopColor="#E37A34" />
+        <stop offset="0.549" stopColor="#FFA538" />
+        <stop offset="0.989" stopColor="#FFC538" />
       </linearGradient>
       <linearGradient
         id="paint4_linear_489_33656"
@@ -339,9 +339,9 @@ const CoinsLogo = () => (
         y2="19.5645"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#E37A34" />
-        <stop offset="0.549" stop-color="#FFA538" />
-        <stop offset="0.989" stop-color="#FFC538" />
+        <stop stopColor="#E37A34" />
+        <stop offset="0.549" stopColor="#FFA538" />
+        <stop offset="0.989" stopColor="#FFC538" />
       </linearGradient>
       <linearGradient
         id="paint5_linear_489_33656"
@@ -351,11 +351,11 @@ const CoinsLogo = () => (
         y2="15.2166"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint6_linear_489_33656"
@@ -365,11 +365,11 @@ const CoinsLogo = () => (
         y2="19.2844"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint7_linear_489_33656"
@@ -379,8 +379,8 @@ const CoinsLogo = () => (
         y2="35.948"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#8B451C" />
-        <stop offset="1" stop-color="#8B451C" stop-opacity="0" />
+        <stop stopColor="#8B451C" />
+        <stop offset="1" stopColor="#8B451C" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint8_linear_489_33656"
@@ -390,16 +390,16 @@ const CoinsLogo = () => (
         y2="28.4024"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.222" stop-color="#FFC538" />
-        <stop offset="0.346" stop-color="#FFA538" />
-        <stop offset="0.427" stop-color="#FBC23C" />
-        <stop offset="0.508" stop-color="#F8D840" />
-        <stop offset="0.56" stop-color="#F7E041" />
-        <stop offset="0.622" stop-color="#F9D53F" />
-        <stop offset="0.731" stop-color="#FDB73B" />
-        <stop offset="0.788" stop-color="#FFA538" />
-        <stop offset="1" stop-color="#FFC538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.222" stopColor="#FFC538" />
+        <stop offset="0.346" stopColor="#FFA538" />
+        <stop offset="0.427" stopColor="#FBC23C" />
+        <stop offset="0.508" stopColor="#F8D840" />
+        <stop offset="0.56" stopColor="#F7E041" />
+        <stop offset="0.622" stopColor="#F9D53F" />
+        <stop offset="0.731" stopColor="#FDB73B" />
+        <stop offset="0.788" stopColor="#FFA538" />
+        <stop offset="1" stopColor="#FFC538" />
       </linearGradient>
       <linearGradient
         id="paint9_linear_489_33656"
@@ -409,8 +409,8 @@ const CoinsLogo = () => (
         y2="28.4294"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="white" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint10_linear_489_33656"
@@ -420,8 +420,8 @@ const CoinsLogo = () => (
         y2="33.3279"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#8B451C" />
-        <stop offset="1" stop-color="#8B451C" stop-opacity="0" />
+        <stop stopColor="#8B451C" />
+        <stop offset="1" stopColor="#8B451C" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint11_linear_489_33656"
@@ -431,9 +431,9 @@ const CoinsLogo = () => (
         y2="29.4324"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#E37A34" />
-        <stop offset="0.549" stop-color="#FFA538" />
-        <stop offset="0.989" stop-color="#FFC538" />
+        <stop stopColor="#E37A34" />
+        <stop offset="0.549" stopColor="#FFA538" />
+        <stop offset="0.989" stopColor="#FFC538" />
       </linearGradient>
       <linearGradient
         id="paint12_linear_489_33656"
@@ -443,10 +443,10 @@ const CoinsLogo = () => (
         y2="14.8753"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.022" stop-color="#FFC538" />
-        <stop offset="0.263" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop offset="0.022" stopColor="#FFC538" />
+        <stop offset="0.263" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint13_linear_489_33656"
@@ -456,11 +456,11 @@ const CoinsLogo = () => (
         y2="10.5274"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint14_linear_489_33656"
@@ -470,11 +470,11 @@ const CoinsLogo = () => (
         y2="14.5953"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint15_linear_489_33656"
@@ -484,8 +484,8 @@ const CoinsLogo = () => (
         y2="33.3135"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#8B451C" />
-        <stop offset="1" stop-color="#8B451C" stop-opacity="0" />
+        <stop stopColor="#8B451C" />
+        <stop offset="1" stopColor="#8B451C" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint16_linear_489_33656"
@@ -495,15 +495,15 @@ const CoinsLogo = () => (
         y2="23.9696"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.222" stop-color="#FFC538" />
-        <stop offset="0.346" stop-color="#FFA538" />
-        <stop offset="0.403" stop-color="#FBC23C" />
-        <stop offset="0.46" stop-color="#F8D840" />
-        <stop offset="0.496" stop-color="#F7E041" />
-        <stop offset="0.633" stop-color="#F9D53F" />
-        <stop offset="0.874" stop-color="#FDB73B" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.222" stopColor="#FFC538" />
+        <stop offset="0.346" stopColor="#FFA538" />
+        <stop offset="0.403" stopColor="#FBC23C" />
+        <stop offset="0.46" stopColor="#F8D840" />
+        <stop offset="0.496" stopColor="#F7E041" />
+        <stop offset="0.633" stopColor="#F9D53F" />
+        <stop offset="0.874" stopColor="#FDB73B" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint17_linear_489_33656"
@@ -513,8 +513,8 @@ const CoinsLogo = () => (
         y2="23.4192"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="white" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint18_linear_489_33656"
@@ -524,8 +524,8 @@ const CoinsLogo = () => (
         y2="28.6649"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#8B451C" />
-        <stop offset="1" stop-color="#8B451C" stop-opacity="0" />
+        <stop stopColor="#8B451C" />
+        <stop offset="1" stopColor="#8B451C" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint19_linear_489_33656"
@@ -535,9 +535,9 @@ const CoinsLogo = () => (
         y2="24.9995"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#E37A34" />
-        <stop offset="0.549" stop-color="#FFA538" />
-        <stop offset="0.989" stop-color="#FFC538" />
+        <stop stopColor="#E37A34" />
+        <stop offset="0.549" stopColor="#FFA538" />
+        <stop offset="0.989" stopColor="#FFC538" />
       </linearGradient>
       <linearGradient
         id="paint20_linear_489_33656"
@@ -547,10 +547,10 @@ const CoinsLogo = () => (
         y2="10.4425"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.022" stop-color="#FFC538" />
-        <stop offset="0.263" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop offset="0.022" stopColor="#FFC538" />
+        <stop offset="0.263" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint21_linear_489_33656"
@@ -560,11 +560,11 @@ const CoinsLogo = () => (
         y2="6.09456"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint22_linear_489_33656"
@@ -574,11 +574,11 @@ const CoinsLogo = () => (
         y2="10.1622"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint23_linear_489_33656"
@@ -588,8 +588,8 @@ const CoinsLogo = () => (
         y2="30.8487"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#8B451C" />
-        <stop offset="1" stop-color="#8B451C" stop-opacity="0" />
+        <stop stopColor="#8B451C" />
+        <stop offset="1" stopColor="#8B451C" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint24_linear_489_33656"
@@ -599,15 +599,15 @@ const CoinsLogo = () => (
         y2="19.2594"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.222" stop-color="#FFC538" />
-        <stop offset="0.346" stop-color="#FFA538" />
-        <stop offset="0.497" stop-color="#FBC23C" />
-        <stop offset="0.647" stop-color="#F8D840" />
-        <stop offset="0.744" stop-color="#F7E041" />
-        <stop offset="0.814" stop-color="#F9D53F" />
-        <stop offset="0.936" stop-color="#FDB73B" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.222" stopColor="#FFC538" />
+        <stop offset="0.346" stopColor="#FFA538" />
+        <stop offset="0.497" stopColor="#FBC23C" />
+        <stop offset="0.647" stopColor="#F8D840" />
+        <stop offset="0.744" stopColor="#F7E041" />
+        <stop offset="0.814" stopColor="#F9D53F" />
+        <stop offset="0.936" stopColor="#FDB73B" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint25_linear_489_33656"
@@ -617,8 +617,8 @@ const CoinsLogo = () => (
         y2="19.0758"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="white" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint26_linear_489_33656"
@@ -628,8 +628,8 @@ const CoinsLogo = () => (
         y2="22.9691"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#8B451C" />
-        <stop offset="1" stop-color="#8B451C" stop-opacity="0" />
+        <stop stopColor="#8B451C" />
+        <stop offset="1" stopColor="#8B451C" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint27_linear_489_33656"
@@ -639,8 +639,8 @@ const CoinsLogo = () => (
         y2="20.2894"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#FFA538" />
-        <stop offset="1" stop-color="#F7E041" />
+        <stop stopColor="#FFA538" />
+        <stop offset="1" stopColor="#F7E041" />
       </linearGradient>
       <linearGradient
         id="paint28_linear_489_33656"
@@ -650,9 +650,9 @@ const CoinsLogo = () => (
         y2="5.73225"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#E37A34" />
-        <stop offset="0.549" stop-color="#FFA538" />
-        <stop offset="0.989" stop-color="#FFC538" />
+        <stop stopColor="#E37A34" />
+        <stop offset="0.549" stopColor="#FFA538" />
+        <stop offset="0.989" stopColor="#FFC538" />
       </linearGradient>
       <linearGradient
         id="paint29_linear_489_33656"
@@ -662,11 +662,11 @@ const CoinsLogo = () => (
         y2="1.38436"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint30_linear_489_33656"
@@ -676,11 +676,11 @@ const CoinsLogo = () => (
         y2="5.45212"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint31_linear_489_33656"
@@ -690,8 +690,8 @@ const CoinsLogo = () => (
         y2="21.3598"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#8B451C" />
-        <stop offset="1" stop-color="#8B451C" stop-opacity="0" />
+        <stop stopColor="#8B451C" />
+        <stop offset="1" stopColor="#8B451C" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint32_linear_489_33656"
@@ -701,15 +701,15 @@ const CoinsLogo = () => (
         y2="14.1803"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.222" stop-color="#FFC538" />
-        <stop offset="0.346" stop-color="#FFA538" />
-        <stop offset="0.465" stop-color="#FBC23C" />
-        <stop offset="0.584" stop-color="#F8D840" />
-        <stop offset="0.66" stop-color="#F7E041" />
-        <stop offset="0.752" stop-color="#F9D53F" />
-        <stop offset="0.915" stop-color="#FDB73B" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.222" stopColor="#FFC538" />
+        <stop offset="0.346" stopColor="#FFA538" />
+        <stop offset="0.465" stopColor="#FBC23C" />
+        <stop offset="0.584" stopColor="#F8D840" />
+        <stop offset="0.66" stopColor="#F7E041" />
+        <stop offset="0.752" stopColor="#F9D53F" />
+        <stop offset="0.915" stopColor="#FDB73B" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint33_linear_489_33656"
@@ -719,8 +719,8 @@ const CoinsLogo = () => (
         y2="14.8762"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="white" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint34_linear_489_33656"
@@ -730,8 +730,8 @@ const CoinsLogo = () => (
         y2="0.390293"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#FFC538" />
-        <stop offset="1" stop-color="#F7E041" />
+        <stop stopColor="#FFC538" />
+        <stop offset="1" stopColor="#F7E041" />
       </linearGradient>
       <linearGradient
         id="paint35_linear_489_33656"
@@ -741,8 +741,8 @@ const CoinsLogo = () => (
         y2="6.29837"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="white" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
       <linearGradient
         id="paint36_linear_489_33656"
@@ -752,9 +752,9 @@ const CoinsLogo = () => (
         y2="4.52453"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#E37A34" />
-        <stop offset="0.549" stop-color="#FFA538" />
-        <stop offset="0.989" stop-color="#FFC538" />
+        <stop stopColor="#E37A34" />
+        <stop offset="0.549" stopColor="#FFA538" />
+        <stop offset="0.989" stopColor="#FFC538" />
       </linearGradient>
       <linearGradient
         id="paint37_linear_489_33656"
@@ -764,9 +764,9 @@ const CoinsLogo = () => (
         y2="1.55694"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#E37A34" />
-        <stop offset="0.549" stop-color="#FFA538" />
-        <stop offset="0.989" stop-color="#FFC538" />
+        <stop stopColor="#E37A34" />
+        <stop offset="0.549" stopColor="#FFA538" />
+        <stop offset="0.989" stopColor="#FFC538" />
       </linearGradient>
       <linearGradient
         id="paint38_linear_489_33656"
@@ -776,11 +776,11 @@ const CoinsLogo = () => (
         y2="-3.69472"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <linearGradient
         id="paint39_linear_489_33656"
@@ -790,11 +790,11 @@ const CoinsLogo = () => (
         y2="0.373018"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#BA5C25" />
-        <stop offset="0.199" stop-color="#FFC538" />
-        <stop offset="0.409" stop-color="#FFA538" />
-        <stop offset="0.621" stop-color="#F7E041" />
-        <stop offset="1" stop-color="#FFA538" />
+        <stop stopColor="#BA5C25" />
+        <stop offset="0.199" stopColor="#FFC538" />
+        <stop offset="0.409" stopColor="#FFA538" />
+        <stop offset="0.621" stopColor="#F7E041" />
+        <stop offset="1" stopColor="#FFA538" />
       </linearGradient>
       <clipPath id="clip0_489_33656">
         <rect width="40" height="40" fill="white" />

@@ -44,7 +44,7 @@ const Banner = () => {
     // {`min-h-screen p-6 ${bg} ${text}`}
 
   return (
-    <div className={`h-[1222px] mt-40 ${bg}  overflow-hidden`}>
+    <div className={`h-[1222px]  ${bg} mt-32 overflow-hidden`}>
       <div className="absolute inset-0 opacity-20">
         <div
           className="absolute inset-0 bg-cover bg-center"

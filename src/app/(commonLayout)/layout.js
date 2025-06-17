@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Footer from "@/components/footer/Footer";
 import Banner from "@/components/home/Banner";
@@ -15,7 +15,7 @@ const CommonLayout = ({ children }) => {
       {pathname === "/" && <Banner />}
       {/* Main content */}
       <div className="bg-[#000] flex flex-col flex-grow">
-        <main className="container mx-auto mt-20 flex-1">
+        <main className="container mx-auto flex-1 mt-[120px] sm:mt-[100px] md:mt-[120px] lg:mt-[130px]">
           <div className="">{children}</div>
         </main>
       </div>
