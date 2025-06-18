@@ -19,7 +19,7 @@ const CommonLayout = ({ children }) => {
       )}
       {/* Main content */}
       <div className="bg-[#000] flex flex-col flex-grow">
-        <main className="container mx-auto mt-20 flex-1">
+        <main className="container mx-auto my-20 flex-1">
           <div className="">{children}</div>
         </main>
       </div>

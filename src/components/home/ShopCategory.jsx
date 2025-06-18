@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const ShopCategory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -43,7 +44,7 @@ const ShopCategory = () => {
     {
       id: 5,
       name: "Scheelite",
-      image: availableImages[1],
+      image: "/assets/category1.png",
       description: "Tungsten mineral with blue-white fluorescence",
     },
     {
@@ -65,9 +66,33 @@ const ShopCategory = () => {
       description: "Rare zinc silicate with bright fluorescent properties",
     },
     {
-      id: 9,
+      id: 11,
+      name: "Scheelite",
+      image: "/assets/category4.png",
+      description: "Tungsten mineral with blue-white fluorescence",
+    },
+    {
+      id: 12,
+      name: "Hyalite Opal",
+      image: "/assets/category1.png",
+      description: "Clear opal variety with bright green fluorescence",
+    },
+    {
+      id: 13,
+      name: "Sodalite",
+      image: "/assets/category2.png",
+      description: "Blue mineral with orange fluorescence under UV",
+    },
+    {
+      id: 14,
+      name: "Clinohedrite",
+      image: "/assets/category3.png",
+      description: "Rare zinc silicate with bright fluorescent properties",
+    },
+    {
+      id: 15,
       name: "Aragonite",
-      image: availableImages[2],
+      image: "/assets/category5.png",
       description: "Calcium carbonate polymorph with varied fluorescence",
     },
     {
@@ -78,7 +103,7 @@ const ShopCategory = () => {
     },
   ];
 
-  const visibleCount = Math.min(6, minerals.length);
+  const visibleCount = Math.min(9, minerals.length);
   const maxIndex = Math.max(0, minerals.length - visibleCount);
 
   // Auto-play functionality
@@ -105,15 +130,15 @@ const ShopCategory = () => {
   };
 
   return (
-    <div className="w-full mx-auto p-8 bg-black min-h-screen flex flex-col justify-center">
+    <div className="w-full mx-auto  bg-black my-20 flex flex-col justify-center">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-          Fluorescent Mineral Gallery
+        <h1 className="text-4xl font-bold  mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+        Shop Categories
         </h1>
-        <p className="text-gray-300 text-lg">
+        {/* <p className="text-gray-300 text-lg">
           Discover the hidden beauty that glows under UV light
-        </p>
+        </p> */}
       </div>
 
       {/* Main Slider Container */}
@@ -152,37 +177,35 @@ const ShopCategory = () => {
                 {/* Mineral Card */}
                 <div
                   className={`
-                  aspect-square rounded-xl overflow-hidden relative
-                  border-2 border-white/10
-                  transform transition-all duration-300
-                  group-hover:scale-105 group-hover:border-white/30
-                  shadow-2xl hover:shadow-cyan-500/20
-                `}
+    w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative
+    border-2 border-white/10
+    transform transition-all duration-300
+    group-hover:scale-105 group-hover:border-white/30
+    shadow-2xl hover:shadow-cyan-500/20
+  `}
                 >
                   {/* Background Image */}
-                  <img
+                  <Image
                     src={mineral.image}
                     alt={mineral.name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onError={(e) => {
-                      // Fallback to gradient if image fails to load
-                      e.target.style.display = "none";
-                    }}
+                    height={130} // Set height to 130px
+                    width={130} // Set width to 130px
+                    className="absolute inset-0 object-cover"
                   />
 
                   {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4">
-                    <span className="text-white font-bold text-lg text-center mb-2">
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-2">
+                    <span className="text-white font-bold text-xs text-center mb-2">
                       {mineral.name}
                     </span>
-                    <span className="text-gray-200 text-sm text-center leading-tight">
+                    <span className="text-gray-200 text-xs text-center leading-tight">
                       {mineral.description}
                     </span>
                   </div>
 
                   {/* Bottom Label */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                    <h3 className="text-white font-semibold text-sm truncate">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                    <h3 className="text-white font-semibold text-xs truncate">
                       {mineral.name}
                     </h3>
                   </div>
