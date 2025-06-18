@@ -881,4 +881,31 @@ const MyProfile = () => (
 );
 
 
-export {MainLogo, CalenderLogo, Logo, CoinsLogo, Ranking, MyBug, MyProfile}
+const Star = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="80"
+    height="80"
+    viewBox="0 0 80 80"
+    fill="none"
+  >
+    <g clip-path="url(#clip0_1188_1127)">
+      <path
+        d="M79.3 32.9L61.4333 51.2L65.6333 77.1C66.0033 79.1666 63.76 80.68 61.9667 79.7L40 67.5333V0.0999756C40.9333 0.0999756 41.8667 0.533309 42.2667 1.43331L53.3 24.9333L77.8667 28.6666C79.92 29.0333 80.6767 31.45 79.3 32.9Z"
+        fill="white"
+      />
+      <path
+        d="M40 0.0999756V67.5333L18.0333 79.7C16.27 80.69 13.9933 79.19 14.3666 77.1L18.5666 51.2L0.699972 32.9C0.382393 32.5667 0.162021 32.153 0.0627136 31.7035C-0.0365934 31.254 -0.0110508 30.7859 0.136576 30.3499C0.284203 29.9139 0.548288 29.5266 0.900241 29.2299C1.25219 28.9332 1.6786 28.7384 2.13331 28.6666L26.7 24.9333L37.7333 1.43331C38.1333 0.533309 39.0666 0.0999756 40 0.0999756Z"
+        fill="#A4FBC4"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_1188_1127">
+        <rect width="80" height="80" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+
+export {MainLogo, CalenderLogo, Logo, CoinsLogo, Ranking, MyBug, MyProfile,Star}

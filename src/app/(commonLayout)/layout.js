@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import Footer from "@/components/footer/Footer";
 import Banner from "@/components/home/Banner";
@@ -11,11 +11,15 @@ const CommonLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col bg-[#000] text-white">
       {/* Header */}
-      <Navbar />
-      {pathname === "/" && <Banner />}
+      <Navbar className="" />
+      {pathname === "/" && (
+        <div className="60">
+          <Banner />{" "}
+        </div>
+      )}
       {/* Main content */}
       <div className="bg-[#000] flex flex-col flex-grow">
-        <main className="container mx-auto flex-1 mt-[120px] sm:mt-[100px] md:mt-[120px] lg:mt-[130px]">
+        <main className="container mx-auto mt-20 flex-1">
           <div className="">{children}</div>
         </main>
       </div>

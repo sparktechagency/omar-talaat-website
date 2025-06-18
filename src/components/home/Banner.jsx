@@ -44,25 +44,25 @@ const Banner = () => {
     // {`min-h-screen p-6 ${bg} ${text}`}
 
   return (
-    <div className={`h-[1222px]  ${bg} mt-32 overflow-hidden`}>
-      <div className="absolute inset-0 opacity-20">
+    <div className={`h-auto pt-32 lg:pt-40 ${bg}  overflow-hidden`}>
+      <div className="absolute inset-0 ">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center h-screen lg:h-[1100px]"
           style={{
-            backgroundImage: `url('/assets/banner-bg.png')`,
+            backgroundImage: `url('/assets/banner3.png')`,
           }}
         ></div>
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
+      <div className="relative top-0 z-10 flex flex-col items-center justify-center px-4 text-center">
         {/* Logo */}
-        <div className="mb-8">
+        <div className="mb:2 lg:mb-8">
           <MainLogo
-            className="w-[168px] h-[182px] mx-auto mb-6"
+            className="w-32 h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-6"
             color={`${logo}`}
           />
-          <h1 className="text-5xl md:text-6xl font-bold font-brush text-white mb-10">
+          <h1 className="text-5xl md:text-6xl font-bold font-brush text-white mb-2 lg:mb-10">
             Coral Stash
           </h1>
         </div>
@@ -71,7 +71,7 @@ const Banner = () => {
         <p className="text-white/90 text-lg mb-2">
           Deliveries commence January 10th
         </p>
-        <p className="text-white/80 text-base mb-8 max-w-2xl">
+        <p className="text-white/80 text-base mb-4 lg:mb-8 max-w-2xl">
           We deliver to all emirates in the UAE - we accept trades - we accept
           new suppliers
         </p>
@@ -79,40 +79,44 @@ const Banner = () => {
         {/* Shop Now Button */}
         <Button
           size="lg"
-          className="bg-white text-primary hover:bg-white/90 mb-12 px-8 py-3 text-lg font-semibold rounded-full"
+          className="bg-white text-primary hover:bg-white/90 mb-6 lg:mb-16 px-8 py-3 text-lg font-semibold rounded-full"
         >
           Shop Now
         </Button>
 
         {/* Countdown Timer */}
-        <div className="flex items-center justify-center space-x-8 mb-12">
+        <div className="flex items-center justify-center space-x-8 mb-6 lg:mb-12">
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-white mb-1">
+            <div className="text-4xl flex justify-center gap-3 items-center md:text-5xl font-bold text-white mb-1">
               {formatTime(timeLeft.days)}
+              <div className="text-white text-3xl">:</div>
             </div>
+
             <div className="text-white/70 text-sm uppercase tracking-wider">
               Days
             </div>
           </div>
-          <div className="text-white text-3xl">:</div>
+
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-white mb-1">
+            <div className="text-4xl md:text-5xl font-bold text-white mb-1 flex items-center justify-center gap-3">
               {formatTime(timeLeft.hours)}
+              <div className="text-white text-3xl">:</div>
             </div>
             <div className="text-white/70 text-sm uppercase tracking-wider">
               Hours
             </div>
           </div>
-          <div className="text-white text-3xl">:</div>
+
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-white mb-1">
+            <div className="text-4xl md:text-5xl font-bold text-white mb-1 flex items-center justify-center gap-3">
               {formatTime(timeLeft.mins)}
+              <div className="text-white text-3xl ">:</div>
             </div>
             <div className="text-white/70 text-sm uppercase tracking-wider">
               Mins
             </div>
           </div>
-          <div className="text-white text-3xl">:</div>
+
           <div className="text-center">
             <div className="text-4xl md:text-5xl font-bold text-white mb-1">
               {formatTime(timeLeft.secs)}

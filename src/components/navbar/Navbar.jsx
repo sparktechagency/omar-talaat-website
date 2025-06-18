@@ -8,7 +8,15 @@ import { FiMenu, FiShoppingCart } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { HiOutlineChartBar } from "react-icons/hi";
-import { CalenderLogo, CoinsLogo, Logo, MainLogo, MyBug, MyProfile, Ranking } from "../share/svg/Logo";
+import {
+  CalenderLogo,
+  CoinsLogo,
+  Logo,
+  MainLogo,
+  MyBug,
+  MyProfile,
+  Ranking,
+} from "../share/svg/Logo";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -87,11 +95,10 @@ export default function Navbar() {
           href="/"
           className="flex items-center space-x-2 text-lg font-bold"
         >
-          {/* Coral/Tree icon placeholder - replace with your logo */}
           <MainLogo color={`#fff`} width={65} height={70} />
         </Link>
 
-        {/* Middle: Navigation Links & Search */}
+        {/* Middle: Navigation Links & Search (Desktop) */}
         <div className="hidden lg:flex items-center space-x-8 flex-1 justify-center">
           {/* Navigation Links */}
           <ul className="flex space-x-6">
@@ -139,14 +146,30 @@ export default function Navbar() {
           </div>
         </div>
 
+        {/* Mobile Search Bar - Show only on mobile between left and right */}
+        <div className="lg:hidden flex-1 mx-4">
+          <form onSubmit={handleSearch} className="relative">
+            <div className="flex items-center bg-gray-800 rounded-full px-3 py-2">
+              <FaSearch className="text-gray-400 mr-2 text-sm" />
+              <input
+                type="text"
+                placeholder="Search Corals"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onKeyPress={handleKeyPress}
+                className="bg-transparent text-white placeholder-gray-400 outline-none flex-1 text-sm"
+              />
+            </div>
+          </form>
+        </div>
+
         {/* Right: Stats & Profile Icons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 md:space-x-4">
           {/* Stats Icons (Hidden on mobile) */}
           <div className="hidden md:flex items-center space-x-4 text-sm">
             {/* Calendar Icon with number */}
             <div className="flex items-center space-x-1">
               <CalenderLogo />
-
               <span className="text-white text-4xl font-brush">7</span>
             </div>
 
@@ -156,25 +179,33 @@ export default function Navbar() {
               <span className="text-white font-brush text-4xl">512</span>
             </div>
 
-            {/* Coin Icon with number */}
-            <div className="flex items-center space-x-1">
-              <CoinsLogo />
-              <span className="text-white font-brush text-4xl">235</span>
-            </div>
-
             {/* Chart Icon */}
             <Ranking />
           </div>
 
-          {/* Cart Icon */}
-          <Link href="/cart" className="text-xl text-white hover:text-gray-300">
+          {/* Coin Icon with number - Show on all devices */}
+          <div className="relative group">
+            <button className="flex items-center space-x-1">
+              <CoinsLogo />
+            </button>
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+              235 Coins
+            </div>
+          </div>
+
+          {/* Cart Icon - Hidden on mobile */}
+          <Link
+            href="/cart"
+            className="hidden lg:block text-xl text-white hover:text-gray-300"
+          >
             <MyBug />
           </Link>
 
           {/* Profile Dropdown */}
           <div className="relative profile-menu">
             <button
-              className="text-xl"
+              className="text-xl flex items-center justify-center w-8 h-8"
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             >
               <MyProfile />
@@ -214,7 +245,15 @@ export default function Navbar() {
                       Download Video
                     </Link>
                   </li>
-
+                  {/* Cart option for mobile in profile menu */}
+                  <li className="lg:hidden">
+                    <Link
+                      href="/cart"
+                      className="block px-4 py-2 hover:bg-gray-800"
+                    >
+                      My Cart
+                    </Link>
+                  </li>
                   <li>
                     <button
                       className="block w-full text-left px-4 py-2 hover:bg-gray-800"
@@ -287,7 +326,7 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden text-xl"
+            className="lg:hidden text-xl flex items-center justify-center w-8 h-8 ml-2"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? (
@@ -302,23 +341,6 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="lg:hidden bg-gray-900 text-white">
-          {/* Mobile Search */}
-          <div className="p-4 border-b border-gray-700">
-            <form onSubmit={handleSearch} className="relative">
-              <div className="flex items-center bg-gray-800 rounded-full px-4 py-2">
-                <FaSearch className="text-gray-400 mr-3" />
-                <input
-                  type="text"
-                  placeholder="Search Corals"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  onKeyPress={handleKeyPress}
-                  className="bg-transparent text-white placeholder-gray-400 outline-none flex-1"
-                />
-              </div>
-            </form>
-          </div>
-
           {/* Mobile Navigation Links */}
           <ul className="p-4 space-y-3">
             {[
@@ -346,20 +368,15 @@ export default function Navbar() {
           <div className="p-4 border-t border-gray-700">
             <div className="flex items-center justify-center space-x-6 text-sm">
               <div className="flex items-center space-x-1">
-                <div className="w-6 h-6 bg-orange-400 rounded flex items-center justify-center">
-                  <span className="text-xs font-bold text-black">📅</span>
-                </div>
-                <span>7</span>
+                <CalenderLogo />
+                <span className="text-white font-brush text-2xl">7</span>
               </div>
               <div className="flex items-center space-x-1">
-                <div className="w-6 h-6 text-orange-400">🪸</div>
-                <span>512</span>
+                <Logo />
+                <span className="text-white font-brush text-2xl">512</span>
               </div>
               <div className="flex items-center space-x-1">
-                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold text-black">C</span>
-                </div>
-                <span>235</span>
+                <Ranking />
               </div>
             </div>
           </div>
