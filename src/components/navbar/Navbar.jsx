@@ -181,10 +181,16 @@ export default function Navbar() {
 
             {/* Chart Icon */}
             <Ranking />
+
+            {/* Coin Icon with number - Show directly on large devices */}
+            <div className="flex items-center space-x-1">
+              <CoinsLogo />
+              <span className="text-white font-brush text-4xl">235</span>
+            </div>
           </div>
 
-          {/* Coin Icon with number - Show on all devices */}
-          <div className="relative group">
+          {/* Coin Icon with tooltip - Show only on mobile */}
+          <div className="relative group md:hidden">
             <button className="flex items-center space-x-1">
               <CoinsLogo />
             </button>

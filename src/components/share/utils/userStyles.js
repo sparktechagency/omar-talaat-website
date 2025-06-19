@@ -23,7 +23,7 @@ export const getUserStyles = (userType) => {
         bg: "bg-yellow-700",
         text: "text-yellow-900",
         border: "border-yellow-500",
-        logo: "#FFD700", // gold color
+        logo: "#057199", // gold color
         buttonBg: "bg-yellow-500",
         buttonText: "text-white",
       };
@@ -32,7 +32,7 @@ export const getUserStyles = (userType) => {
         bg: "bg-white",
         text: "text-black",
         border: "border-gray-200",
-        logo: "#000000",
+        logo: "#FEF488",
         buttonBg: "bg-gray-100",
         buttonText: "text-black",
       };

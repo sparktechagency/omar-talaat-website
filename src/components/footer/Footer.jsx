@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Logo and Contact Section */}
           <div className="lg:col-span-1">
-            <div className=" mb-6">
+            <div className=" mb-6 ">
               <FooterLogo />
               <div className="">
                 <h3 className="text-lg  my-3">
@@ -44,7 +44,7 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4 text-center">
               Quick Links
             </h3>
-            <div className="flex items-center justify-center gap-6">
+            <div className="flex items-center lg:justify-center justify-between  lg:gap-6">
               <div className="space-y-2">
                 <Link
                   href="/all-coral"

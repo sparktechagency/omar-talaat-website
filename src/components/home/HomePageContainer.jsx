@@ -3,6 +3,8 @@ import CountdownProgressTracker from "./TimeSection";
 import ShopCategory from "./ShopCategory";
 import RecentAdded from "./RecentAded";
 import RecentView from "./RecentView";
+import Ficilities from "./Ficilities";
+import GallaryImage from "./GallaryImage";
 
 const HomePageContainer = () => {
   return (
@@ -11,6 +13,8 @@ const HomePageContainer = () => {
       <ShopCategory />
       <RecentAdded />
       <RecentView />
+      <Ficilities />
+      <GallaryImage />
       {/* <Banner /> */}
       {/* <TodaysVideo />
       <ComingSoon />

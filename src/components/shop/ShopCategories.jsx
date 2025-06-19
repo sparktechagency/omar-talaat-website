@@ -12,62 +12,74 @@ const ShopCategories = () => {
   const images = [
     {
       id: 1,
-      src: "https://i.ibb.co/JWgXSZcb/vibrant-coral-reef-aquarium-ornament-stunning-underwater-scene-191095-85646.jpg",
+      src: "/assets/category3.png",
       alt: "Coral Reef Aquarium",
       title: "Coral Reef",
     },
     {
       id: 2,
-      src: "https://i.ibb.co/JR01nZWv/underwater-landscape-23-2150440386.jpg",
+      src: "/assets/category2.png",
       alt: "Underwater Landscape",
       title: "Ocean Depths",
     },
     {
       id: 3,
-      src: "https://i.ibb.co/39tf5zPg/underwater-plant-1160-742.jpg",
+      src: "/assets/category1.png",
       alt: "Aquatic Plants",
       title: "Sea Flora",
     },
     {
       id: 4,
-      src: "https://i.ibb.co/JR01nZWv/underwater-landscape-23-2150440386.jpg",
+      src: "/assets/category6.png",
       alt: "Marine Ecosystem",
       title: "Marine Life",
     },
     {
       id: 5,
-      src: "https://i.ibb.co/JWgXSZcb/vibrant-coral-reef-aquarium-ornament-stunning-underwater-scene-191095-85646.jpg",
+      src: "/assets/category3.png",
       alt: "Tropical Waters",
       title: "Tropical Zone",
     },
     {
       id: 6,
-      src: "https://i.ibb.co/39tf5zPg/underwater-plant-1160-742.jpg",
+      src: "/assets/category8.png",
       alt: "Aquarium Setup",
       title: "Aquascaping",
    
     },
     {
       id: 7,
-      src: "https://i.ibb.co/JWgXSZcb/vibrant-coral-reef-aquarium-ornament-stunning-underwater-scene-191095-85646.jpg",
+      src: "/assets/category4.png",
       alt: "Blue Waters",
       title: "Blue Depths",
     },
     {
       id: 8,
-      src: "https://i.ibb.co/39tf5zPg/underwater-plant-1160-742.jpg",
+      src: "/assets/category1.png",
       alt: "Water Garden",
       title: "Water Garden",
     },
     {
       id: 9,
-      src: "https://i.ibb.co/JR01nZWv/underwater-landscape-23-2150440386.jpg",
+      src: "/assets/category2.png",
       alt: "Ocean Floor",
       title: "Ocean Floor",
     },
     {
       id: 10,
-      src: "https://i.ibb.co/JWgXSZcb/vibrant-coral-reef-aquarium-ornament-stunning-underwater-scene-191095-85646.jpg",
+      src: "/assets/category4.png",
+      alt: "Reef Habitat",
+      title: "Reef Habitat",
+    },
+    {
+      id: 11,
+      src: "/assets/category2.png",
+      alt: "Ocean Floor",
+      title: "Ocean Floor",
+    },
+    {
+      id: 12,
+      src: "/assets/category5.png",
       alt: "Reef Habitat",
       title: "Reef Habitat",
     },
@@ -107,6 +119,7 @@ const ShopCategories = () => {
 
   return (
     <div className=" mx-auto py-8">
+      <h2 className="text-center text-3xl font-bold mb-6">All Categories</h2>
       <div className="relative">
         {/* Navigation Buttons */}
         <button
@@ -147,16 +160,16 @@ const ShopCategories = () => {
               <div
                 key={image.id}
                 className="flex-shrink-0"
-                style={{ width: `${100 / itemsToShow}%` }}
+                style={{ width: `130px`, height: `130px` }} // Set the fixed width and height for the container
               >
                 <div className="group cursor-pointer mx-2">
                   <div className="aspect-square bg-black rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 relative">
                     <Image
                       src={image.src}
-                                alt={image.alt}
-                                height={120}
-                                width={120}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                      alt={image.alt}
+                      height={130} // Set image height to 130px
+                      width={130} // Set image width to 130px
+                      className="object-cover group-hover:scale-105 transition-transform duration-200"
                       loading="lazy"
                     />
                     {/* Overlay for titles */}
@@ -165,7 +178,6 @@ const ShopCategories = () => {
                         <h3 className="text-white font-semibold text-sm mb-1">
                           {image.title}
                         </h3>
-                       
                       </div>
                     </div>
                   </div>
@@ -174,7 +186,6 @@ const ShopCategories = () => {
                     <h3 className="text-white font-medium text-sm mb-1">
                       {image.title}
                     </h3>
-                   
                   </div>
                 </div>
               </div>
@@ -200,17 +211,6 @@ const ShopCategories = () => {
           ))}
         </div>
       </div>
-
-      {/* Responsive Info */}
-      {/* <div className="mt-8 text-center text-sm text-gray-500">
-        <p>
-          Showing {itemsToShow} of {images.length} categories
-          <span className="block mt-1">
-            Current position: {currentIndex + 1} -{" "}
-            {Math.min(currentIndex + itemsToShow, images.length)}
-          </span>
-        </p>
-      </div> */}
     </div>
   );
 };

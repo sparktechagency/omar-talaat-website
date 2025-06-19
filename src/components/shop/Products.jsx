@@ -1,12 +1,17 @@
-"use client"
+"use client";
 import React, { useState, useMemo } from "react";
 import { Search, Filter, ChevronDown, Lock } from "lucide-react";
-import Link from "next/link";
+import { CoinsLogo, Logo, MainLogo } from "../share/svg/Logo";
+import { getUserStyles } from "../share/utils/userStyles";
+import { useUser } from "../share/UserProvider";
 
 const CoralShopGrid = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("Featured");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { userType } = useUser();
+  const { bg, text, border, logo, buttonBg, buttonText } =
+    getUserStyles(userType);
 
   // Sample product data
   const products = [
@@ -14,71 +19,71 @@ const CoralShopGrid = () => {
       id: 1,
       name: "CS Purple Hornets Zoanthids",
       price: 99.5,
-      image: "/coral-1.jpg",
+      image: "/assets/category1.png",
       status: "Cut to Order",
       available: true,
-      membership: "basic",
+      membership: "normal",
     },
     {
       id: 2,
-      name: "CS Purple Hornets Zoanthids",
-      price: 99.5,
-      image: "/coral-2.jpg",
-      status: "Cut to Order",
-      available: true,
-      membership: "basic",
+      name: "CS Blue Matrix Zoanthids",
+      price: 149.99,
+      image: "/assets/category8.png",
+      status: "In Stock",
+      available: false,
+      membership: "normal",
     },
     {
       id: 3,
-      name: "CS Purple Hornets Zoanthids",
-      price: 99.5,
-      image: "/coral-3.jpg",
+      name: "CS Rainbow Incinerator",
+      price: 199.5,
+      image: "/assets/category3.png",
       status: "Cut to Order",
       available: false,
       membership: "advanced",
     },
     {
       id: 4,
-      name: "CS Purple Hornets Zoanthids",
-      price: 99.5,
-      image: "/coral-4.jpg",
-      status: "Cut to Order",
+      name: "CS Fire and Ice",
+      price: 299.0,
+      image: "/assets/category4.png",
+      status: "Limited Edition",
       available: false,
       membership: "premium",
     },
     {
       id: 5,
-      name: "CS Purple Hornets Zoanthids",
-      price: 99.5,
-      image: "/coral-5.jpg",
+      name: "CS Green Bay Packers",
+      price: 89.99,
+      image: "/assets/category9.png",
       status: "Cut to Order",
       available: true,
-      membership: "basic",
+      membership: "normal",
     },
     {
       id: 6,
-      name: "CS Purple Hornets Zoanthids",
-      price: 99.5,
-      image: "/coral-6.jpg",
-      status: "Cut to Order",
-      available: true,
-      membership: "basic",
+      name: "CS Sunny Delight",
+      price: 129.5,
+      image: "/assets/category9.png",
+      status: "In Stock",
+      available: false,
+      membership: "normal",
     },
     {
       id: 7,
-      name: "CS Purple Hornets Zoanthids",
-      price: 99.5,
-      image: "/coral-7.jpg",
+      name: "CS Dragon Eyes",
+      price: 249.99,
+      image: "/assets/category7.png",
       status: "Cut to Order",
       available: false,
       membership: "advanced",
     },
     {
       id: 8,
-      name: "CS Purple Hornets Zoanthids",
-      price: 99.5,
-      image: "/coral-8.jpg",
-      status: "Cut to Order",
+      name: "CS Ultra Rare Collector",
+      price: 399.0,
+      image: "/assets/category8.png",
+      status: "Premium Only",
       available: false,
       membership: "premium",
     },
@@ -119,45 +124,105 @@ const CoralShopGrid = () => {
 
   const ProductCard = ({ product }) => {
     const isLocked = !product.available;
+    const [imageError, setImageError] = useState(false);
+
+    const handleImageError = () => {
+      setImageError(true);
+    };
+
+
+    const getMembershipIcon = (membership, available) => {
+      if (membership === "advanced") {
+        return (
+          <MainLogo
+            className="w-32 h-36 lg:w-[128px] lg:h-[142px] mx-auto mb-6"
+            color="#057199"
+          />
+        );
+      } else if (membership === "premium") {
+        return (
+          <MainLogo
+            className="w-32 h-36 lg:w-[128px] lg:h-[142px] mx-auto mb-6"
+            color="#FEF488"
+          />
+        );
+      } else if (membership === "normal" && !available) {
+        return (
+          <div className="flex gap-2 border-2 border-amber-200 py-1 px-6 rounded-full">
+            <CoinsLogo />
+            <span className="text-white font-semibold text-4xl font-brush">
+              235{" "}
+            </span>
+          </div>
+        );
+      }
+      return null;
+    };
+    
 
     return (
       <div className="relative group cursor-pointer">
-        <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+        <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
           {/* Product Image */}
           <div className="relative aspect-square overflow-hidden">
-            {/* Coral Pattern Background */}
-            <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-800 to-yellow-600 relative">
-              {/* Coral Pattern Overlay */}
-              <div className="absolute inset-0 opacity-80">
-                <div
-                  className="w-full h-full"
-                  style={{
-                    backgroundImage: `radial-gradient(circle at 25% 25%, #FFD700 2px, transparent 2px),
-                                   radial-gradient(circle at 75% 25%, #FFD700 2px, transparent 2px),
-                                   radial-gradient(circle at 25% 75%, #FFD700 2px, transparent 2px),
-                                   radial-gradient(circle at 75% 75%, #FFD700 2px, transparent 2px),
-                                   radial-gradient(circle at 50% 50%, #4338CA 3px, transparent 3px)`,
-                    backgroundSize:
-                      "40px 40px, 40px 40px, 40px 40px, 40px 40px, 60px 60px",
-                  }}
-                />
-              </div>
-
-              {/* Membership Lock Overlay */}
-              {isLocked && (
-                <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-4">
-                  <Lock className="w-8 h-8 mb-2" />
-                  <h4 className="font-semibold text-sm mb-1">
-                    {product.membership === "advanced" ? "Advanced" : "Premium"}{" "}
-                    Membership Required
-                  </h4>
-                  <p className="text-xs opacity-90">
-                    You have to upgrade your membership status to view this
-                    product
-                  </p>
+            {!imageError ? (
+              <img
+                src={product.image}
+                alt={product.name}
+                onError={handleImageError}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            ) : (
+              /* Fallback coral pattern background */
+              <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-800 to-yellow-600 flex items-center justify-center relative">
+                <div className="absolute inset-0 bg-black/20"></div>
+                <div className="text-white text-center p-4 relative z-10">
+                  <div className="text-6xl mb-2">🪸</div>
+                  <p className="text-sm opacity-75">Coral Preview</p>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+
+            {/* Price Badge for Available Products */}
+            {/* {product.available && (
+              <div className="absolute top-4 left-4">
+                <div className="bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
+                  <div className="w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                    <span className="text-black text-xs font-bold">$</span>
+                  </div>
+                  <span className="text-yellow-400 font-semibold text-sm">
+                    {product.price.toFixed(0)}
+                  </span>
+                </div>
+              </div>
+            )} */}
+
+            {/* Membership Lock Overlay */}
+            {isLocked && (
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
+                <div className="mb-4">
+                  {getMembershipIcon(product.membership)}
+                </div>
+                <h4 className="font-semibold text-lg mb-2">
+                  {product.membership === "advanced" ? "Advanced" : "Premium"}{" "}
+                  Membership Required
+                </h4>
+                <p className="text-sm opacity-90 mb-4 leading-relaxed">
+                  You have to upgrade your membership status to view this
+                  product
+                </p>
+
+                {/* Price Badge for Locked Products */}
+                {/* <div className="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
+                  <div className="w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                    <span className="text-black text-xs font-bold">$</span>
+                  </div>
+                  <span className="text-yellow-400 font-semibold text-sm">
+                    {product.price.toFixed(0)}
+                  </span>
+                </div> */}
+              </div>
+            )}
           </div>
 
           {/* Product Info */}
@@ -165,11 +230,19 @@ const CoralShopGrid = () => {
             <h3 className="text-white font-medium text-lg mb-1 group-hover:text-yellow-400 transition-colors">
               {product.name}
             </h3>
-            <p className="text-gray-400 text-sm mb-3">{product.status}</p>
-            <p className="text-white font-bold text-xl">
-              {product.price.toFixed(2)}
-              <span className="text-sm align-top">50</span>
+            <p className="text-gray-400 text-sm mb-3 italic">
+              {product.status}
             </p>
+            <div className="flex items-center justify-between">
+              <p className="text-white font-bold text-xl">
+                AED {product.price.toFixed(2)}
+              </p>
+              {product.available && (
+                <button className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                  Add to Cart
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -177,8 +250,16 @@ const CoralShopGrid = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 sm:p-6 lg:p-8">
-      <div className=" mx-auto">
+    <div className="min-h-screen  text-white ">
+      <div className="mx-auto ">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+            Coral Shop
+          </h1>
+          <p className="text-gray-400">Premium corals for your reef aquarium</p>
+        </div>
+
         {/* Header Controls */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
           {/* Search Bar */}
@@ -189,7 +270,7 @@ const CoralShopGrid = () => {
               placeholder="Search corals..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+              className="w-full bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500/50 transition-all duration-300"
             />
           </div>
 
@@ -197,7 +278,7 @@ const CoralShopGrid = () => {
           <div className="relative">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center space-x-2 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 min-w-[160px] justify-between"
+              className="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 min-w-[160px] justify-between transition-all duration-300"
             >
               <span className="flex items-center space-x-2">
                 <Filter className="w-4 h-4" />
@@ -235,13 +316,14 @@ const CoralShopGrid = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {filteredAndSortedProducts.map((product) => (
-            <Link key={product.id} href={`/shop/${product.id}`}>
-            
-                <ProductCard product={product} />
-            
-            </Link>
+            <div
+              key={product.id}
+              onClick={() => console.log("Product clicked:", product.id)}
+            >
+              <ProductCard product={product} />
+            </div>
           ))}
         </div>
 
