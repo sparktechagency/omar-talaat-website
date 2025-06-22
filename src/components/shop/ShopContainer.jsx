@@ -1,6 +1,4 @@
-import React from 'react'
-import ShopBanner from './ShopBanner'
-import ProductsList from './ProductsList'
+
 import ShopCategories from './ShopCategories'
 import CoralShopGrid from './Products'
 
@@ -9,8 +7,6 @@ const ShopContainer = () => {
     <div className=''>
       <ShopCategories />
       <CoralShopGrid />
-      {/* <ShopBanner />
-      <ProductsList /> */}
     </div>
   )
 }

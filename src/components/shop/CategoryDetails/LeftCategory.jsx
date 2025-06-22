@@ -5,11 +5,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const ShopCategories = () => {
+const LeftCategory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsToShow, setItemsToShow] = useState(5);
-   const router = useRouter();
-   
+  const router = useRouter();
+
+  // Sample images with niche titles in English and Korean
   const images = [
     {
       id: 1,
@@ -46,7 +47,6 @@ const ShopCategories = () => {
       src: "/assets/category8.png",
       alt: "Aquarium Setup",
       title: "Aquascaping",
-   
     },
     {
       id: 7,
@@ -114,16 +114,34 @@ const ShopCategories = () => {
       prevIndex === 0 ? Math.max(0, images.length - itemsToShow) : prevIndex - 1
     );
   };
-  const handleProductClick = (category) => {
-    router.push(`/category/${category.id}`);
-  };
+//   const handleProductClick = (category) => {
+//     router.push(`/category/${category.id}`);
+//   };
 
   const canGoPrev = currentIndex > 0;
   const canGoNext = currentIndex + itemsToShow < images.length;
 
   return (
     <div className=" mx-auto py-8 ">
-      <h2 className="text-center text-3xl font-bold mb-6">All Categories</h2>
+      <div className="max-w-4xl mx-auto px-4 ">
+        <h2 className="text-center text-3xl font-bold mb-6">Zoanthids</h2>
+        <p className="text-center">
+          Discover a stunning collection of Zoanthids from Coral Stash. These
+          colorful and hardy polyps are a favorite among hobbyists, offering a
+          range of colors that thrive in a variety of reef systems. Ideal for
+          beginners and advanced hobbyists alike!
+        </p>
+        <p className="mt-4 opacity-50 text-center">
+          EXCLUSIVE = Reserved for a special list of customers who have
+          completed at least 3 orders or who have spent at least AED2500 in
+          total
+        </p>
+        <p className="mt-4 opacity-50 text-center">
+          EXCLUSIVE = Reserved for a special list of customers who have
+          completed at least 3 orders or who have spent at least AED2500 in
+          total
+        </p>
+      </div>
       <div className="relative">
         {/* Navigation Buttons */}
         <button
@@ -165,7 +183,7 @@ const ShopCategories = () => {
                 key={image.id}
                 className="flex-shrink-0"
                 style={{ width: `130px`, height: `170px` }}
-                onClick={() => handleProductClick(image)}
+                // onClick={() => handleProductClick(image)}
               >
                 <div className="group cursor-pointer mx-2">
                   <div className="aspect-square bg-black rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 relative">
@@ -222,4 +240,4 @@ const ShopCategories = () => {
   );
 };
 
-export default ShopCategories;
+export default LeftCategory;

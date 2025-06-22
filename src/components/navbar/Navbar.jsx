@@ -17,6 +17,7 @@ import {
   MyProfile,
   Ranking,
 } from "../share/svg/Logo";
+import Image from "next/image";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -205,7 +206,8 @@ export default function Navbar() {
             href="/cart"
             className="hidden lg:block text-xl text-white hover:text-gray-300"
           >
-            <MyBug />
+            <Image src="/assets/image 10.png" height={55} width={55}/>
+            {/* <MyBug /> */}
           </Link>
 
           {/* Profile Dropdown */}

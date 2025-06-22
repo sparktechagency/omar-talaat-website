@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <div className="bg-gray-900 text-white">
       {/* Main Footer Content */}
-      <footer className="container mx-auto py-12 px-4">
+      <footer className="container mx-auto py-[30px] ">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Logo and Contact Section */}
           <div className="lg:col-span-1">
@@ -187,36 +187,36 @@ export default function Footer() {
             </div>
           </div>
         </div>
-      </footer>
 
-      {/* Bottom Footer */}
-      <div className="border-t border-gray-800">
-        <div className="container mx-auto py-4 px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <p className="text-sm text-gray-400">© 2025 coral-Stash.com</p>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              {/* Payment Icons */}
-              <div className="flex space-x-2">
-                <div className="w-8 h-5 bg-blue-600 rounded flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">AE</span>
-                </div>
-                <div className="w-8 h-5 bg-gray-600 rounded flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">AP</span>
-                </div>
-                <div className="w-8 h-5 bg-red-600 rounded flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">MC</span>
-                </div>
-                <div className="w-8 h-5 bg-blue-800 rounded flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">V</span>
+        {/* bottom section */}
+        <div className="border-b border-gray-800">
+          <div className="container mx-auto mb-2 ">
+            <div className="flex flex-col md:flex-row justify-end items-center">
+              <div className="flex items-center space-x-4">
+                {/* Payment Icons */}
+                <div className="flex space-x-2">
+                  <div className="w-8 h-5 bg-blue-600 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">AE</span>
+                  </div>
+                  <div className="w-8 h-5 bg-gray-600 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">AP</span>
+                  </div>
+                  <div className="w-8 h-5 bg-red-600 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">MC</span>
+                  </div>
+                  <div className="w-8 h-5 bg-blue-800 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">V</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+
+        <div className="mt-2 md:mb-0">
+          <p className="text-sm text-gray-400">© 2025 coral-Stash.com</p>
+        </div>
+      </footer>
     </div>
   );
 }

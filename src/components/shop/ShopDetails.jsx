@@ -11,6 +11,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import Image from "next/image";
+import { CoinsLogo, Logo } from "../share/svg/Logo";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
@@ -27,26 +28,26 @@ const ProductDetails = () => {
     {
       id: 1,
       name: "Rainbow Zoanthids",
-      price: 89.5,
+      price: 89.50,
       image:
         "https://i.ibb.co/JWgXSZcb/vibrant-coral-reef-aquarium-ornament-stunning-underwater-scene-191095-85646.jpg",
     },
     {
       id: 2,
       name: "Fire Zoanthids",
-      price: 75.0,
+      price: 75.50,
       image: "https://i.ibb.co/JR01nZWv/underwater-landscape-23-2150440386.jpg",
     },
     {
       id: 3,
       name: "Green Bay Packers",
-      price: 125.0,
+      price: 125.60,
       image: "https://i.ibb.co/fYZx5zCP/Region-Gallery-Viewer.png",
     },
     {
       id: 4,
       name: "Blue Hornets",
-      price: 95.0,
+      price: 95.50,
       image:
         "https://i.ibb.co/JWgXSZcb/vibrant-coral-reef-aquarium-ornament-stunning-underwater-scene-191095-85646.jpg",
     },
@@ -66,9 +67,9 @@ const ProductDetails = () => {
             <div className="relative   rounded-2xl overflow-hidden border border-purple-500/20">
               <Image
                 src={productImages[selectedImage]}
-                              alt="CS Purple Hornets Zoanthids"
-                              height={500}
-                              width={400}
+                alt="CS Purple Hornets Zoanthids"
+                height={747}
+                width={747}
                 className="w-full h-[600px]  object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
@@ -99,18 +100,18 @@ const ProductDetails = () => {
           {/* Product Details */}
           <div className="space-y-6">
             {/* Product Header */}
-            <div className="space-y-2">
+            <div className="space-y-2 ">
               {/* <div className="flex items-center gap-2">
                 <div className="inline-flex items-center px-3 py-1 rounded-full  text-purple-300 border text-sm">
                   <span className="w-2 h-2  rounded-full mr-2"></span>
                   CS Purple Hornets Zoanthids
                 </div>
               </div> */}
-              <h1 className="text-3xl lg:text-4xl font-bold text-white">
+              <h1 className="text-3xl lg:text-4xl font-bold mb-6 text-white ">
                 CS Purple Hornets Zoanthids
               </h1>
 
-              <div className="flex items-center gap-4 text-sm text-gray-400">
+              {/* <div className="flex items-center gap-4 text-sm text-gray-400">
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   <span>512</span>
@@ -119,51 +120,61 @@ const ProductDetails = () => {
                   <Eye className="w-4 h-4" />
                   <span>235</span>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Price */}
-            <div className="space-y-2">
-              <div className="text-4xl font-bold text-white">
-                $99<span className="text-2xl text-gray-400">.50</span>
+            <div className="space-y-2 mb-16">
+              <div className="text-2xl font-bold text-white mb-9">
+                AED 99.50
               </div>
-              <p className="text-gray-400">Free shipping on orders over $150</p>
-            </div>
-
-            {/* Quantity Selector */}
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-gray-300">
-                Quantity
-              </label>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center border border-gray-700 rounded-lg">
-                  <button
-                    onClick={() => handleQuantityChange(-1)}
-                    disabled={quantity <= 1}
-                    className="p-2 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="px-4 py-2 text-center min-w-[3rem]">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => handleQuantityChange(1)}
-                    className="p-2 hover:bg-gray-800"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
+              <div className="flex items-center gap-8 text-sm text-gray-400">
+                <div className="flex items-center gap-2 ">
+                  <Logo />
+                  <p className="font-brush text-3xl">512</p>
+                </div>
+                <div className="flex items-center gap-2 ">
+                  <CoinsLogo />
+                  <p className="font-brush text-3xl">235</p>
                 </div>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="space-y-3">
-              <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
-                <ShoppingCart className="w-5 h-5" />
-                Add to cart
-              </button>
-{/* 
+            <div className="flex items-center mb-8 gap-4">
+              {/* Quantity Selector */}
+              <div className="w-1/3  space-y-3">
+                {/* <label className="text- font-bold text-gray-300">
+                  Quantity
+                </label> */}
+                <div className="flex text-center justify-center items-center gap-3">
+                  <div className="flex w-full justify-center items-center border border-gray-700 rounded-lg">
+                    <button
+                      onClick={() => handleQuantityChange(-1)}
+                      disabled={quantity <= 1}
+                      className="p-2 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="px-4 py-2 text-center min-w-[3rem]">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => handleQuantityChange(1)}
+                      className="p-2 hover:bg-gray-800"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="w-2/3 space-y-3 ">
+                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 text-lg font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                  <ShoppingCart className="w-5 h-5" />
+                  Add to cart
+                </button>
+                {/* 
               <div className="flex gap-3">
                 <button className="flex-1 border border-gray-700 hover:bg-gray-800 text-white py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                   <Heart className="w-4 h-4" />
@@ -174,6 +185,7 @@ const ProductDetails = () => {
                   Share
                 </button>
               </div> */}
+              </div>
             </div>
 
             {/* Description */}
@@ -242,8 +254,9 @@ const ProductDetails = () => {
                   <h3 className="font-medium text-white mb-2 line-clamp-2">
                     {product.name}
                   </h3>
-                  <p className="text-xl font-bold text-purple-400">
-                    ${product.price}
+                  <p className="text-white opacity-50 italic">Cut to Order</p>
+                  <p className="text-xl font-bold text-purple-400 ml-2">
+                    AED {product.price}
                   </p>
                 </div>
               </div>
