@@ -122,7 +122,7 @@ const ShopCategories = () => {
   const canGoNext = currentIndex + itemsToShow < images.length;
 
   return (
-    <div className=" mx-auto py-8 ">
+    <div className="container mx-auto  py-8 ">
       <h2 className="text-center text-3xl font-bold mb-6">All Categories</h2>
       <div className="relative">
         {/* Navigation Buttons */}

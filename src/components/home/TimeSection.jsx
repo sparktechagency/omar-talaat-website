@@ -78,7 +78,7 @@ const CountdownProgressTracker = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white mt-10  flex flex-col items-center justify-center">
+    <div className="container mx-auto min-h-screen bg-black text-white mt-10  flex flex-col items-center justify-center">
       {/* Star and Number - Top Left */}
       <div className="">
         <div className="absolute hidden md:flex left-12 lg:left-36  items-center gap-3">

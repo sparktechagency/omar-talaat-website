@@ -6,7 +6,7 @@ import { IoGiftSharp } from 'react-icons/io5';
 
 const Ficilities = () => {
   return (
-    <div className="py-[51px] bg-[#181818] mt-20 rounded-2xl">
+    <div className="py-[51px] bg-[#181818] mt-28  " >
       <div className="grid grid-cols-2 lg:grid-cols-4">
         <div className="w-full mx-auto m-2 text-center">
           <div className="text-center">

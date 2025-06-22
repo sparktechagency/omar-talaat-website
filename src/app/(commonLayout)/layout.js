@@ -2,6 +2,7 @@
 
 import Footer from "@/components/footer/Footer";
 import Banner from "@/components/home/Banner";
+import Ficilities from "@/components/home/Ficilities";
 import Navbar from "@/components/navbar/Navbar";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -14,12 +15,13 @@ const CommonLayout = ({ children }) => {
       <Navbar className="" />
       {pathname === "/" && (
         <div className="60">
-          <Banner />{" "}
+          <Banner />
+          {/* <Ficilities /> */}
         </div>
       )}
       {/* Main content */}
       <div className="bg-[#000] flex flex-col flex-grow">
-        <main className="container mx-auto my-20 flex-1">
+        <main className="my-20 flex-1">
           <div className="">{children}</div>
         </main>
       </div>

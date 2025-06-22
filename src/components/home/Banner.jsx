@@ -44,10 +44,10 @@ const Banner = () => {
     // {`min-h-screen p-6 ${bg} ${text}`}
 
   return (
-    <div className={`h-auto pt-32 lg:pt-40 ${bg}  overflow-hidden`}>
+    <div className={`h-auto pt-32 lg:pt-60 ${bg}  overflow-hidden`}>
       <div className="absolute inset-0 ">
         <div
-          className="absolute inset-0 bg-cover bg-center h-screen lg:h-[1100px]"
+          className="absolute inset-0 bg-cover bg-center mt-24 h-screen lg:h-[1100px]"
           style={{
             backgroundImage: `url('/assets/banner3.png')`,
           }}

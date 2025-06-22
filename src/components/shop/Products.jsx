@@ -3,12 +3,15 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Search, Filter, ChevronDown, Lock, X, Menu } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
+import { useRouter } from "next/navigation";
 
 const CoralShopGrid = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("Featured");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const rounter = useRouter();
+  
 
   // Simple filters
   const [priceRange, setPriceRange] = useState([0, 400]);
@@ -175,7 +178,7 @@ const CoralShopGrid = () => {
 
   const handleProductClick = (product) => {
     if (product.available) {
-      console.log("Navigate to product:", product.id);
+      rounter.push(`/shop/${product.id}`);
     }
   };
 
@@ -383,7 +386,7 @@ const CoralShopGrid = () => {
   };
 
   return (
-    <div className="min-h-screen text-white">
+    <div className="container mx-auto min-h-screen text-white">
       <div className="mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">

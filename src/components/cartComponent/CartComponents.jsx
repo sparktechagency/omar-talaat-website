@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { Minus, Plus, Edit3, Trash2, Calendar, Clock } from "lucide-react";
+import Image from "next/image";
+import { Button } from "../ui/button";
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([
@@ -11,7 +13,7 @@ const CheckoutPage = () => {
         "Extra color, bring the food and everything, We recommend a spelling level of 2 meals. Spicy delivery Res Hams...",
       price: 99,
       quantity: 1,
-      image: "/api/placeholder/60/60",
+      image: "/assets/category1.png",
     },
     {
       id: 2,
@@ -20,7 +22,7 @@ const CheckoutPage = () => {
         "Extra color, bring the food and everything, We recommend a spelling level of 2 meals. Spicy delivery Res Hams...",
       price: 99,
       quantity: 1,
-      image: "/api/placeholder/60/60",
+      image: "/assets/category4.png",
     },
   ]);
 
@@ -116,9 +118,13 @@ const CheckoutPage = () => {
     <div className="min-h-screen bg-black text-white p-4 lg:p-8">
       <div className="">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 lg:mb-8 lg:col-span-12">
-          <div className="w-6 h-6 bg-gray-700 rounded lg:hidden"></div>
-          <h1 className="text-lg lg:text-2xl font-medium">Checkout</h1>
+        <div className="flex items-center justify-center gap-2 mb-6 lg:mb-8 lg:col-span-12">
+          <div>
+            <Image src="/assets/image 10.png" width={105} height={105} />
+          </div>
+          <h1 className="text-3xl md:text-5xl lg:text-7xl font-medium">
+            Your Stash
+          </h1>
           <div className="w-6 h-6 lg:hidden"></div>
         </div>
 
@@ -132,50 +138,73 @@ const CheckoutPage = () => {
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-start space-x-3 lg:space-x-4 bg-gray-900 rounded-lg p-3 lg:p-4"
+                    className="flex items-start justify-between space-x-3 lg:space-x-4  rounded-lg p-3 lg:p-4"
                   >
-                    <div className="w-12 h-12 lg:w-16 lg:h-16 bg-orange-500 rounded-lg flex items-center justify-center">
-                      <div className="w-8 h-8 lg:w-10 lg:h-10 bg-orange-600 rounded-full"></div>
+                    {/* Image on the left side */}
+                    <div>
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        height={80}
+                        width={80}
+                        className="rounded-full"
+                      />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium text-sm lg:text-base mb-1">
-                        {item.name}
-                      </h3>
-                      <p className="text-xs lg:text-sm text-gray-400 mb-2">
-                        {item.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => updateQuantity(item.id, -1)}
-                            className="w-6 h-6 lg:w-8 lg:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
-                          >
-                            <Minus size={12} className="lg:w-4 lg:h-4" />
-                          </button>
-                          <span className="text-sm lg:text-base min-w-[20px] text-center">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => updateQuantity(item.id, 1)}
-                            className="w-6 h-6 lg:w-8 lg:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
-                          >
-                            <Plus size={12} className="lg:w-4 lg:h-4" />
-                          </button>
-                        </div>
-                        <div className="flex items-center space-x-2 lg:space-x-3">
-                          <span className="font-medium lg:text-lg">
-                            ${item.price}
-                          </span>
-                          <button className="text-gray-400 hover:text-white transition-colors">
-                            <Edit3 size={14} className="lg:w-5 lg:h-5" />
-                          </button>
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className="text-gray-400 hover:text-red-400 transition-colors"
-                          >
-                            <Trash2 size={14} className="lg:w-5 lg:h-5" />
-                          </button>
-                        </div>
+
+                    {/* Content on the right side */}
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Title */}
+                        <h3 className="font-medium text-sm lg:text-base mb-1">
+                          {item.name}
+                        </h3>
+                        {/* Description */}
+                        <p className="text-xs lg:text-sm text-gray-400 mb-2">
+                          {item.description}
+                        </p>
+
+                        {/* Quantity and Price aligned horizontally on the right */}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-10 items-center mt-2">
+                      <div className="flex items-center space-x-2">
+                        {/* Quantity controls */}
+                        <button
+                          onClick={() => updateQuantity(item.id, -1)}
+                          className="w-6 h-6 lg:w-8 lg:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
+                        >
+                          <Minus size={12} className="lg:w-4 lg:h-4" />
+                        </button>
+                        <span className="text-sm lg:text-base min-w-[20px] text-center">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => updateQuantity(item.id, 1)}
+                          className="w-6 h-6 lg:w-8 lg:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
+                        >
+                          <Plus size={12} className="lg:w-4 lg:h-4" />
+                        </button>
+                      </div>
+
+                      <div className="flex items-center space-x-2 lg:space-x-3">
+                        {/* Price */}
+                        <span className="font-medium lg:text-lg">
+                          ${item.price}
+                        </span>
+
+                        {/* Edit button */}
+                        <button className="text-gray-400 hover:text-white transition-colors">
+                          <Edit3 size={14} className="lg:w-5 lg:h-5" />
+                        </button>
+
+                        {/* Delete button */}
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="text-gray-400 hover:text-red-400 transition-colors"
+                        >
+                          <Trash2 size={14} className="lg:w-5 lg:h-5" />
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -184,24 +213,26 @@ const CheckoutPage = () => {
             </div>
 
             {/* Promo Code */}
-            <div>
+            <div >
               <h2 className="text-lg font-medium lg:text-xl mb-4">
                 Promo Code
               </h2>
-              <div className="flex space-x-2">
+              <div className="flex space-x-6 w-1/2">
                 <input
                   type="text"
-                  placeholder="Send AED 50 more and get free shipping! (Free shipping is from AED 100)"
+                  placeholder="Enter promo code"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
-                  className="flex-1 bg-gray-900 rounded-lg px-3 py-2 lg:px-4 lg:py-3 text-sm lg:text-base text-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="flex-1   rounded-lg border-1 px-3 py-2 lg:px-4 lg:py-3 text-sm lg:text-base text-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
+
+                <Button className="py-[26px] ">Apply Promo Code</Button>
               </div>
             </div>
 
             {/* Delivery Options */}
             <div className="flex gap-10 justify-between w-full">
-              <div className="flex-1">
+              <div className=" w-2/3">
                 <h2 className="text-lg font-medium lg:text-xl mb-4">
                   Delivery Options
                 </h2>
@@ -217,7 +248,7 @@ const CheckoutPage = () => {
 
                   <div className="space-y-3">
                     {/* Radio Buttons */}
-                    <label className="flex items-center space-x-3 bg-gray-900 rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
+                    <label className="flex items-center space-x-3 border  rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
                       <input
                         type="radio"
                         name="delivery"
@@ -231,7 +262,7 @@ const CheckoutPage = () => {
                       </span>
                     </label>
 
-                    <label className="flex items-center space-x-3 bg-gray-900 rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
+                    <label className="flex items-center space-x-3 border rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
                       <input
                         type="radio"
                         name="delivery"
@@ -245,7 +276,7 @@ const CheckoutPage = () => {
                       </span>
                     </label>
 
-                    <label className="flex items-center space-x-3 bg-gray-900 rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
+                    <label className="flex items-center space-x-3 border rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
                       <input
                         type="radio"
                         name="delivery"
@@ -272,7 +303,7 @@ const CheckoutPage = () => {
                         id="orderNumber"
                         value={orderNumber}
                         onChange={(e) => setOrderNumber(e.target.value)}
-                        className="w-full mt-2 bg-gray-800 text-white rounded-lg p-3 lg:p-4 text-sm lg:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        className="w-full mt-2 border text-white rounded-lg p-3 lg:p-4 text-sm lg:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                         placeholder="Enter your previous order number"
                       />
                     </div>
@@ -281,7 +312,7 @@ const CheckoutPage = () => {
               </div>
 
               {/* Calendar */}
-              <div className="flex-1">
+              <div className=" w-1/3">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-medium lg:text-xl">
                     Select Delivery Date
@@ -305,13 +336,13 @@ const CheckoutPage = () => {
                   </div>
                 </div>
 
-                <div className="bg-gray-900 rounded-lg p-4 lg:p-6">
+                <div className=" rounded-lg p-4 lg:p-0">
                   <div className="grid grid-cols-7 gap-1 lg:gap-2 mb-4">
                     {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
                       (day) => (
                         <div
                           key={day}
-                          className="text-center text-xs lg:text-sm text-gray-400 py-2"
+                          className="text-center text-xs lg:text-lg font-bold  py-2"
                         >
                           {day}
                         </div>
@@ -322,9 +353,9 @@ const CheckoutPage = () => {
                       <button
                         key={index}
                         onClick={() => day && setSelectedDate(day)}
-                        className={`h-8 lg:h-10 text-xs lg:text-sm rounded transition-colors ${
+                        className={`h-8 lg:h-10 text-xs lg:text-sm rounded border-2 font-bold transition-colors ${
                           day === selectedDate
-                            ? "bg-orange-600 text-white"
+                            ? "bg-white  text-black"
                             : day
                             ? "text-white hover:bg-gray-700"
                             : "text-transparent"
@@ -345,8 +376,8 @@ const CheckoutPage = () => {
                         onClick={() => setSelectedTime("8am-9pm")}
                         className={`px-3 py-2 lg:px-4 lg:py-3 rounded-lg text-sm lg:text-base transition-colors ${
                           selectedTime === "8am-9pm"
-                            ? "bg-orange-600 text-white"
-                            : "bg-gray-700 text-white hover:bg-gray-600"
+                            ? "bg-white text-black"
+                            : "border text-white hover:bg-gray-600"
                         }`}
                       >
                         8am-9pm
@@ -355,8 +386,8 @@ const CheckoutPage = () => {
                         onClick={() => setSelectedTime("9am-10pm")}
                         className={`px-3 py-2 lg:px-4 lg:py-3 rounded-lg text-sm lg:text-base transition-colors ${
                           selectedTime === "9am-10pm"
-                            ? "bg-orange-600 text-white"
-                            : "bg-gray-700 text-white hover:bg-gray-600"
+                            ? "bg-white text-black"
+                            : "border text-white hover:bg-gray-600"
                         }`}
                       >
                         9am-10pm
@@ -372,7 +403,7 @@ const CheckoutPage = () => {
               <h3 className="text-lg font-medium lg:text-xl mb-4">
                 My Information
               </h3>
-              <div className="bg-gray-900 rounded-lg p-4 lg:p-6">
+              <div className="border rounded-lg p-4 lg:p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 text-sm lg:text-base text-gray-400">
                   <div>
                     <span className="text-white font-medium">
@@ -393,13 +424,13 @@ const CheckoutPage = () => {
                     <br />
                     contact@email.com
                   </div>
-                  <div>
+                  {/* <div>
                     <span className="text-white font-medium">
                       Delivery Type:
                     </span>
                     <br />
                     {deliveryType}
-                  </div>
+                  </div> */}
                   <div>
                     <span className="text-white font-medium">
                       Time Location:
@@ -427,14 +458,14 @@ const CheckoutPage = () => {
                   <h3 className="text-lg font-medium lg:text-xl mb-4">
                     Comments
                   </h3>
-                  <div className="bg-gray-900 rounded-lg p-4 lg:p-6">
+                  <div className=" rounded-lg border p-4 lg:p-6">
                     <textarea
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
                       placeholder="Write comment"
-                      className="w-full h-24 lg:h-32 bg-gray-800 rounded-lg p-3 lg:p-4 text-sm lg:text-base text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="w-full h-32 lg:h-50 border  rounded-lg p-3 lg:p-4 text-sm lg:text-base text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
-                    <button className="mt-4 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-lg text-sm lg:text-base w-full transition-colors">
+                    <button className="mt-4 border border-red-500 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-lg text-sm lg:text-base w-full transition-colors">
                       Submit With Order
                     </button>
                   </div>
@@ -445,7 +476,7 @@ const CheckoutPage = () => {
                   <h3 className="text-lg font-medium lg:text-xl mb-4">
                     Order Summary
                   </h3>
-                  <div className="bg-gray-900 rounded-lg p-4 lg:p-6">
+                  <div className="border rounded-lg p-4 lg:p-6">
                     <div className="space-y-3 text-sm lg:text-base">
                       <div className="flex justify-between">
                         <span className="text-gray-400">Quantity:</span>
@@ -477,7 +508,7 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Checkout Button */}
-                    <button className="w-full mt-6 bg-orange-600 hover:bg-orange-700 text-white py-3 lg:py-4 rounded-lg font-medium text-base lg:text-lg transition-colors">
+                    <button className="w-full mt-9 border border-red-500 text-white py-3 lg:py-[10px] rounded-lg font-medium text-base lg:text-lg transition-colors">
                       Proceed To Checkout
                     </button>
                   </div>

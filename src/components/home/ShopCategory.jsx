@@ -130,11 +130,11 @@ const ShopCategory = () => {
   };
 
   return (
-    <div className="w-full mx-auto  bg-black my-20 flex flex-col justify-center">
+    <div className="container w-full mx-auto  bg-black my-20 flex flex-col justify-center">
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold  mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-        Shop Categories
+          Shop Categories
         </h1>
         {/* <p className="text-gray-300 text-lg">
           Discover the hidden beauty that glows under UV light

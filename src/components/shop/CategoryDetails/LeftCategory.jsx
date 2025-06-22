@@ -122,7 +122,7 @@ const LeftCategory = () => {
   const canGoNext = currentIndex + itemsToShow < images.length;
 
   return (
-    <div className=" mx-auto py-8 ">
+    <div className="container mx-auto  py-8 ">
       <div className="max-w-4xl mx-auto px-4 ">
         <h2 className="text-center text-3xl font-bold mb-6">Zoanthids</h2>
         <p className="text-center">

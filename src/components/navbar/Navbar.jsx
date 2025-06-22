@@ -89,12 +89,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-primary text-white fixed w-full top-0 left-0 shadow-lg z-50">
+    <nav className="fixed w-full top-0 left-0 z-50  backdrop-blur-md bg-white/10 border-b border-white/20 shadow-lg">
       <div className="container mx-auto flex justify-between items-center h-24 px-4 lg:px-6">
         {/* Left: Logo */}
         <Link
           href="/"
-          className="flex items-center space-x-2 text-lg font-bold"
+          className="flex items-center space-x-2 text-lg font-bold text-white drop-shadow-lg"
         >
           <MainLogo color={`#fff`} width={65} height={70} />
         </Link>
@@ -111,10 +111,10 @@ export default function Navbar() {
               <li key={item.name}>
                 <Link
                   href={item.path}
-                  className={`relative pb-1 transition-all duration-300 ease-in-out ${
+                  className={`relative pb-1 transition-all duration-300 ease-in-out text-white drop-shadow-md ${
                     pathname === item.path
-                      ? "border-b-2 border-white text-white"
-                      : "hover:border-b-2 hover:border-white text-gray-300 hover:text-white"
+                      ? "border-b-2 border-white/80"
+                      : "hover:border-b-2 hover:border-white/60"
                   }`}
                 >
                   {item.name}
@@ -127,11 +127,11 @@ export default function Navbar() {
           <div className="relative ml-8">
             <form onSubmit={handleSearch} className="relative">
               <div
-                className={`flex items-center bg-gray-800 rounded-full px-4 py-2 transition-all duration-300 ${
-                  isSearchFocused ? "ring-2 ring-white" : ""
+                className={`flex items-center backdrop-blur-sm bg-white/20 border border-white/30 rounded-full px-4 py-2 transition-all duration-300 ${
+                  isSearchFocused ? "ring-2 ring-white/50 bg-white/30" : ""
                 }`}
               >
-                <FaSearch className="text-gray-400 mr-3" />
+                <FaSearch className="text-white/70 mr-3" />
                 <input
                   type="text"
                   placeholder="Search Corals"
@@ -140,7 +140,7 @@ export default function Navbar() {
                   onKeyPress={handleKeyPress}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setIsSearchFocused(false)}
-                  className="bg-transparent text-white placeholder-gray-400 outline-none w-64"
+                  className="bg-transparent text-white placeholder-white/60 outline-none w-64"
                 />
               </div>
             </form>
@@ -150,15 +150,15 @@ export default function Navbar() {
         {/* Mobile Search Bar - Show only on mobile between left and right */}
         <div className="lg:hidden flex-1 mx-4">
           <form onSubmit={handleSearch} className="relative">
-            <div className="flex items-center bg-gray-800 rounded-full px-3 py-2">
-              <FaSearch className="text-gray-400 mr-2 text-sm" />
+            <div className="flex items-center backdrop-blur-sm bg-white/20 border border-white/30 rounded-full px-3 py-2">
+              <FaSearch className="text-white/70 mr-2 text-sm" />
               <input
                 type="text"
                 placeholder="Search Corals"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 onKeyPress={handleKeyPress}
-                className="bg-transparent text-white placeholder-gray-400 outline-none flex-1 text-sm"
+                className="bg-transparent text-white placeholder-white/60 outline-none flex-1 text-sm"
               />
             </div>
           </form>
@@ -171,13 +171,17 @@ export default function Navbar() {
             {/* Calendar Icon with number */}
             <div className="flex items-center space-x-1">
               <CalenderLogo />
-              <span className="text-white text-4xl font-brush">7</span>
+              <span className="text-white text-4xl font-brush drop-shadow-lg">
+                7
+              </span>
             </div>
 
             {/* Coral Icon with number */}
             <div className="flex items-center space-x-1">
               <Logo />
-              <span className="text-white font-brush text-4xl">512</span>
+              <span className="text-white font-brush text-4xl drop-shadow-lg">
+                512
+              </span>
             </div>
 
             {/* Chart Icon */}
@@ -186,7 +190,9 @@ export default function Navbar() {
             {/* Coin Icon with number - Show directly on large devices */}
             <div className="flex items-center space-x-1">
               <CoinsLogo />
-              <span className="text-white font-brush text-4xl">235</span>
+              <span className="text-white font-brush text-4xl drop-shadow-lg">
+                235
+              </span>
             </div>
           </div>
 
@@ -196,7 +202,7 @@ export default function Navbar() {
               <CoinsLogo />
             </button>
             {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 backdrop-blur-sm bg-black/60 border border-white/20 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
               235 Coins
             </div>
           </div>
@@ -204,27 +210,33 @@ export default function Navbar() {
           {/* Cart Icon - Hidden on mobile */}
           <Link
             href="/cart"
-            className="hidden lg:block text-xl text-white hover:text-gray-300"
+            className="hidden lg:block text-xl text-white hover:text-white/80 transition-colors duration-300"
           >
-            <Image src="/assets/image 10.png" height={55} width={55}/>
+            <Image
+              loading="lazy"
+              src="/assets/image 10.png"
+              height={55}
+              width={55}
+              className="drop-shadow-lg"
+            />
             {/* <MyBug /> */}
           </Link>
 
           {/* Profile Dropdown */}
           <div className="relative profile-menu">
             <button
-              className="text-xl flex items-center justify-center w-8 h-8"
+              className="text-xl flex items-center justify-center w-8 h-8 text-white hover:text-white/80 transition-colors duration-300"
               onClick={() => setIsProfileOpen(!isProfileOpen)}
             >
               <MyProfile />
             </button>
             {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-60 border border-gray-700 bg-gray-900 text-white shadow-lg rounded-md">
+              <div className="absolute right-0 mt-2 w-60 backdrop-blur-md bg-black/40 border border-white/20 text-white shadow-xl rounded-lg overflow-hidden">
                 <ul className="py-2">
                   <li>
                     <Link
                       href="/profile-dashboard"
-                      className="block px-4 py-2 hover:bg-gray-800"
+                      className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                     >
                       Profile Dashboard
                     </Link>
@@ -232,7 +244,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/my-feed"
-                      className="block px-4 py-2 hover:bg-gray-800"
+                      className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                     >
                       My Feed
                     </Link>
@@ -240,7 +252,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/my-post"
-                      className="block px-4 py-2 hover:bg-gray-800"
+                      className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                     >
                       My Post
                     </Link>
@@ -248,7 +260,7 @@ export default function Navbar() {
                   <li>
                     <Link
                       href="/my-download"
-                      className="block px-4 py-2 hover:bg-gray-800"
+                      className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                     >
                       Download Video
                     </Link>
@@ -257,14 +269,14 @@ export default function Navbar() {
                   <li className="lg:hidden">
                     <Link
                       href="/cart"
-                      className="block px-4 py-2 hover:bg-gray-800"
+                      className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                     >
                       My Cart
                     </Link>
                   </li>
                   <li>
                     <button
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-800"
+                      className="block w-full text-left px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                       onClick={() => setIsSettingsOpen(!isSettingsOpen)}
                     >
                       <div className="flex justify-between items-center">
@@ -277,11 +289,11 @@ export default function Navbar() {
                       </div>
                     </button>
                     {isSettingsOpen && (
-                      <ul className="pl-4 bg-gray-800">
+                      <ul className="pl-4 bg-white/5 border-t border-white/10">
                         <li>
                           <Link
                             href="/contact"
-                            className="block px-4 py-2 hover:bg-gray-700"
+                            className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                           >
                             Contact us
                           </Link>
@@ -289,7 +301,7 @@ export default function Navbar() {
                         <li>
                           <Link
                             href="/terms"
-                            className="block px-4 py-2 hover:bg-gray-700"
+                            className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                           >
                             Terms & Conditions
                           </Link>
@@ -297,7 +309,7 @@ export default function Navbar() {
                         <li>
                           <Link
                             href="/change-password"
-                            className="block px-4 py-2 hover:bg-gray-700"
+                            className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                           >
                             Change Password
                           </Link>
@@ -305,7 +317,7 @@ export default function Navbar() {
                         <li>
                           <Link
                             href="/policy"
-                            className="block px-4 py-2 hover:bg-gray-700"
+                            className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                           >
                             Privacy Policy
                           </Link>
@@ -322,7 +334,7 @@ export default function Navbar() {
                           localStorage.removeItem("token");
                         }
                       }}
-                      className="block px-4 py-2 mt-2 border-t border-gray-700 hover:bg-gray-800 text-red-400"
+                      className="block px-4 py-2 mt-2 border-t border-white/20 hover:bg-white/10 text-red-400 transition-colors duration-200"
                     >
                       Logout
                     </Link>
@@ -334,13 +346,13 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden text-xl flex items-center justify-center w-8 h-8 ml-2"
+            className="lg:hidden text-xl flex items-center justify-center w-8 h-8 ml-2 text-white hover:text-white/80 transition-colors duration-300"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? (
-              <AiOutlineClose className="text-white" />
+              <AiOutlineClose className="text-white drop-shadow-lg" />
             ) : (
-              <FiMenu className="text-white" />
+              <FiMenu className="text-white drop-shadow-lg" />
             )}
           </button>
         </div>
@@ -348,7 +360,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="lg:hidden bg-gray-900 text-white">
+        <div className="lg:hidden backdrop-blur-md bg-black/40 border-t border-white/20 text-white">
           {/* Mobile Navigation Links */}
           <ul className="p-4 space-y-3">
             {[
@@ -359,10 +371,10 @@ export default function Navbar() {
               <li key={item.name}>
                 <Link
                   href={item.path}
-                  className={`block py-2 px-4 rounded transition-colors ${
+                  className={`block py-2 px-4 rounded-lg transition-all duration-300 ${
                     pathname === item.path
-                      ? "bg-white text-black"
-                      : "hover:bg-gray-800"
+                      ? "bg-white/20 text-white border border-white/30"
+                      : "hover:bg-white/10 hover:border hover:border-white/20"
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -373,15 +385,19 @@ export default function Navbar() {
           </ul>
 
           {/* Mobile Stats */}
-          <div className="p-4 border-t border-gray-700">
+          <div className="p-4 border-t border-white/20">
             <div className="flex items-center justify-center space-x-6 text-sm">
               <div className="flex items-center space-x-1">
                 <CalenderLogo />
-                <span className="text-white font-brush text-2xl">7</span>
+                <span className="text-white font-brush text-2xl drop-shadow-lg">
+                  7
+                </span>
               </div>
               <div className="flex items-center space-x-1">
                 <Logo />
-                <span className="text-white font-brush text-2xl">512</span>
+                <span className="text-white font-brush text-2xl drop-shadow-lg">
+                  512
+                </span>
               </div>
               <div className="flex items-center space-x-1">
                 <Ranking />

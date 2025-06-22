@@ -169,7 +169,7 @@ const RecentAdded = () => {
 
   return (
     <motion.div
-      className="w-full"
+      className="w-full container mx-auto"
       ref={ref}
       initial="hidden"
       animate={controls}

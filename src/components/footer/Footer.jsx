@@ -6,7 +6,7 @@ import { FooterLogo, MainLogo } from "../share/svg/Logo";
 
 export default function Footer() {
   return (
-    <div className="bg-gray-900 text-white">
+    <div className="bg-[#181818] text-white">
       {/* Main Footer Content */}
       <footer className="container mx-auto py-[30px] ">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">

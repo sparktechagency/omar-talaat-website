@@ -58,7 +58,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="container mx-auto min-h-screen bg-black text-white">
       <div className="mx-auto p-4 lg:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Images */}
@@ -170,7 +170,7 @@ const ProductDetails = () => {
 
               {/* Action Buttons */}
               <div className="w-2/3 space-y-3 ">
-                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 text-lg font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                <button className="w-full border text-white py-2 text-lg font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
                   <ShoppingCart className="w-5 h-5" />
                   Add to cart
                 </button>
