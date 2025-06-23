@@ -255,7 +255,7 @@ const ProductDetails = () => {
                     {product.name}
                   </h3>
                   <p className="text-white opacity-50 italic">Cut to Order</p>
-                  <p className="text-xl font-bold text-purple-400 ml-2">
+                  <p className="text-xl font-bold  ml-2">
                     AED {product.price}
                   </p>
                 </div>

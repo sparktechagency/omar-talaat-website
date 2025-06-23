@@ -18,6 +18,7 @@ import {
   Ranking,
 } from "../share/svg/Logo";
 import Image from "next/image";
+import LeaderboardModal from "./LeaderBoard";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -28,6 +29,7 @@ export default function Navbar() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  
 
   // Initialize search query from URL params
   useEffect(() => {
@@ -89,7 +91,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed w-full top-0 left-0 z-50  backdrop-blur-md bg-white/10 border-b border-white/20 shadow-lg">
+    <nav className="fixed w-full top-0 left-0 z-50  backdrop-blur-md   shadow-lg">
       <div className="container mx-auto flex justify-between items-center h-24 px-4 lg:px-6">
         {/* Left: Logo */}
         <Link
@@ -184,9 +186,6 @@ export default function Navbar() {
               </span>
             </div>
 
-            {/* Chart Icon */}
-            <Ranking />
-
             {/* Coin Icon with number - Show directly on large devices */}
             <div className="flex items-center space-x-1">
               <CoinsLogo />
@@ -205,6 +204,14 @@ export default function Navbar() {
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 backdrop-blur-sm bg-black/60 border border-white/20 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
               235 Coins
             </div>
+          </div>
+          <div className="relative group ">
+            <button
+              className="flex items-center space-x-1  "
+              onClick={() => setIsOpen(true)}
+            >
+              <Ranking />
+            </button>
           </div>
 
           {/* Cart Icon - Hidden on mobile */}
@@ -406,6 +413,8 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+      <LeaderboardModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </nav>
   );
 }

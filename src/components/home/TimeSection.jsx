@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import {  Award, Coins, Lock, Check } from "lucide-react";
 import Image from "next/image";
 import { Star } from "../share/svg/Logo";
+import Container from "../share/Container";
 
 const CountdownProgressTracker = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -63,14 +64,14 @@ const CountdownProgressTracker = () => {
       locked: true,
       borderColor: "border-yellow-500",
     },
-    {
-      id: 4,
-      title: "DOPAMINE\nRECEPTOR GENE\nVARIATIONS",
-      completed: false,
-      current: false,
-      locked: true,
-      borderColor: "border-gray-500",
-    },
+    // {
+    //   id: 4,
+    //   title: "DOPAMINE\nRECEPTOR GENE\nVARIATIONS",
+    //   completed: false,
+    //   current: false,
+    //   locked: true,
+    //   borderColor: "border-gray-500",
+    // },
   ];
 
   const formatTime = (time) => {
@@ -78,7 +79,7 @@ const CountdownProgressTracker = () => {
   };
 
   return (
-    <div className="container mx-auto min-h-screen bg-black text-white mt-10  flex flex-col items-center justify-center">
+    <Container className=" min-h-screen bg-black text-white mt-10  flex flex-col items-center justify-center">
       {/* Star and Number - Top Left */}
       <div className="">
         <div className="absolute hidden md:flex left-12 lg:left-36  items-center gap-3">
@@ -135,30 +136,50 @@ const CountdownProgressTracker = () => {
       {/* Progress Steps */}
       <div className="relative w-full mb-20">
         {/* Progress Line */}
-        <div className="absolute top-6 max-w-6xl mx-auto left-0 right-0 h-1 bg-gray-600 z-0">
-          <div className="h-full bg-white w-1/4"></div>
+        <div className="absolute top-6 max-w-6xl mx-auto left-0 right-0 h-2 z-0">
+          <div
+            className="h-full "
+            style={{
+              background: "linear-gradient(to right, #FFFFFF, #181818)",
+            }}
+          ></div>
         </div>
 
         {/* Steps */}
-        <div className="relative grid grid-cols-2 lg:grid-cols-4 z-10 flex-wrap sm:flex-nowrap">
+        <div className="relative grid grid-cols-2 lg:grid-cols-5 z-10 flex-wrap sm:flex-nowrap">
           {progressSteps.map((step, index) => (
             <div
               key={step.id}
-              className="flex flex-col items-center mb-8 sm:mb-0"
+              className="flex flex-col items-center mb-8 sm:mb-0 relative"
             >
+              {/* Add left and right borders to the second card */}
+              {index === 0 && (
+                <>
+                  {/* Left Border */}
+                  <div className="absolute left-1/2 h-6   top-12 w-[2px] bg-white z-10"></div>
+                </>
+              )}
+              {index === 1 && (
+                <>
+                  {/* Left Border */}
+                  <div className="absolute left-[-1px] h-5 rotate-90 top-3/5 bottom-0 w-[2px] bg-white z-10"></div>
+                  {/* Right Border */}
+                  <div className="absolute right-[-1px] h-5 rotate-90 top-3/5 bottom-0 w-[2px] bg-white z-10"></div>
+                </>
+              )}
+
               {/* Step Circle */}
               <div
                 className={`w-16 h-16 sm:w-12 sm:h-12 rounded-full border-2 flex items-center justify-center mb-6 bg-black
-            ${
-              step.completed
-                ? "border-white bg-white"
-                : step.current
-                ? "border-cyan-400"
-                : step.locked
-                ? "border-gray-500"
-                : "border-gray-600"
-            }
-          `}
+        ${
+          step.completed
+            ? "border-white bg-white"
+            : step.current
+            ? "border-cyan-400"
+            : step.locked
+            ? "border-gray-500"
+            : "border-gray-600"
+        }`}
               >
                 {step.completed ? (
                   <Check className="w-8 h-8 text-black sm:w-6 sm:h-6" />
@@ -185,7 +206,7 @@ const CountdownProgressTracker = () => {
                     : "border-gray-500"
                 } bg-black`}
               >
-                <h3 className="text-white font-bold text-sm sm:text-xs lg:text-2xl  leading-tight whitespace-pre-line tracking-wide">
+                <h3 className="text-white font-bold text-sm sm:text-xs lg:text-2xl leading-tight whitespace-pre-line tracking-wide">
                   {step.title}
                 </h3>
               </div>
@@ -246,7 +267,7 @@ const CountdownProgressTracker = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

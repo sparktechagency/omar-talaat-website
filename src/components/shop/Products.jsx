@@ -4,6 +4,8 @@ import { Search, Filter, ChevronDown, Lock, X, Menu } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Container from "../share/Container";
 
 const CoralShopGrid = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -91,7 +93,7 @@ const CoralShopGrid = () => {
       id: 5,
       name: "CS Green Bay Packers",
       price: 89.99,
-      image: "/assets/category9.png",
+      image: "/assets/category4.png",
       status: "Cut to Order",
       available: true,
       membership: "normal",
@@ -184,7 +186,7 @@ const CoralShopGrid = () => {
 
   const FilterSection = ({ isMobile = false }) => (
     <div
-      className={`bg-gray-900/50 backdrop-blur-sm rounded-2xl p-4 border border-gray-700/50 ${
+      className={`bg-[#181818] backdrop-blur-sm rounded-2xl p-4 border border-gray-700/50 ${
         isMobile ? "h-full" : ""
       }`}
     >
@@ -208,11 +210,11 @@ const CoralShopGrid = () => {
           Price Range
         </label>
         <div className="flex gap-2 mb-4">
-          <span className="px-3 py-1 bg-gray-800 border border-gray-600 rounded-full text-xs text-white">
+          <span className="px-3 py-1 bg-[#181818] border border-gray-600 rounded-full text-xs text-white">
             AED {priceRange[0]}
           </span>
           <span className="text-gray-400">-</span>
-          <span className="px-3 py-1 bg-gray-800 border border-gray-600 rounded-full text-xs text-white">
+          <span className="px-3 py-1 bg-[#181818] border border-gray-600 rounded-full text-xs text-white">
             AED {priceRange[1]}
           </span>
         </div>
@@ -236,7 +238,7 @@ const CoralShopGrid = () => {
         <select
           value={availabilityFilter}
           onChange={(e) => setAvailabilityFilter(e.target.value)}
-          className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          className="w-full bg-[#181818] border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
         >
           <option value="all">All Products</option>
           <option value="available">Available</option>
@@ -310,19 +312,24 @@ const CoralShopGrid = () => {
         }`}
         onClick={() => handleProductClick(product)}
       >
-        <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
+        <div className="bg-[#181818] backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
           {/* Product Image */}
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
-              <img
+              <Image
                 src={product.image}
                 alt={product.name}
+                height={300}
+                width={300}
+                loading="lazy"
+                quality={80}
+                onClick={() => handleProductClick(product)}
                 onError={handleImageError}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
             ) : (
               /* Fallback coral pattern background */
-              <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-800 to-yellow-600 flex items-center justify-center relative">
+              <div className="w-full h-full bg-[#181818] flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-black/20"></div>
                 <div className="text-white text-center p-4 relative z-10">
                   <div className="text-6xl mb-2">🪸</div>
@@ -368,7 +375,7 @@ const CoralShopGrid = () => {
 
           {/* Product Info */}
           <div className="p-4">
-            <h3 className="text-white font-medium text-lg mb-1 group-hover:text-yellow-400 transition-colors">
+            <h3 className="text-white font-medium text-lg mb-1  transition-colors">
               {product.name}
             </h3>
             <p className="text-gray-400 text-sm mb-3 italic">
@@ -386,7 +393,7 @@ const CoralShopGrid = () => {
   };
 
   return (
-    <div className="container mx-auto min-h-screen text-white">
+    <Container className=" min-h-screen text-white">
       <div className="mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
@@ -399,23 +406,23 @@ const CoralShopGrid = () => {
         {/* Header Controls */}
         <div className="flex flex-col gap-4 mb-8">
           {/* Search Bar */}
-          <div className="relative flex-1 max-w-md mx-auto sm:mx-0">
+          {/* <div className="relative flex-1 max-w-md mx-auto sm:mx-0">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
               placeholder="Search corals..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500/50 transition-all duration-300"
+              className="w-full bg-[#181818]/50 backdrop-blur-sm border border-gray-600/50 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500/50 transition-all duration-300"
             />
-          </div>
+          </div> */}
 
           {/* Mobile Controls - Filter Left, Sort Right */}
           <div className="flex justify-between gap-4 sm:hidden">
             {/* Mobile Filter Toggle Button - Left */}
             <button
               onClick={() => setIsMobileFilterOpen(true)}
-              className="filter-toggle-btn flex items-center justify-center space-x-2 bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all duration-300 flex-1"
+              className="filter-toggle-btn flex items-center justify-center space-x-2 bg-[#181818]/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all duration-300 flex-1"
             >
               <Menu className="w-4 h-4" />
               <span className="text-sm font-medium">Filters</span>
@@ -425,7 +432,7 @@ const CoralShopGrid = () => {
             <div className="relative flex-1">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 justify-between transition-all duration-300"
+                className="w-full flex items-center space-x-2 bg-[#181818]/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 justify-between transition-all duration-300"
               >
                 <span className="flex items-center space-x-2">
                   <Filter className="w-4 h-4" />
@@ -439,7 +446,7 @@ const CoralShopGrid = () => {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
+                <div className="absolute top-full right-0 mt-1 w-full bg-[#181818] border border-gray-700 rounded-lg shadow-lg z-50">
                   {sortOptions.map((option) => (
                     <button
                       key={option}
@@ -466,7 +473,7 @@ const CoralShopGrid = () => {
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 min-w-[160px] justify-between transition-all duration-300"
+                className="flex items-center space-x-2 bg-[#181818]/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 min-w-[160px] justify-between transition-all duration-300"
               >
                 <span className="flex items-center space-x-2">
                   <Filter className="w-4 h-4" />
@@ -481,7 +488,7 @@ const CoralShopGrid = () => {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50">
+                <div className="absolute top-full left-0 mt-1 w-full bg-[#181818] border border-gray-700 rounded-lg shadow-lg z-50">
                   {sortOptions.map((option) => (
                     <button
                       key={option}
@@ -546,7 +553,7 @@ const CoralShopGrid = () => {
           </div>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 

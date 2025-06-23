@@ -6,12 +6,12 @@ import { FooterLogo, MainLogo } from "../share/svg/Logo";
 
 export default function Footer() {
   return (
-    <div className="bg-[#181818] text-white">
+    <div className="px-4 lg:px-0 bg-[#181818] text-white">
       {/* Main Footer Content */}
       <footer className="container mx-auto py-[30px] ">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Logo and Contact Section */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 text-center">
             <div className=" mb-6 ">
               <FooterLogo />
               <div className="">
@@ -40,11 +40,11 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 text-center">
             <h3 className="text-lg font-semibold mb-4 text-center">
               Quick Links
             </h3>
-            <div className="flex items-center lg:justify-center justify-between  lg:gap-6">
+            <div className="flex items-center lg:justify-center justify-between  lg:gap-[50px]">
               <div className="space-y-2">
                 <Link
                   href="/all-coral"
@@ -115,7 +115,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 text-center">
             <h3 className="text-lg font-semibold mb-4">Information Links</h3>
             <div>
               <Link
@@ -128,7 +128,7 @@ export default function Footer() {
           </div>
 
           {/* Information Links & WhatsApp */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 text-center pr-8">
             <div className="space-y-4">
               <div className="">
                 <h4 className="text-lg font-semibold mb-3">
@@ -157,7 +157,7 @@ export default function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 text-center pl-8">
             <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
             <p className="text-gray-300 text-sm mb-4">
               Sign up for exclusive offers, additions and more.
