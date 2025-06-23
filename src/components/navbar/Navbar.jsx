@@ -264,14 +264,14 @@ export default function Navbar() {
                       My Post
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       href="/my-download"
                       className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                     >
                       Download Video
                     </Link>
-                  </li>
+                  </li> */}
                   {/* Cart option for mobile in profile menu */}
                   <li className="lg:hidden">
                     <Link
