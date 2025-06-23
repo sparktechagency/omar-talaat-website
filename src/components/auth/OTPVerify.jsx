@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
 import { registerSuccess } from "@/redux/featured/auth/authSlice";
@@ -17,7 +17,7 @@ export default function OTPVerify() {
   const [verificationStatus, setVerificationStatus] = useState("");
 
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {

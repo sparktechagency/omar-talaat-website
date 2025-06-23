@@ -248,14 +248,14 @@ export default function Navbar() {
                       Profile Dashboard
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       href="/my-feed"
                       className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                     >
                       My Feed
                     </Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link
                       href="/my-post"
