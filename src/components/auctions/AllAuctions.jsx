@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
 
-const AllAuctions = () => {
+const AllAuctions = ({ setActiveTab }) => {
   const auctions = [
     {
       id: 1,
@@ -19,18 +19,30 @@ const AllAuctions = () => {
       csAuraWorth: 92,
       totalBids: 3,
       highestBidder: "Sabbir Ahmed",
+      EndTime: {
+        days: 0,
+        hours: 2,
+        mins: 30,
+        secs: 15,
+      },
     },
     {
       id: 2,
       name: "CS Blue Matrix Zoanthids",
       currentBid: 149.99,
-      image: "/assets/category8.png",
+      image: "/assets/category1.png",
       status: "Upcoming",
       timeLeft: "Starts in 1 day",
       available: false,
       coins: 235,
       membership: "normal",
       type: "upcoming",
+      startTime: {
+        days: 1,
+        hours: 12,
+        mins: 30,
+        secs: 45,
+      },
     },
     {
       id: 3,
@@ -43,6 +55,12 @@ const AllAuctions = () => {
       membership: "advanced",
       type: "my_auction",
       coins: 235,
+      EndTime: {
+        days: 0,
+        hours: 3,
+        mins: 45,
+        secs: 20,
+      },
     },
     {
       id: 4,
@@ -55,6 +73,12 @@ const AllAuctions = () => {
       membership: "premium",
       type: "live",
       coins: 235,
+      EndTime: {
+        days: 0,
+        hours: 1,
+        mins: 15,
+        secs: 30,
+      },
     },
   ];
 
@@ -63,6 +87,12 @@ const AllAuctions = () => {
   const handleAuctionClick = (auction) => {
     if (auction.available) {
       setSelectedAuction(auction);
+    }
+  };
+
+  const handleViewAuction = () => {
+    if (setActiveTab) {
+      setActiveTab("my_auction");
     }
   };
 
@@ -80,7 +110,7 @@ const AllAuctions = () => {
 
     const getMembershipIcon = (membership) => {
       if (membership === "advanced") {
-        return <MainLogo className="w-12 h-12 mx-auto mb-4" color="#057199" />;
+        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#057199" />;
       } else if (membership === "premium") {
         return <MainLogo className="w-12 h-12 mx-auto mb-4" color="#FEF488" />;
       }
@@ -90,11 +120,82 @@ const AllAuctions = () => {
     const getCoinsDisplay = (auction) => {
       if (showCoinsOverlay) {
         return (
-          <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-2 px-4 rounded-full">
+          <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-2 px-8 rounded-full">
             <CoinsLogo className="w-6 h-6" />
             <span className="text-white font-bold text-lg">
               {auction.coins}
             </span>
+          </div>
+        );
+      }
+      return null;
+    };
+
+    const getTimerDisplay = (auction) => {
+      if (auction.startTime) {
+        return (
+          <div className="absolute bottom-0 left-0 right-0 p-3  rounded-b-2xl">
+            <div className="text-center flex items-center px-6 justify-between">
+              <div className="text-white text-xs mb-1">Starts In:</div>
+              <div>
+              <div className="flex justify-center gap-1 text-white text-sm font-mono">
+                <span className=" px-2 py-1 rounded">
+                  {String(auction.startTime.days).padStart(2, "0")}
+                </span>
+                <span className="text-gray-400">:</span>
+                <span className=" px-2 py-1 rounded">
+                  {String(auction.startTime.hours).padStart(2, "0")}
+                </span>
+                <span className="text-gray-400">:</span>
+                <span className=" px-2 py-1 rounded">
+                  {String(auction.startTime.mins).padStart(2, "0")}
+                </span>
+                <span className="text-gray-400">:</span>
+                <span className=" px-2 py-1 rounded">
+                  {String(auction.startTime.secs).padStart(2, "0")}
+                </span>
+              </div>
+              <div className="flex justify-center gap-4 text-xs text-gray-300 mt-1">
+                <span>Days</span>
+                <span>Hours</span>
+                <span>Mins</span>
+                <span>Secs</span>
+              </div>
+              </div>
+            </div>
+          </div>
+        );
+      } else if (auction.EndTime) {
+        return (
+          <div className="absolute bottom-0 left-0 right-0   p-3 rounded-b-2xl">
+            <div className="text-center flex items-center px-6 justify-between">
+              <div className="text-white text-xs mb-1 ">Ends In:</div>
+              <div>
+                <div className="flex justify-center gap-1 text-white font-black font-mono">
+                  <span className=" px-2 py-1 rounded">
+                    {String(auction.EndTime.days).padStart(2, "0")}
+                  </span>
+                  <span className="text-gray-400 font-black">:</span>
+                  <span className=" px-2 py-1 rounded">
+                    {String(auction.EndTime.hours).padStart(2, "0")}
+                  </span>
+                  <span className="text-gray-400 font-black">:</span>
+                  <span className=" px-2 py-1 rounded">
+                    {String(auction.EndTime.mins).padStart(2, "0")}
+                  </span>
+                  <span className="text-gray-400 font-black">:</span>
+                  <span className=" px-2 py-1 rounded">
+                    {String(auction.EndTime.secs).padStart(2, "0")}
+                  </span>
+                </div>
+                <div className="flex justify-center gap-4 text-xs font-black text-gray-300 mt-1">
+                  <span>Days</span>
+                  <span>Hours</span>
+                  <span>Mins</span>
+                  <span>Secs</span>
+                </div>
+              </div>
+            </div>
           </div>
         );
       }
@@ -108,7 +209,7 @@ const AllAuctions = () => {
         }`}
         onClick={() => handleAuctionClick(auction)}
       >
-        <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
+        <div className=" backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
           {/* Auction Image */}
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
@@ -130,8 +231,14 @@ const AllAuctions = () => {
 
             {/* View Auction Button for Available Auctions */}
             {auction.available && (
-              <div className="absolute bottom-4 left-4">
-                <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button
+                  className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleViewAuction();
+                  }}
+                >
                   View Auction
                 </button>
               </div>
@@ -164,132 +271,35 @@ const AllAuctions = () => {
 
             {/* Coins Overlay */}
             {showCoinsOverlay && (
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
+              <div className="absolute inset-0  backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
                 <div className="mb-4">{getCoinsDisplay(auction)}</div>
-                <p className="text-xs opacity-90">100 credits required</p>
               </div>
             )}
+
+            {/* Timer Display - Always at bottom */}
+            {getTimerDisplay(auction)}
           </div>
+
+          {/* Auction Info */}
+          {/* <div className="p-4">
+            <h3 className="text-white font-bold text-lg mb-2 truncate">
+              {auction.name}
+            </h3>
+            <div className="flex items-center justify-between">
+              <span className="text-green-400 text-sm font-medium">
+                {auction.status}
+              </span>
+              <span className="text-white font-bold">
+                AED {auction.currentBid}
+              </span>
+            </div>
+          </div> */}
         </div>
       </div>
     );
   };
 
-  // Detailed Auction View
-  if (selectedAuction) {
-    return (
-      <div className="space-y-6">
-        <button
-          onClick={() => setSelectedAuction(null)}
-          className="text-blue-400 hover:text-blue-300 mb-4"
-        >
-          ← Back to All Auctions
-        </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Auction Image */}
-          <div className="relative">
-            <img
-              src={selectedAuction.image}
-              alt={selectedAuction.name}
-              className="w-full aspect-square object-cover rounded-2xl"
-            />
-          </div>
-
-          {/* Auction Details */}
-          <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
-            <h2 className="text-2xl font-bold text-white mb-4">
-              {selectedAuction.name}
-            </h2>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <span className="text-green-400 text-sm font-medium">
-                  Auction Status: STARTED
-                </span>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <CoinsLogo className="w-5 h-5" />
-                  <span className="text-white">
-                    {selectedAuction.creditsUsed || 235}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CoinsLogo className="w-5 h-5" />
-                  <span className="text-white">
-                    {selectedAuction.creditsWorth || 1000}
-                  </span>
-                </div>
-                <div className="text-white">
-                  CS Aura Worth: {selectedAuction.csAuraWorth || 92}
-                </div>
-              </div>
-
-              <div className="bg-gray-800 p-4 rounded-lg">
-                <h3 className="text-white font-bold mb-2">Auction Ends In:</h3>
-                <div className="flex gap-4 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-white">00</div>
-                    <div className="text-gray-400 text-xs">Days</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-white">00</div>
-                    <div className="text-gray-400 text-xs">Hours</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-white">00</div>
-                    <div className="text-gray-400 text-xs">Mins</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-white">00</div>
-                    <div className="text-gray-400 text-xs">Secs</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bid Information */}
-        <div className="bg-gray-900/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
-          <h3 className="text-xl font-bold text-white mb-4">
-            Bid Information:
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-gray-400">Total Number of Bids:</p>
-              <p className="text-white font-bold">
-                {selectedAuction.totalBids || 3} Bid(s)
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400">My Latest Bid:</p>
-              <p className="text-white font-bold">
-                AED {selectedAuction.currentBid}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400">
-                Current Leading Bid (Highest Bid Amount):
-              </p>
-              <p className="text-white font-bold">AED315</p>
-            </div>
-            <div>
-              <p className="text-gray-400">Current Highest Bidder:</p>
-              <p className="text-white font-bold">
-                {selectedAuction.highestBidder || "Sabbir Ahmed"}
-              </p>
-            </div>
-          </div>
-          <button className="mt-6 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300">
-            Click Here to Place a Bid
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

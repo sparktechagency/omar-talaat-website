@@ -28,16 +28,16 @@ const AuctionsContainer = () => {
   };
 
   return (
-    <Container className="min-h-screen text-white">
+    <Container className=" text-white">
       <div className="mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-            Coral Auctions
+          <h1 className="text-4xl font-bold mb-2 ">
+            Auctions
           </h1>
-          <p className="text-gray-400">
+          {/* <p className="text-gray-400">
             Bid on premium corals for your reef aquarium
-          </p>
+          </p> */}
         </div>
 
         {/* Tabs */}

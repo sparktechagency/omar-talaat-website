@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FaUserCircle, FaSearch } from "react-icons/fa";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FiMenu, FiShoppingCart } from "react-icons/fi";
@@ -23,7 +23,7 @@ import LeaderboardModal from "./LeaderBoard";
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useParams();
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -33,7 +33,7 @@ export default function Navbar() {
 
   // Initialize search query from URL params
   useEffect(() => {
-    const query = searchParams.get("search") || "";
+    const query = searchParams?.get("search") || "";
     setSearchQuery(query);
   }, [searchParams]);
 
@@ -225,6 +225,7 @@ export default function Navbar() {
               height={55}
               width={55}
               className="drop-shadow-lg"
+              alt="Cart Icon"
             />
             {/* <MyBug /> */}
           </Link>

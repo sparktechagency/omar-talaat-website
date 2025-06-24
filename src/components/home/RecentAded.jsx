@@ -1,7 +1,8 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 
 const productsData = [
@@ -35,7 +36,6 @@ const productsData = [
   },
 ];
 
-// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -50,7 +50,7 @@ const containerVariants = {
 const cardVariants = {
   hidden: {
     opacity: 0,
-    y: 50,
+    y: 15,
     scale: 0.9,
   },
   visible: {
@@ -84,8 +84,57 @@ const priceVariants = {
   },
 };
 
+const cartIconVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0,
+    x: 10,
+    y: 5,
+    backgroundColor: "transparent",
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    x: 0,
+    y: 0,
+    backgroundColor: "transparent",
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 10,
+      duration: 1.5,
+    },
+  },
+  hover: {
+    scale: 1,
+    backgroundColor: "transparent",
+    transition: {
+      duration: 0.5,
+    },
+  },
+  tap: {
+    scale: 0.95,
+    backgroundColor: "transparent",
+    transition: {
+      duration: 0.3,
+    },
+  },
+};
+
 const ProductCard = ({ index, controls }) => {
   const product = productsData[index];
+  const [isHovered, setIsHovered] = useState(false);
+  const [cartClicked, setCartClicked] = useState(false);
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    setCartClicked(true);
+
+    // Reset animation after 500ms
+    setTimeout(() => setCartClicked(false), 500);
+
+    console.log(`Added ${product.title} to cart`);
+  };
 
   return (
     <motion.div
@@ -93,14 +142,18 @@ const ProductCard = ({ index, controls }) => {
       initial="hidden"
       animate={controls}
       whileHover={{
-        y: -8,
-        boxShadow:
-          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-        transition: { duration: 0.2 },
+        y: 0.2,
+        transition: {
+          duration: 0.3,
+          ease: "easeOut",
+        },
       }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: 0.95 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="relative"
     >
-      <Card className="w-full h-full  cursor-pointer overflow-hidden bg-primary border border-gray-200 hover:border-gray-300 transition-colors duration-300">
+      <Card className="w-full h-full cursor-pointer overflow-hidden bg-primary border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-xl">
         <CardHeader className="p-0">
           <motion.div
             className="relative w-full h-48 overflow-hidden"
@@ -121,9 +174,9 @@ const ProductCard = ({ index, controls }) => {
           </motion.div>
         </CardHeader>
 
-        <CardContent className="p-4">
+        <CardContent className="p-4 relative">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 2 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}
           >
@@ -140,16 +193,37 @@ const ProductCard = ({ index, controls }) => {
             </motion.p>
           </motion.div>
 
-          <motion.div
-            className="flex items-baseline space-x-1"
-            variants={priceVariants}
-            whileHover="hover"
-          >
+          <div>
             <span className="text-lg font-bold text-white">
               AED {product.price}
             </span>
             <span className="text-sm text-white">.00</span>
-          </motion.div>
+          </div>
+
+          {/* Cart Icon */}
+          <motion.button
+            className="absolute bottom-3 right-3 w-16 h-16 rounded-full flex items-center justify-center text-white shadow-lg bg-transparent"
+            variants={cartIconVariants}
+            initial="hidden"
+            animate={isHovered ? "visible" : "hidden"}
+            whileHover="hover"
+            whileTap="tap"
+            onClick={handleAddToCart}
+          >
+            <motion.div
+              animate={
+                cartClicked
+                  ? {
+                      scale: [1, 0.3, 1],
+                      rotate: [0, 5, -2, 0],
+                    }
+                  : {}
+              }
+              transition={{ duration: 0.5 }}
+            >
+              <ShoppingCart size={32} />
+            </motion.div>
+          </motion.button>
         </CardContent>
       </Card>
     </motion.div>
@@ -177,15 +251,15 @@ const RecentAdded = () => {
     >
       <motion.div
         className="mb-6"
-        initial={{ opacity: 0, x: -20 }}
+        initial={{ opacity: 0, x: 20 }}
         animate={controls}
         variants={{
-          hidden: { opacity: 0, x: -20 },
+          hidden: { opacity: 0, x: 20 },
           visible: { opacity: 1, x: 0 },
         }}
         transition={{ duration: 0.5 }}
       >
-        <CardTitle className="text-xl font-semibold text-white ">
+        <CardTitle className="text-xl font-semibold text-white">
           Recent Added
         </CardTitle>
       </motion.div>

@@ -7,7 +7,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
   const leaderboardData = Array.from({ length: 10 }, (_, index) => ({
     position: index + 1,
     name: "Sabbir Ahmed",
-    avatar: "/assets/profile.png", // placeholder avatar
+    avatar: "/assets/profile.png", 
     cmPoints: 7,
     credits: 235,
     csAura: 100,
@@ -25,7 +25,14 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
     if (position === 1)
       return (
         <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-          <Image src="/assets/first.png" width={20} height={20} className="w-8 h-8 text-white" />
+          <Image
+            src="/assets/first.png"
+            width={20}
+            height={20}
+            quality={75}
+            className="w-8 h-8 text-white"
+            alt="First Place Medal" 
+          />
         </div>
       );
     if (position === 2)
@@ -35,7 +42,9 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
             src="/assets/second.png"
             width={40}
             height={40}
+            quality={75}
             className="w-10 h-10 text-white"
+            alt="Second Place Medal"
           />
         </div>
       );
@@ -46,7 +55,9 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
             src="/assets/third.png"
             width={20}
             height={20}
+            quality={75}
             className="w-8 h-8 text-white"
+            alt="Third Place Medal"
           />
         </div>
       );

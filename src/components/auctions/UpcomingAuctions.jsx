@@ -90,9 +90,9 @@ const UpcomingAuctions = () => {
 
     const getMembershipIcon = (membership) => {
       if (membership === "advanced") {
-        return <MainLogo className="w-12 h-12 mx-auto mb-4" color="#057199" />;
+        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#057199" />;
       } else if (membership === "premium") {
-        return <MainLogo className="w-12 h-12 mx-auto mb-4" color="#FEF488" />;
+        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#FEF488" />;
       }
       return null;
     };
@@ -100,7 +100,7 @@ const UpcomingAuctions = () => {
     const getCoinsDisplay = (auction) => {
       if (showCoinsOverlay) {
         return (
-          <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-2 px-4 rounded-full">
+          <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-2 px-8 rounded-full">
             <CoinsLogo className="w-6 h-6" />
             <span className="text-white font-bold text-lg">
               {auction.coins}
@@ -140,7 +140,7 @@ const UpcomingAuctions = () => {
 
             {/* View Auction Button for Available Auctions */}
             {auction.available && (
-              <div className="absolute bottom-4 left-4">
+              <div className="absolute bottom-1/2 left-1/3">
                 <button className="bg-white text-black px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                   View Auction
                 </button>
@@ -187,7 +187,7 @@ const UpcomingAuctions = () => {
                   product
                 </p>
                 {auction.coins && (
-                  <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-1 px-3 rounded-full">
+                  <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-1 px-6 rounded-full">
                     <CoinsLogo className="w-5 h-5" />
                     <span className="text-white font-bold text-sm">
                       {auction.coins}
@@ -206,15 +206,15 @@ const UpcomingAuctions = () => {
 
             {/* Coins Overlay for Normal Membership */}
             {showCoinsOverlay && (
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
+              <div className="absolute inset-0  bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
                 <div className="mb-4">{getCoinsDisplay(auction)}</div>
-                <div className="bg-black/30 rounded-lg px-3 py-2">
+                {/* <div className="bg-black/30 absolute bottom-0 rounded-lg px-3 py-2">
                   <div className="text-white text-xs">Starts In:</div>
                   <div className="flex gap-1 text-white text-xs">
                     <span>00</span>:<span>00</span>:<span>00</span>:
                     <span>00</span>
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
           </div>
