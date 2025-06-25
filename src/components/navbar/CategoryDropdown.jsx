@@ -17,7 +17,7 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
     {
       id: 1,
       name: "All Coral",
-      image: "/assets/all-coral.png",
+      image: availableImages[0],
       description: "Browse all available coral types",
     },
     {
