@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingCart } from "lucide-react";
+import { TbShoppingBagPlus } from "react-icons/tb";
 import Image from "next/image";
 
 const productsData = [
@@ -221,7 +221,7 @@ const ProductCard = ({ index, controls }) => {
               }
               transition={{ duration: 0.5 }}
             >
-              <ShoppingCart size={32} />
+              <TbShoppingBagPlus size={32} />
             </motion.div>
           </motion.button>
         </CardContent>
