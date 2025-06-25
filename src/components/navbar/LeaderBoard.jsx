@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { X, Trophy, Star, Coins, Sparkles } from "lucide-react";
 import Image from "next/image";
+import { CalenderLogo, CoinsLogo, Logo, Ranking } from "../share/svg/Logo";
 
 const LeaderboardModal = ({ isOpen, setIsOpen }) => {
   // Sample data - same person repeated as shown in the image
   const leaderboardData = Array.from({ length: 10 }, (_, index) => ({
     position: index + 1,
     name: "Sabbir Ahmed",
-    avatar: "/assets/profile.png", 
+    avatar: "/assets/profile.png",
     cmPoints: 7,
     credits: 235,
     csAura: 100,
@@ -31,7 +32,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
             height={20}
             quality={75}
             className="w-8 h-8 text-white"
-            alt="First Place Medal" 
+            alt="First Place Medal"
           />
         </div>
       );
@@ -66,24 +67,16 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
 
   return (
     <>
-      {/* Trigger Button */}
-      {/* <div className="relative group">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="flex items-center space-x-1 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <Trophy className="w-5 h-5" />
-        </button>
-      </div> */}
-
       {/* Modal */}
       {isOpen && (
-        <div className="fixed inset-0  bg-opacity-50 lg:mt-80 lg:mr-48 flex items-center justify-end z-50 px-4">
-          <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-hidden">
+        <div className="fixed inset-0 bg-opacity-50  flex items-center justify-end z-50 px-4 mr-48 mt-16">
+          {" "}
+          {/* Add margin-top for spacing below navbar */}
+          <div className="rounded-xl border  bg-black p-5  w-[512px] overflow-hidden">
             {/* Header */}
-            <div className="bg-black text-white px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center space-x-1">
-                <Trophy className="w-6 h-6 text-yellow-400" />
+            <div className="bg-black  text-white w-full px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center  justify-centerm-2 mx-auto px-4 py-2 rounded-2xl  border space-x-1">
+                <Ranking className="w-6 h-6 text-yellow-400" />
                 <h2 className="text-xl font-semibold">Leaderboard</h2>
               </div>
               <button
@@ -93,12 +86,13 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                 <X className="w-6 h-6" />
               </button>
             </div>
+
             {/* Table Header */}
-            <div className="bg-gray-800 text-white px-3 py-2">
+            <div className="border text-white px-3 py-2">
               <div className="grid grid-cols-12 gap-4 items-center text-sm font-medium">
                 <div className="col-span-1">Pos</div>
-                <div className="col-span-5">Name</div>
-                <div className="col-span-2 flex items-center space-x-1">
+                <div className="col-span-4">Name</div>
+                <div className="col-span-3 flex items-center space-x-">
                   <span>CM Points</span>
                   <svg
                     className="w-3 h-3"
@@ -112,7 +106,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                     />
                   </svg>
                 </div>
-                <div className="col-span-2 flex items-center space-x-1">
+                <div className="col-span-2 flex items-center space-x-">
                   <span>Credits</span>
                   <svg
                     className="w-3 h-3"
@@ -126,7 +120,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                     />
                   </svg>
                 </div>
-                <div className="col-span-2 flex items-center space-x-1">
+                <div className="col-span-2 flex items-center space-x-">
                   <span>CS Aura</span>
                   <svg
                     className="w-3 h-3"
@@ -142,12 +136,13 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                 </div>
               </div>
             </div>
+
             {/* Leaderboard Content */}
-            <div className="bg-gray-900 text-white overflow-y-auto custom-scrollbar max-h-96">
+            <div className="border text-white">
               {leaderboardData.map((user, index) => (
                 <div
                   key={index}
-                  className="border-b border-gray-700 last:border-b-0"
+                  className="border  last:border-b-0"
                 >
                   <div className="grid grid-cols-12 gap-4 items-center px-6 py-2 hover:bg-gray-800 transition-colors">
                     {/* Position */}
@@ -190,14 +185,14 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
 
                     {/* CM Points */}
                     <div className="col-span-2 flex items-center space-x-2">
-                      <Star className="w-4 h-4 text-green-400 fill-green-400" />
+                      <CalenderLogo className="w-4 h-4 text-green-400 fill-green-400" />
                       <span>{user.cmPoints}</span>
                     </div>
 
                     {/* Credits */}
                     <div className="col-span-2 flex items-center space-x-2">
                       <div className="flex">
-                        <Coins className="w-4 h-4 text-yellow-400" />
+                        <CoinsLogo className="w-4 h-4 text-yellow-400" />
                       </div>
                       <span className="text-yellow-400 font-medium">
                         {user.credits}
@@ -206,7 +201,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
 
                     {/* CS Aura */}
                     <div className="col-span-2 flex items-center space-x-2">
-                      <Sparkles className="w-4 h-4 text-blue-400" />
+                      <Logo className="w-4 h-4 text-blue-400" />
                       <span className="text-blue-400 font-medium">
                         {user.csAura}
                       </span>
@@ -215,33 +210,11 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                 </div>
               ))}
             </div>
-            <style jsx>{`
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #181818
-    border-radius: 10px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.8);
-  }
-`}</style>
-            
           </div>
         </div>
       )}
     </>
   );
 };
-
-
 
 export default LeaderboardModal;

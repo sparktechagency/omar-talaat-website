@@ -1,10 +1,13 @@
-"use client";
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "../share/UserProvider";
 import { getUserStyles } from "../share/utils/userStyles";
 import { MainLogo } from "../share/svg/Logo";
 import { X, Copy, Check } from "lucide-react";
+import AnimatedShopButton from "../share/utils/AnimatedShopButton";
+import { useRouter } from "next/navigation";
+import { FaRegCopy } from "react-icons/fa";
 
 const Banner = () => {
   const { userType } = useUser();
@@ -20,6 +23,7 @@ const Banner = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [copied, setCopied] = useState(false);
+  const router=useRouter()
 
   // Discount offers data
   const discountOffers = [
@@ -69,6 +73,11 @@ const Banner = () => {
     setSelectedOffer(offer);
     setModalOpen(true);
     setCopied(false);
+  };
+
+  const handleShopClick = () => {
+    router.push("/shop");
+    console.log("Navigating to shop page...");
   };
 
   const handleCopyCode = async () => {
@@ -150,13 +159,13 @@ const Banner = () => {
             new suppliers
           </p>
 
-          {/* Shop Now Button */}
-          <Button
-            size="lg"
-            className="bg-white text-primary hover:bg-white/90 mb-6 lg:mb-16 px-8 py-3 text-lg font-semibold rounded-full"
-          >
-            Shop Now
-          </Button>
+          {/* Animated Shop Button */}
+          <AnimatedShopButton
+            onClick={handleShopClick}
+            size="xl"
+            text="Shop Now"
+            className="mb-6 lg:mb-16 shadow-xl hover:shadow-2xl"
+          />
 
           {/* Countdown Timer */}
           <div className="flex items-center justify-center space-x-8 mb-6 lg:mb-12">
@@ -206,17 +215,18 @@ const Banner = () => {
             {discountOffers.map((offer) => (
               <div
                 key={offer.id}
-                className="flex items-center justify-between bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 h-[67px] py-4"
+                className="flex items-center justify-between pr-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 h-[67px] py-4"
               >
                 <span className="text-white font-medium">{offer.title}</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-transparent border-white rounded-3xl text-white hover:bg-white hover:text-primary"
+
+                <AnimatedShopButton
                   onClick={() => handleGetCode(offer)}
-                >
-                  Get Code
-                </Button>
+                  size="md"
+                  text="Get Code"
+                  icon={FaRegCopy}
+                  className="  shadow-xl hover:shadow-2xl"
+                />
+               
               </div>
             ))}
           </div>

@@ -77,30 +77,7 @@ const ShopCategory = () => {
       image: "/assets/category1.png",
       description: "Clear opal variety with bright green fluorescence",
     },
-    {
-      id: 13,
-      name: "Sodalite",
-      image: "/assets/category2.png",
-      description: "Blue mineral with orange fluorescence under UV",
-    },
-    {
-      id: 14,
-      name: "Clinohedrite",
-      image: "/assets/category3.png",
-      description: "Rare zinc silicate with bright fluorescent properties",
-    },
-    {
-      id: 15,
-      name: "Aragonite",
-      image: "/assets/category5.png",
-      description: "Calcium carbonate polymorph with varied fluorescence",
-    },
-    {
-      id: 10,
-      name: "Autunite",
-      image: availableImages[0],
-      description: "Uranium phosphate mineral with yellow-green glow",
-    },
+    
   ];
 
   const visibleCount = Math.min(9, minerals.length);
