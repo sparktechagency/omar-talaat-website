@@ -177,3 +177,32 @@ body {
 .font-dm-sans{
   font-family: var(--font-dm-sans);
 }
+
+
+
+
+
+/* Normal user style */
+.user-normal {
+  --user-bg: var(--normal);
+  --user-text: var(--text-primary);
+  --user-border: #cccccc;
+  --user-icon: #7c7c7c;
+}
+
+/* Advanced user style */
+.user-advanced {
+  --user-bg: var(--advanced);
+  --user-text: #fff;
+  --user-border: #E8505B;
+  --user-icon: #E8505B;
+}
+
+/* Premium user style */
+.user-premium {
+  --user-bg: var(--premium);
+  --user-text: #000;
+  --user-border: #eab308;
+  --user-icon: #eab308;
+}
+

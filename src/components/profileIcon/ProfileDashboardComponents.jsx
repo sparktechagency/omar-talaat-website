@@ -118,7 +118,7 @@ const ProfileTab = () => {
         />
       </div>
 
-      <Button className="w-full bg-white text-black hover:bg-gray-200 font-medium py-3">
+      <Button className="w-full bg-white text-black hover:bg-gray-200 font-medium py-5">
         Save Changes
       </Button>
     </div>

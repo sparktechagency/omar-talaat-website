@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion"; // Don't forget to import motion
+import { cardVariants } from "../../components/share/utils/motionVariants"; // Import cardVariants
 
 const ShopCategory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -77,7 +79,6 @@ const ShopCategory = () => {
       image: "/assets/category1.png",
       description: "Clear opal variety with bright green fluorescence",
     },
-    
   ];
 
   const visibleCount = Math.min(9, minerals.length);
@@ -107,15 +108,12 @@ const ShopCategory = () => {
   };
 
   return (
-    <div className="container w-full mx-auto  bg-black my-20 flex flex-col justify-center">
+    <motion.div className="container w-full mx-auto bg-black my-20 flex flex-col justify-center">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold  mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
           Shop Categories
         </h1>
-        {/* <p className="text-gray-300 text-lg">
-          Discover the hidden beauty that glows under UV light
-        </p> */}
       </div>
 
       {/* Main Slider Container */}
@@ -138,56 +136,52 @@ const ShopCategory = () => {
         {/* Slider Track */}
         <div className="overflow-hidden rounded-2xl">
           <div
-            className="flex transition-transform duration-500 ease-out gap-6 px-16"
+            className="flex transition-transform duration-500 ease-out gap-6 px-16 py-10"
             style={{
               transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
               width: `${(minerals.length / visibleCount) * 100}%`,
             }}
           >
             {minerals.map((mineral, index) => (
-              <div
+              <motion.div
                 key={mineral.id}
                 className="flex-shrink-0 relative group cursor-pointer"
                 style={{ width: `${100 / minerals.length}%` }}
                 onClick={() => goToSlide(index)}
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
               >
                 {/* Mineral Card */}
-                <div
-                  className={`
-    w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative
-    border-2 border-white/10
-    transform transition-all duration-300
-    group-hover:scale-105 group-hover:border-white/30
-    shadow-2xl hover:shadow-cyan-500/20
-  `}
+                <motion.div
+                  whileHover={{
+                    y: -10,
+                    transition: {
+                      type: "tween",
+                      ease: "easeOut",
+                      duration: 0.3,
+                    },
+                  }}
+                  className={`w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative
+                  transform transition-all duration-300
+                   group-hover:border-white/30
+                  shadow-2xl 
+                `}
                 >
-                  {/* Background Image */}
                   <Image
                     src={mineral.image}
                     alt={mineral.name}
-                    height={130} // Set height to 130px
-                    width={130} // Set width to 130px
-                    className="absolute inset-0 object-cover"
+                    height={130}
+                    width={130}
+                    className="absolute inset-0 object-cover transition-all  duration-300"
                   />
+                </motion.div>
 
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-2">
-                    <span className="text-white font-bold text-xs text-center mb-2">
-                      {mineral.name}
-                    </span>
-                    <span className="text-gray-200 text-xs text-center leading-tight">
-                      {mineral.description}
-                    </span>
-                  </div>
-
-                  {/* Bottom Label */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                    <h3 className="text-white font-semibold text-xs truncate">
-                      {mineral.name}
-                    </h3>
-                  </div>
-                </div>
-              </div>
+                {/* Title should not animate */}
+                <h3 className="text-white font-semibold text-xs truncate mt-2 text-center">
+                  {mineral.name}
+                </h3>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -201,14 +195,11 @@ const ShopCategory = () => {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`
-                w-3 h-3 rounded-full transition-all duration-300
-                ${
-                  currentIndex === index
-                    ? "bg-cyan-400 shadow-lg shadow-cyan-400/50"
-                    : "bg-white/30 hover:bg-white/50"
-                }
-              `}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                currentIndex === index
+                  ? "bg-cyan-400 shadow-lg shadow-cyan-400/50"
+                  : "bg-white/30 hover:bg-white/50"
+              }`}
             />
           ))}
         </div>
@@ -221,20 +212,7 @@ const ShopCategory = () => {
           {isAutoPlay ? "Pause" : "Play"}
         </button>
       </div>
-
-      {/* Current Mineral Info */}
-      {/* <div className="text-center mt-8">
-        <h3 className="text-2xl font-bold text-white mb-2">
-          {minerals[currentIndex]?.name}
-        </h3>
-        <p className="text-gray-400 mb-2">
-          Specimen {currentIndex + 1} of {minerals.length}
-        </p>
-        <p className="text-gray-300 max-w-md mx-auto">
-          {minerals[currentIndex]?.description}
-        </p>
-      </div> */}
-    </div>
+    </motion.div>
   );
 };
 

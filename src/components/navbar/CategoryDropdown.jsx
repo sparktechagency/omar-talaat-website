@@ -109,9 +109,9 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
   return (
     <div
       ref={dropdownRef}
-      className="absolute w-full bg-black/90  border-white/20 shadow-2xl z-50"
+      className="absolute w-full bg-black/95  border-white/20 shadow-2xl z-50"
       style={{
-        top: "120px",
+        top: "90px",
         left: "50%",
         transform: "translateX(-50%)",
         position: "fixed",

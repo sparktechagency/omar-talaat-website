@@ -144,7 +144,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                   key={index}
                   className="border  last:border-b-0"
                 >
-                  <div className="grid grid-cols-12 gap-4 items-center px-6 py-2 hover:bg-gray-800 transition-colors">
+                  <div className="grid grid-cols-12 gap-4 items-center px-6 py-2  transition-colors">
                     {/* Position */}
                     <div className="col-span-1 flex items-center">
                       {user.medal ? (

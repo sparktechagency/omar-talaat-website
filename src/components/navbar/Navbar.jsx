@@ -105,7 +105,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed w-full top-0 left-0 z-50 backdrop-blur-[2px]">
+      <nav className="fixed w-full top-0 left-0 z-50 backdrop-blur-[5px] bg-black/30 shadow-2xl">
         <div className="container mx-auto flex justify-between items-center h-24 px-4 lg:px-6">
           {/* Left: Logo */}
           <Link

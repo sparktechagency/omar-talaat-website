@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Minus, Plus, Edit3, Trash2, Calendar, Clock } from "lucide-react";
 import Image from "next/image";
 import Container from "../share/Container";
+import { Button } from "../ui/button";
+import styles from './cartComponent.module.css'
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([
@@ -37,6 +39,7 @@ const CheckoutPage = () => {
   const currentDate = new Date();
   const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth());
   const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear());
+
 
   const monthNames = [
     "January",
@@ -127,7 +130,7 @@ const CheckoutPage = () => {
       <div className="">
         {/* Header */}
         <div className="flex items-center justify-center gap-2 mb-6 lg:mb-8 lg:col-span-12">
-          <div>
+          <div className={styles.imageWithBubbles}>
             <Image
               src="/assets/image 10.png"
               width={105}
@@ -150,21 +153,21 @@ const CheckoutPage = () => {
               <div className="space-y-4">
                 {cartItems.map((item) => (
                   <div key={item.id} className="space-y-3">
-                    <div className="flex items-start justify-between space-x-3 lg:space-x-4 rounded-lg p-3 lg:p-4">
+                    <div className="flex items-start justify-around space-x-3 lg:space-x-4 rounded-lg p-3 lg:p-4">
                       {/* Image on the left side */}
                       <div>
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
                           height={80}
                           width={80}
-                          className="rounded-full"
+                          className="rounded-full "
                         />
                       </div>
 
                       {/* Content on the right side */}
                       <div className="flex-1 flex flex-col justify-between">
-                        <div>
+                        <div className="w-[585px]">
                           {/* Title */}
                           <h3 className="font-medium text-sm lg:text-base mb-1">
                             {item.name}
@@ -176,12 +179,12 @@ const CheckoutPage = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-10 items-center mt-2">
-                        <div className="flex items-center space-x-2">
+                      <div className="  flex gap-40 items-center justify-between mt-2">
+                        <div className="flex w-[187px] border px-3 justify-between py-1 rounded-full items-center space-x-2">
                           {/* Quantity controls */}
                           <button
                             onClick={() => updateQuantity(item.id, -1)}
-                            className="w-6 h-6 lg:w-8 lg:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
+                            className="w-6 h-6 lg:w-8 lg:h-8  rounded-full flex items-center justify-center hover: transition-colors"
                           >
                             <Minus size={12} className="lg:w-4 lg:h-4" />
                           </button>
@@ -190,7 +193,7 @@ const CheckoutPage = () => {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, 1)}
-                            className="w-6 h-6 lg:w-8 lg:h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
+                            className="w-6 h-6 lg:w-8 lg:h-8  rounded-full flex items-center justify-center hover: transition-colors"
                           >
                             <Plus size={12} className="lg:w-4 lg:h-4" />
                           </button>
@@ -198,11 +201,15 @@ const CheckoutPage = () => {
 
                         <div className="flex items-center space-x-2 lg:space-x-3">
                           {/* Price - now shows total for this item */}
-                          <span className="font-medium lg:text-lg">
-                            ${item.price * item.quantity}
-                          </span>
+                          <div>
+                            <span className="font-medium lg:text-lg">
+                              ${item.price * item.quantity}
+                            </span>
+                          </div>
+                        </div>
 
-                          {/* Edit button */}
+                        {/* Edit button */}
+                        <div className="flex items-center space-x-2 lg:space-x-3">
                           <button className="text-gray-400 hover:text-white transition-colors">
                             <Edit3 size={14} className="lg:w-5 lg:h-5" />
                           </button>
@@ -217,65 +224,35 @@ const CheckoutPage = () => {
                         </div>
                       </div>
                     </div>
-
-                    {/* Progress bar for each product */}
-                    {/* <div className="ml-20 mr-4">
-                      <div className="flex justify-between text-xs text-gray-400 mb-1">
-                        <span>Progress to Free Delivery</span>
-                        <span>${item.price * item.quantity} / $1000</span>
-                      </div>
-                      <div className="w-full bg-gray-700 rounded-full h-2">
-                        <div
-                          className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full transition-all duration-300"
-                          style={{
-                            width: `${Math.min(
-                              ((item.price * item.quantity) /
-                                freeDeliveryThreshold) *
-                                100,
-                              100
-                            )}%`,
-                          }}
-                        ></div>
-                      </div>
-                      {item.price * item.quantity >= freeDeliveryThreshold ? (
-                        <p className="text-xs text-green-400 mt-1">
-                          🎉 Free delivery unlocked for this item!
-                        </p>
-                      ) : (
-                        <p className="text-xs text-gray-400 mt-1">
-                          Add $
-                          {freeDeliveryThreshold - item.price * item.quantity}{" "}
-                          more for free delivery
-                        </p>
-                      )}
-                    </div> */}
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Overall Progress Bar */}
-            <div className="">
+            <div className="group">
               <div className="flex justify-between items-center mb-3">
-                {/* <h3 className="text-lg font-medium">Free Delivery Progress</h3> */}
-                {/* <span className="text-sm text-gray-400">
-                  ${subtotal} / $1000
-                </span> */}
+                {/* Optional heading and progress value */}
               </div>
+
               <div className="w-full bg-gray-700 rounded-full h-3 mb-2">
                 <div
                   className="bg-white h-3 rounded-full transition-all duration-500"
                   style={{ width: `${progressPercentage}%` }}
                 ></div>
               </div>
+
               {subtotal >= freeDeliveryThreshold ? (
-                <p className="text-green-400 text-sm font-medium">
+                <p className="text-white text-sm font-medium">
                   🎉 Congratulations! You've qualified for free delivery!
                 </p>
               ) : (
-                <p className="text-gray-400 text-sm">
-                  Spend AED ${remainingAmount} more and get free shipping! (Free
-                  shipping is from AED 1000).
+                <p className=" text-sm">
+                  Spend 
+                  <span className="transition-all duration-300 group-hover:font-bold group-hover:text-2xl">
+                    AED ${remainingAmount}
+                  </span>{" "}
+                  more and get free shipping! (Free shipping is from AED 1000).
                 </p>
               )}
             </div>
@@ -291,7 +268,7 @@ const CheckoutPage = () => {
                   placeholder="Enter promo code"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
-                  className="flex-1  rounded-lg border-gray-600 border px-3 py-2 lg:px-4 lg:py-3 text-sm lg:text-base text-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="flex-1  rounded-lg  border px-3 py-2 lg:px-4 lg:py-3 text-sm lg:text-base text-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 <button className="border  text-white px-4 py-2 lg:px-6 lg:py-3 rounded-lg font-medium transition-colors">
                   Apply Promo Code
@@ -308,7 +285,7 @@ const CheckoutPage = () => {
                 <div className="space-y-4">
                   <div className="space-y-6 mb-8">
                     {/* Radio Buttons */}
-                    <label className="flex items-center space-x-3 border border-gray-600 rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
+                    <label className="flex items-center space-x-3 border  rounded-lg p-3 lg:p-4 cursor-pointer  transition-colors">
                       <input
                         type="radio"
                         name="delivery"
@@ -325,7 +302,7 @@ const CheckoutPage = () => {
                       </span>
                     </label>
 
-                    <label className="flex items-center space-x-3 border border-gray-600 rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
+                    <label className="flex items-center space-x-3 border  rounded-lg p-3 lg:p-4 cursor-pointer  transition-colors">
                       <input
                         type="radio"
                         name="delivery"
@@ -349,7 +326,7 @@ const CheckoutPage = () => {
                       </span>
                     </label>
 
-                    <label className="flex items-center space-x-3 border border-gray-600 rounded-lg p-3 lg:p-4 cursor-pointer hover:bg-gray-800 transition-colors">
+                    <label className="flex items-center space-x-3 border  rounded-lg p-3 lg:p-4 cursor-pointer  transition-colors">
                       <input
                         type="radio"
                         name="delivery"
@@ -364,21 +341,25 @@ const CheckoutPage = () => {
                     </label>
 
                     {/* Order Number Input */}
-                    <div className="">
+                    <div>
                       <label
                         htmlFor="orderNumber"
                         className="text-sm lg:text-base text-gray-400"
                       >
                         Enter Previous Order Number:
                       </label>
-                      <input
-                        type="text"
-                        id="orderNumber"
-                        value={orderNumber}
-                        onChange={(e) => setOrderNumber(e.target.value)}
-                        className="w-full mt-2 border border-gray-600 bg-gray-800 text-white rounded-lg p-3 lg:p-4 text-sm lg:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        placeholder="Enter your previous order number"
-                      />
+                      <div className=" flex items-center gap-6 w-2/3">
+                        <input
+                          type="text"
+                          id="orderNumber"
+                          value={orderNumber}
+                          onChange={(e) => setOrderNumber(e.target.value)}
+                          className="w-full mt-2 border  text-white rounded-lg p-2 lg:p-3 text-sm lg:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          placeholder="Enter your previous order number"
+                        />
+
+                        <Button className="h-12 px-8">Submit</Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -430,7 +411,7 @@ const CheckoutPage = () => {
                           day
                             ? day === selectedDate
                               ? "bg-white text-black"
-                              : "text-white hover:bg-gray-700 border-gray-600"
+                              : "text-white hover:bg-gray-700 "
                             : "invisible" // makes unavailable days invisible
                         }`}
                       >
@@ -447,22 +428,37 @@ const CheckoutPage = () => {
                     <div className="flex items-center justify-between gap-6">
                       <button
                         onClick={() => setSelectedTime("8am-9pm")}
-                        className={`px-3 py-2 lg:px-4 lg:py-3 w-1/2 rounded-lg text-sm lg:text-base transition-colors ${
+                        className={`relative px-3 py-2 lg:px-4 lg:py-3 w-1/2 rounded-lg text-sm lg:text-base transition-colors border ${
                           selectedTime === "8am-9pm"
-                            ? "bg-white text-black"
-                            : "border border-gray-600 text-white hover:bg-gray-600"
+                            ? " text-white"
+                            : "text-white hover:"
                         }`}
                       >
+                        <span
+                          className={`absolute top-1/2 left-2 transform -translate-y-1/2 ${
+                            selectedTime === "8am-9pm"
+                              ? "bg-white"
+                              : "border-2 border-white"
+                          } rounded-full w-5 h-5`}
+                        ></span>
                         8am-9pm
                       </button>
+
                       <button
                         onClick={() => setSelectedTime("9am-10pm")}
-                        className={`px-3 py-2 lg:px-4 w-1/2 lg:py-3 rounded-lg text-sm lg:text-base transition-colors ${
+                        className={`relative px-3 py-2 lg:px-4 w-1/2 lg:py-3 rounded-lg text-sm lg:text-base transition-colors border ${
                           selectedTime === "9am-10pm"
-                            ? "bg-white text-black"
-                            : "border border-gray-600 text-white hover:bg-gray-600"
+                            ? " text-white"
+                            : "text-white hover:"
                         }`}
                       >
+                        <span
+                          className={`absolute top-1/2 left-2 transform -translate-y-1/2 ${
+                            selectedTime === "9am-10pm"
+                              ? "bg-white"
+                              : "border-2 border-white"
+                          } rounded-full w-5 h-5`}
+                        ></span>
                         9am-10pm
                       </button>
                     </div>
@@ -471,12 +467,36 @@ const CheckoutPage = () => {
               </div>
             </div>
 
+            <div className="flex justify-center items-center space-y-7 mt-16">
+              <div
+                className={`w-24 h-24 lg:w-36 lg:h-36 {styles.imageWithBubbles}`}
+              
+              >
+                <Image
+                  src="/assets/image 10.png"
+                  alt="Delivery Image"
+                  width={150}
+                  height={150}
+                  className="w-full  h-auto rounded-lg"
+                />
+              </div>
+              <div>
+                <h2 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-2">
+                  You Can Fit Up To 4 More Corals
+                </h2>
+                <p className="text-[14px] text-center">
+                  For No Additional Delivery Charge, You can Add More Corals to
+                  your Stash!
+                </p>
+              </div>
+            </div>
+
             {/* My Information */}
             <div>
               <h3 className="text-lg font-medium lg:text-xl mb-4">
                 My Information
               </h3>
-              <div className="border border-gray-600 rounded-lg p-4 lg:p-6">
+              <div className="border  rounded-lg p-4 lg:p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 text-sm lg:text-base text-gray-400">
                   <div>
                     <span className="text-white font-medium">
@@ -524,12 +544,12 @@ const CheckoutPage = () => {
                   <h3 className="text-lg font-medium lg:text-xl mb-4">
                     Comments
                   </h3>
-                  <div className="rounded-lg border border-gray-600 p-4 lg:p-6">
+                  <div className="rounded-lg border  p-4 lg:p-6">
                     <textarea
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
                       placeholder="Write comment"
-                      className="w-full h-32 lg:h-50 border border-gray-600  rounded-lg p-3 lg:p-4 text-sm lg:text-base text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="w-full h-32 lg:h-50 border   rounded-lg p-3 lg:p-4 text-sm lg:text-base text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
                     <button className="mt-4 border border-red-500 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-lg text-sm lg:text-base w-full  transition-colors">
                       Submit With Order
@@ -542,7 +562,7 @@ const CheckoutPage = () => {
                   <h3 className="text-lg font-medium lg:text-xl mb-4">
                     Order Summary
                   </h3>
-                  <div className="border border-gray-600 rounded-lg p-4 lg:p-6">
+                  <div className="border  rounded-lg p-4 lg:p-6">
                     <div className="space-y-3 text-sm lg:text-base">
                       <div className="flex justify-between">
                         <span className="text-gray-400">Quantity:</span>
@@ -598,4 +618,10 @@ const CheckoutPage = () => {
   );
 };
 
+
+
 export default CheckoutPage;
+
+
+
+

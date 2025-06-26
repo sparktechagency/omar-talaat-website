@@ -1,0 +1,56 @@
+.imageWithBubbles {
+  position: relative;
+  animation: image-float 3s ease-in-out infinite;
+}
+
+.imageWithBubbles::before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: bubble-float 4s ease-in-out infinite;
+}
+
+.imageWithBubbles::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: bubble-float 5s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+@keyframes bubble-float {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-25px) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes image-float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* Move the image up */
+  }
+  100% {
+    transform: translateY(0); /* Return to original position */
+  }
+}

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FooterLogo, MainLogo } from "../share/svg/Logo";
+import { GoArrowRight } from "react-icons/go";
 
 export default function Footer() {
   return (
@@ -163,27 +164,15 @@ export default function Footer() {
               Sign up for exclusive offers, additions and more.
             </p>
 
-            <div className="flex">
+            <div className="flex relative">
               <Input
                 type="email"
                 placeholder="Your email"
-                className="bg-gray-800 border-gray-700 text-white placeholder-gray-400 rounded-r-none focus:border-gray-600"
+                className="bg-[#181818] text-white placeholder-gray-400 rounded-r-none focus:border-gray-600"
               />
-              <Button className="bg-white text-gray-900 hover:bg-gray-100 rounded-l-none px-4">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </Button>
+              <button className="absolute right-3 text-white h-12 ">
+                <GoArrowRight size={24} />
+              </button>
             </div>
           </div>
         </div>
