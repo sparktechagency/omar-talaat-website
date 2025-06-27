@@ -469,16 +469,17 @@ const CheckoutPage = () => {
 
             <div className="flex justify-center items-center space-y-7 mt-16">
               <div
-                className={`w-24 h-24 lg:w-36 lg:h-36 {styles.imageWithBubbles}`}
-              
+                className={`w-24 h-24 lg:w-36 lg:h-36 `}
               >
-                <Image
-                  src="/assets/image 10.png"
-                  alt="Delivery Image"
-                  width={150}
-                  height={150}
-                  className="w-full  h-auto rounded-lg"
-                />
+                <div className={styles.imageWithBubbles}>
+                  <Image
+                    src="/assets/image 10.png"
+                    alt="Delivery Image"
+                    width={150}
+                    height={150}
+                    className="w-full  h-auto rounded-lg"
+                  />
+                </div>
               </div>
               <div>
                 <h2 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-2">

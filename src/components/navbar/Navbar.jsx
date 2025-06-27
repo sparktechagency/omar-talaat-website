@@ -25,17 +25,21 @@ import {
 import Image from "next/image";
 import LeaderboardModal from "./LeaderBoard";
 import CategoryDropdown from "./CategoryDropdown"; // Import the new component
+import { set } from "react-hook-form";
+import ProfileDashboardComponents from "../profileIcon/ProfileDashboardComponents";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isShopHovered, setIsShopHovered] = useState(false); // New state for shop dropdown
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Initialize search query from URL params
   useEffect(() => {
@@ -284,12 +288,12 @@ export default function Navbar() {
                 <div className="absolute right-0 mt-2 w-60 backdrop-blur-md bg-black/40 border border-white/20 text-white shadow-xl rounded-lg overflow-hidden">
                   <ul className="py-2">
                     <li>
-                      <Link
-                        href="/profile-dashboard"
-                        className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
+                      <button
+                        onClick={() => setIsProfileModalOpen(true)}
+                        className="block w-full text-left px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                       >
                         Profile Dashboard
-                      </Link>
+                      </button>
                     </li>
 
                     {/* Cart option for mobile in profile menu */}
@@ -414,12 +418,22 @@ export default function Navbar() {
         )}
       </nav>
 
+      {isProfileOpen && (
+        <ProfileDashboardComponents
+          isProfileModalOpen={isProfileModalOpen}
+          setIsProfileModalOpen={setIsProfileModalOpen}
+          setIsProfileOpen={setIsProfileOpen} // Pass this state to ProfileDashboard
+        />
+      )}
       {/* Category Dropdown - Outside nav to prevent z-index issues */}
       <CategoryDropdown
         isShopHovered={isShopHovered}
         setIsShopHovered={setIsShopHovered}
       />
-
+      {/* <ProfileDashboardComponents
+        isProfileModalOpen={isProfileModalOpen}
+        setIsProfileModalOpen={setIsProfileModalOpen}
+      /> */}
       <LeaderboardModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );

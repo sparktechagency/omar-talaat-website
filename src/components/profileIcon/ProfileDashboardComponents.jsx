@@ -274,61 +274,80 @@ const MyMembershipTab = () => {
 };
 
 // Main Profile Page Component
-const ProfileDashboardComponents = () => {
+// In ProfileDashboardComponents
+export default function ProfileDashboardComponents({
+  isProfileModalOpen,
+  setIsProfileModalOpen,
+  setIsProfileOpen,
+}) {
   return (
     <div className="mt-16">
-      <div className="max-w-6xl mx-auto">
-        <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 ">
-            <TabsTrigger
-              value="profile"
-              className=" data-[state=active]:text-white data-[state=active]:border data-[state=active]:text-2xl"
+      {/* Modal Overlay and Content */}
+      {isProfileModalOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center">
+          <div className="relative bg-black text-white rounded-lg p-8 max-w-6xl w-full">
+            <button
+              onClick={() => setIsProfileOpen(false)} // Close Profile Dashboard Modal
+              className="absolute top-4 right-4 text-white text-xl font-bold"
             >
-              Edit Profile
-            </TabsTrigger>
-            <TabsTrigger
-              value="password"
-              className=" data-[state=active]:text-white data-[state=active]:border data-[state=active]:text-2xl"
-            >
-              Change Password
-            </TabsTrigger>
-            <TabsTrigger
-              value="leaderboard"
-              className=" data-[state=active]:text-white data-[state=active]:border data-[state=active]:text-2xl"
-            >
-              Leaderboard
-            </TabsTrigger>
-            <TabsTrigger
-              value="membership"
-              className=" data-[state=active]:text-white data-[state=active]:border data-[state=active]:text-2xl"
-            >
-              My Membership
-            </TabsTrigger>
-          </TabsList>
+              ✕
+            </button>
+            {/* Modal Content */}
+            <div className="max-w-full">
+              <Tabs defaultValue="profile" className="w-full">
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger
+                    value="profile"
+                    className="data-[state=active]:text-white data-[state=active]:text-2xl"
+                  >
+                    Edit Profile
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="password"
+                    className="data-[state=active]:text-white data-[state=active]:text-2xl"
+                  >
+                    Change Password
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="leaderboard"
+                    className="data-[state=active]:text-white data-[state=active]:text-2xl"
+                  >
+                    Leaderboard
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="membership"
+                    className="data-[state=active]:text-white data-[state=active]:text-2xl"
+                  >
+                    My Membership
+                  </TabsTrigger>
+                </TabsList>
 
-          <Card className="mt-6 border bg-black/85">
-            <CardContent className="p-8">
-              <TabsContent value="profile" className="mt-0">
-                <ProfileTab />
-              </TabsContent>
+                <Card className="mt-6 bg-black/85">
+                  <CardContent className="p-8">
+                    <TabsContent value="profile" className="mt-0">
+                      <ProfileTab />
+                    </TabsContent>
 
-              <TabsContent value="password" className="mt-0">
-                <ChangePasswordTab />
-              </TabsContent>
+                    <TabsContent value="password" className="mt-0">
+                      <ChangePasswordTab />
+                    </TabsContent>
 
-              <TabsContent value="leaderboard" className="mt-0">
-                <LeaderboardTab />
-              </TabsContent>
+                    <TabsContent value="leaderboard" className="mt-0">
+                      <LeaderboardTab />
+                    </TabsContent>
 
-              <TabsContent value="membership" className="mt-0">
-                <MyMembershipTab />
-              </TabsContent>
-            </CardContent>
-          </Card>
-        </Tabs>
-      </div>
+                    <TabsContent value="membership" className="mt-0">
+                      <MyMembershipTab />
+                    </TabsContent>
+                  </CardContent>
+                </Card>
+              </Tabs>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
+}
 
-export default ProfileDashboardComponents;
+// export default ProfileDashboardComponents;

@@ -1,65 +1,123 @@
-import React, { useState } from "react";
-import { X, Trophy, Star, Coins, Sparkles } from "lucide-react";
+"use client";
+import React, { useState, useMemo } from "react";
+import { X } from "lucide-react";
 import Image from "next/image";
 import { CalenderLogo, CoinsLogo, Logo, Ranking } from "../share/svg/Logo";
 
 const LeaderboardModal = ({ isOpen, setIsOpen }) => {
-  // Sample data - same person repeated as shown in the image
-  const leaderboardData = Array.from({ length: 10 }, (_, index) => ({
-    position: index + 1,
-    name: "Sabbir Ahmed",
-    avatar: "/assets/profile.png",
-    cmPoints: 7,
-    credits: 235,
-    csAura: 100,
-    medal:
-      index < 3
-        ? index === 0
-          ? "gold"
-          : index === 1
-          ? "silver"
-          : "bronze"
-        : null,
-  }));
+  const leaderboardData = [
+    {
+      name: "Sabbir Ahmed",
+      avatar: "/assets/profile.png",
+      cmPoints: 10,
+      credits: 200,
+      csAura: 300,
+    },
+    {
+      name: "Rakib Hasan",
+      avatar: "/assets/profile.png",
+      cmPoints: 15,
+      credits: 150,
+      csAura: 250,
+    },
+    {
+      name: "Nusrat Jahan",
+      avatar: "/assets/profile.png",
+      cmPoints: 5,
+      credits: 100,
+      csAura: 280,
+    },
+    {
+      name: "Mehedi Hasan",
+      avatar: "/assets/profile.png",
+      cmPoints: 8,
+      credits: 300,
+      csAura: 300,
+    },
+    {
+      name: "Tanjina Akter",
+      avatar: "/assets/profile.png",
+      cmPoints: 15,
+      credits: 170,
+      csAura: 320,
+    },
+    {
+      name: "Sabbir Ahmed",
+      avatar: "/assets/profile.png",
+      cmPoints: 14,
+      credits: 200,
+      csAura: 200,
+    },
+    {
+      name: "Rakib Hasan",
+      avatar: "/assets/profile.png",
+      cmPoints: 15,
+      credits: 150,
+      csAura: 250,
+    },
+    {
+      name: "Nusrat Jahan",
+      avatar: "/assets/profile.png",
+      cmPoints: 5,
+      credits: 100,
+      csAura: 280,
+    },
+    {
+      name: "Mehedi Hasan",
+      avatar: "/assets/profile.png",
+      cmPoints: 5,
+      credits: 200,
+      csAura: 130,
+    },
+    {
+      name: "Tanjina Akter",
+      avatar: "/assets/profile.png",
+      cmPoints: 12,
+      credits: 180,
+      csAura: 220,
+    },
+  ];
+
+  const [sortKey, setSortKey] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortOrder("asc");
+    }
+  };
+
+  const sortedLeaderboardData = useMemo(() => {
+    const data = [...leaderboardData];
+    if (!sortKey) return data;
+
+    return data.sort((a, b) => {
+      const aVal = a[sortKey];
+      const bVal = b[sortKey];
+      return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+    });
+  }, [leaderboardData, sortKey, sortOrder]);
 
   const getMedalIcon = (position) => {
     if (position === 1)
       return (
         <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-          <Image
-            src="/assets/first.png"
-            width={20}
-            height={20}
-            quality={75}
-            className="w-8 h-8 text-white"
-            alt="First Place Medal"
-          />
+          <Image src="/assets/first.png" width={20} height={20} alt="First" />
         </div>
       );
     if (position === 2)
       return (
         <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
-          <Image
-            src="/assets/second.png"
-            width={40}
-            height={40}
-            quality={75}
-            className="w-10 h-10 text-white"
-            alt="Second Place Medal"
-          />
+          <Image src="/assets/second.png" width={40} height={40} alt="Second" />
         </div>
       );
     if (position === 3)
       return (
         <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center">
-          <Image
-            src="/assets/third.png"
-            width={20}
-            height={20}
-            quality={75}
-            className="w-8 h-8 text-white"
-            alt="Third Place Medal"
-          />
+          <Image src="/assets/third.png" width={20} height={20} alt="Third" />
         </div>
       );
     return null;
@@ -67,15 +125,12 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
 
   return (
     <>
-      {/* Modal */}
       {isOpen && (
-        <div className="fixed inset-0 bg-opacity-50  flex items-center justify-end z-50 px-4 mr-48 mt-16">
-          {" "}
-          {/* Add margin-top for spacing below navbar */}
-          <div className="rounded-xl border  bg-black p-5  w-[512px] overflow-hidden">
+        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-end z-50 px-4 mr-48 mt-16">
+          <div className="rounded-xl border bg-black p-5 w-[512px] overflow-hidden">
             {/* Header */}
-            <div className="bg-black  text-white w-full px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center  justify-centerm-2 mx-auto px-4 py-2 rounded-2xl  border space-x-1">
+            <div className="bg-black text-white w-full px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center justify-center m-2 mx-auto px-4 py-2 rounded-2xl border space-x-1">
                 <Ranking className="w-6 h-6 text-yellow-400" />
                 <h2 className="text-xl font-semibold">Leaderboard</h2>
               </div>
@@ -89,10 +144,14 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
 
             {/* Table Header */}
             <div className="border text-white px-3 py-2">
-              <div className="grid grid-cols-12 gap-4 items-center text-sm font-medium">
+              <div className="grid grid-cols-12 gap-4 items-center text-[12px] font-medium">
                 <div className="col-span-1">Pos</div>
                 <div className="col-span-4">Name</div>
-                <div className="col-span-3 flex items-center space-x-">
+
+                <div
+                  className="col-span-3 flex items-center space-x-1 cursor-pointer"
+                  onClick={() => handleSort("cmPoints")}
+                >
                   <span>CM Points</span>
                   <svg
                     className="w-3 h-3"
@@ -106,7 +165,11 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                     />
                   </svg>
                 </div>
-                <div className="col-span-2 flex items-center space-x-">
+
+                <div
+                  className="col-span-2 flex items-center space-x-1 cursor-pointer"
+                  onClick={() => handleSort("credits")}
+                >
                   <span>Credits</span>
                   <svg
                     className="w-3 h-3"
@@ -120,7 +183,11 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                     />
                   </svg>
                 </div>
-                <div className="col-span-2 flex items-center space-x-">
+
+                <div
+                  className="col-span-2 flex items-center space-x- cursor-pointer"
+                  onClick={() => handleSort("csAura")}
+                >
                   <span>CS Aura</span>
                   <svg
                     className="w-3 h-3"
@@ -137,48 +204,32 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
               </div>
             </div>
 
-            {/* Leaderboard Content */}
+            {/* Table Body */}
             <div className="border text-white">
-              {leaderboardData.map((user, index) => (
-                <div
-                  key={index}
-                  className="border  last:border-b-0"
-                >
-                  <div className="grid grid-cols-12 gap-4 items-center px-6 py-2  transition-colors">
-                    {/* Position */}
+              {sortedLeaderboardData.map((user, index) => (
+                <div key={index} className="border last:border-b-0">
+                  <div className="grid grid-cols-12 gap-4 items-center px-6 py-2 transition-colors">
+                    {/* Dynamic Position */}
                     <div className="col-span-1 flex items-center">
-                      {user.medal ? (
-                        getMedalIcon(user.position)
+                      {index + 1 <= 3 ? (
+                        getMedalIcon(index + 1)
                       ) : (
                         <span className="text-lg font-semibold">
-                          {user.position}
+                          {index + 1}
                         </span>
                       )}
                     </div>
 
-                    {/* Name with Avatar */}
+                    {/* Name + Avatar */}
                     <div className="col-span-5 flex items-center space-x-1">
-                      <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center overflow-hidden">
+                      <div className="w-10 h-10 bg-gray-600 rounded-full overflow-hidden">
                         <Image
                           src={user.avatar}
                           alt={user.name}
                           height={20}
                           width={20}
                           className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                            e.target.nextSibling.style.display = "flex";
-                          }}
                         />
-                        <div
-                          className="w-full h-full bg-gray-600 flex items-center justify-center text-white text-sm font-semibold"
-                          style={{ display: "none" }}
-                        >
-                          {user.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </div>
                       </div>
                       <span className="font-medium">{user.name}</span>
                     </div>
@@ -191,9 +242,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
 
                     {/* Credits */}
                     <div className="col-span-2 flex items-center space-x-2">
-                      <div className="flex">
-                        <CoinsLogo className="w-4 h-4 text-yellow-400" />
-                      </div>
+                      <CoinsLogo className="w-4 h-4 text-yellow-400" />
                       <span className="text-yellow-400 font-medium">
                         {user.credits}
                       </span>

@@ -1,0 +1,17 @@
+.imageWithBubbles {
+    position: relative;
+    animation: image-float 3s ease-in-out infinite; /* Only image float animation */
+  }
+  
+  @keyframes image-float {
+    0% {
+      transform: translateY(0); /* Initial position */
+    }
+    50% {
+      transform: translateY(-10px); /* Move the image up */
+    }
+    100% {
+      transform: translateY(0); /* Return to original position */
+    }
+  }
+  

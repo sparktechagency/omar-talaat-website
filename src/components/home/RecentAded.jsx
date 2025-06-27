@@ -118,7 +118,7 @@ const ProductCard = ({ product, controls }) => {
               <motion.div
                 className="flex items-baseline gap-0.5"
                 animate={isHovered ? { x: -36 } : { x: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.5 }}
               >
                 <span className="text-lg font-bold text-white">
                   {product.price}
@@ -128,7 +128,7 @@ const ProductCard = ({ product, controls }) => {
                   animate={
                     isHovered ? { y: -10, scale: 0.8 } : { y: 0, scale: 1 }
                   }
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.5 }}
                   style={{ transformOrigin: "bottom left" }}
                 >
                   .00
