@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { motion } from "framer-motion"; // Don't forget to import motion
-import { cardVariants } from "../../components/share/utils/motionVariants"; // Import cardVariants
 
 const ShopCategory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,72 +10,79 @@ const ShopCategory = () => {
 
   // Available images to cycle through
   const availableImages = [
-    "https://i.ibb.co/JR01nZWv/underwater-landscape-23-2150440386.jpg",
-    "https://i.ibb.co/JWgXSZcb/vibrant-coral-reef-aquarium-ornament-stunning-underwater-scene-191095-85646.jpg",
-    "https://i.ibb.co/3yVCq90L/Region-Gallery-Viewer.png",
+    "/assets/category1.png",
+    "/assets/category11.png",
+    "/assets/category12.png",
+    "/assets/category4.png",
   ];
 
   // Mineral data with images
   const minerals = [
     {
       id: 1,
-      name: "Fluorite Crystal",
+      name: "All Coral",
       image: availableImages[0],
-      description: "Beautiful fluorescent crystal that glows under UV light",
+      description: "Browse all available coral types",
     },
     {
       id: 2,
-      name: "Willemite",
+      name: "Zoanthids",
       image: availableImages[1],
-      description: "Zinc silicate mineral with bright green fluorescence",
+      description: "Colorful colonial marine organisms",
     },
     {
       id: 3,
-      name: "Adamite",
-      image: availableImages[2],
-      description: "Zinc arsenate hydroxide with lime-green glow",
+      name: "SPS",
+      image: availableImages[1],
+      description: "Small Polyp Stony corals with intricate structures",
     },
     {
       id: 4,
-      name: "Calcite UV",
-      image: availableImages[0],
-      description: "Calcium carbonate showing red fluorescence",
+      name: "LPS",
+      image: availableImages[2],
+      description: "Large Polyp Stony corals with flowing tentacles",
     },
     {
       id: 5,
-      name: "Scheelite",
-      image: "/assets/category1.png",
-      description: "Tungsten mineral with blue-white fluorescence",
+      name: "Acropora",
+      image: availableImages[0],
+      description: "Fast-growing branching SPS corals",
     },
     {
       id: 6,
-      name: "Hyalite Opal",
-      image: availableImages[2],
-      description: "Clear opal variety with bright green fluorescence",
+      name: "Montipora",
+      image: availableImages[1],
+      description: "Plating and encrusting SPS corals",
     },
     {
       id: 7,
-      name: "Sodalite",
-      image: availableImages[0],
-      description: "Blue mineral with orange fluorescence under UV",
+      name: "Soft Corals",
+      image: availableImages[2],
+      description: "Flexible corals that sway with the current",
     },
     {
       id: 8,
-      name: "Clinohedrite",
+      name: "Anemones",
+      image: availableImages[3],
+      description: "Sea anemones and related species",
+    },
+    {
+      id: 9,
+      name: "WYSIWYG",
+      image: availableImages[0],
+      description: "What You See Is What You Get specimens",
+    },
+    {
+      id: 10,
+      name: "Zoanth",
       image: availableImages[1],
-      description: "Rare zinc silicate with bright fluorescent properties",
+      description: "Premium zoanthid collections",
     },
     {
       id: 11,
-      name: "Scheelite",
-      image: "/assets/category4.png",
-      description: "Tungsten mineral with blue-white fluorescence",
-    },
-    {
-      id: 12,
-      name: "Hyalite Opal",
-      image: "/assets/category1.png",
-      description: "Clear opal variety with bright green fluorescence",
+      name: "The Vault",
+      image: availableImages[2],
+      description: "Rare and exclusive coral specimens",
     },
   ];
 
@@ -108,7 +113,7 @@ const ShopCategory = () => {
   };
 
   return (
-    <motion.div className="container w-full mx-auto bg-black my-20 flex flex-col justify-center">
+    <div className="container w-full mx-auto bg-black my-20 flex flex-col justify-center">
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
@@ -143,45 +148,28 @@ const ShopCategory = () => {
             }}
           >
             {minerals.map((mineral, index) => (
-              <motion.div
+              <div
                 key={mineral.id}
                 className="flex-shrink-0 relative group cursor-pointer"
                 style={{ width: `${100 / minerals.length}%` }}
                 onClick={() => goToSlide(index)}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
               >
                 {/* Mineral Card */}
-                <motion.div
-                  whileHover={{
-                    y: -10,
-                    transition: {
-                      type: "tween",
-                      ease: "easeOut",
-                      duration: 0.3,
-                    },
-                  }}
-                  className={`w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative
-                  transform transition-all duration-300
-                   group-hover:border-white/30
-                  shadow-2xl 
-                `}
-                >
+                <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
                   <Image
                     src={mineral.image}
                     alt={mineral.name}
                     height={130}
                     width={130}
-                    className="absolute inset-0 object-cover transition-all  duration-300"
+                    className="absolute inset-0 object-cover transition-all duration-300 group-hover:scale-125"
                   />
-                </motion.div>
+                </div>
 
-                {/* Title should not animate */}
+                {/* Title */}
                 <h3 className="text-white font-semibold text-xs truncate mt-2 text-center">
                   {mineral.name}
                 </h3>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -212,7 +200,7 @@ const ShopCategory = () => {
           {isAutoPlay ? "Pause" : "Play"}
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

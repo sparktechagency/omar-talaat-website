@@ -142,10 +142,10 @@ const Banner = () => {
           {/* Logo */}
           <div className="mb:2 lg:mb-8">
             <MainLogo
-              className="w-32 h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-6"
+              className="w-32 h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-8"
               color={`${logo}`}
             />
-            <h1 className="text-5xl md:text-6xl font-bold font-brush text-white mb-2 lg:mb-10">
+            <h1 className="text-5xl md:text-6xl font-bold font-brush text-white mb-2 lg:mb-6">
               Coral Stash
             </h1>
           </div>

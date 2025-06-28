@@ -249,7 +249,7 @@ const CheckoutPage = () => {
               ) : (
                 <p className=" text-sm">
                   Spend 
-                  <span className="transition-all duration-300 group-hover:font-bold group-hover:text-2xl">
+                  <span className="transition-all duration-300 group-hover:font-bold group-hover:text-xl">
                     AED ${remainingAmount}
                   </span>{" "}
                   more and get free shipping! (Free shipping is from AED 1000).

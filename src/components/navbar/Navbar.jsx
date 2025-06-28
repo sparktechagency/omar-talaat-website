@@ -116,7 +116,7 @@ export default function Navbar() {
             href="/"
             className="flex items-center space-x-2 text-lg font-bold text-white drop-shadow-lg"
           >
-            <MainLogo color={`#fff`} width={65} height={70} />
+            <MainLogo color={`#fff`} width={65} height={70} className="" />
           </Link>
 
           {/* Middle: Navigation Links & Search (Desktop) */}
@@ -189,7 +189,7 @@ export default function Navbar() {
                     onKeyPress={handleKeyPress}
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() => setIsSearchFocused(false)}
-                    className="bg-transparent  text-white placeholder-white/60 outline-none w-[600px]"
+                    className="bg-transparent  text-white placeholder-white/60  outline-none w-[600px]"
                   />
                 </div>
               </form>
@@ -219,7 +219,9 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-4 text-sm">
               {/* Calendar Icon with number */}
               <div className="flex items-center space-x-1">
-                <CalenderLogo />
+                <div className="hover:scale-115">
+                  <CalenderLogo />
+                </div>
                 <span className="text-white text-4xl font-brush drop-shadow-lg">
                   7
                 </span>
@@ -227,7 +229,9 @@ export default function Navbar() {
 
               {/* Coral Icon with number */}
               <div className="flex items-center space-x-1">
-                <Logo />
+                <div className="hover:scale-115">
+                  <Logo />
+                </div>
                 <span className="text-white font-brush text-4xl drop-shadow-lg">
                   512
                 </span>
@@ -235,7 +239,9 @@ export default function Navbar() {
 
               {/* Coin Icon with number - Show directly on large devices */}
               <div className="flex items-center space-x-1">
-                <CoinsLogo />
+                <div className="hover:scale-115">
+                  <CoinsLogo />
+                </div>
                 <span className="text-white font-brush text-4xl drop-shadow-lg">
                   235
                 </span>
@@ -245,7 +251,9 @@ export default function Navbar() {
             {/* Coin Icon with tooltip - Show only on mobile */}
             <div className="relative group md:hidden">
               <button className="flex items-center space-x-1">
-                <CoinsLogo />
+                <div className="hover:scale-115">
+                  <CoinsLogo />
+                </div>
               </button>
               {/* Tooltip */}
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 backdrop-blur-sm bg-black/60 border border-white/20 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
@@ -257,7 +265,9 @@ export default function Navbar() {
                 className="flex items-center space-x-1  "
                 onClick={() => setIsOpen(true)}
               >
-                <Ranking />
+                <div className="hover:scale-125">
+                  <Ranking />
+                </div>
               </button>
             </div>
 
@@ -271,7 +281,7 @@ export default function Navbar() {
                 src="/assets/image 10.png"
                 height={55}
                 width={55}
-                className="drop-shadow-lg"
+                className="drop-shadow-lg hover:scale-115"
                 alt="Cart Icon"
               />
             </Link>
@@ -279,7 +289,7 @@ export default function Navbar() {
             {/* Profile Dropdown */}
             <div className="relative profile-menu">
               <button
-                className="text-xl flex items-center justify-center w-8 h-8 text-white hover:text-white/80 transition-colors duration-300"
+                className="text-xl flex items-center justify-center hover:scale-115 w-8 h-8 text-white hover:text-white/80 transition-colors duration-300"
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
               >
                 <MyProfile />

@@ -12,6 +12,7 @@ import {
   imageVariants,
   cartIconVariants,
 } from "@/components/share/utils/motionVariants";
+import { toast } from "sonner";
 
 const productsData = [
   {
@@ -42,18 +43,16 @@ const productsData = [
     price: "99",
     image: "/assets/gallary.png",
   },
-
 ];
 
 const ProductCard = ({ product, controls }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = (e, product) => {
     e.stopPropagation();
-    setShowSuccessMessage(true);
-    setTimeout(() => setShowSuccessMessage(false), 2000);
-    console.log(`Added ${product.title} to cart`);
+
+    toast.success(`Add to cart successfully`);
   };
 
   return (
@@ -119,7 +118,7 @@ const ProductCard = ({ product, controls }) => {
               <motion.div
                 className="flex items-baseline gap-0.5"
                 animate={isHovered ? { x: -36 } : { x: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.5 }}
               >
                 <span className="text-lg font-bold text-white">
                   {product.price}
@@ -129,7 +128,7 @@ const ProductCard = ({ product, controls }) => {
                   animate={
                     isHovered ? { y: -10, scale: 0.8 } : { y: 0, scale: 1 }
                   }
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.5 }}
                   style={{ transformOrigin: "bottom left" }}
                 >
                   .00
@@ -139,13 +138,13 @@ const ProductCard = ({ product, controls }) => {
 
             {/* Cart Button */}
             <motion.button
-              className="absolute bottom-2 right-3 w-10 h-10 rounded-full flex items-center justify-center text-black bg-white p-2"
+              className="absolute bottom-2 right-3 w-10 h-10 cursor-pointer hover:scale-110 rounded-full flex items-center justify-center text-black bg-white p-2"
               variants={cartIconVariants}
               initial="hidden"
               animate={isHovered ? "visible" : "hidden"}
               onClick={handleAddToCart}
             >
-              <TbShoppingBagPlus size={32} />
+              <TbShoppingBagPlus size={32} className="scale-110" />
             </motion.button>
           </CardContent>
         </Card>

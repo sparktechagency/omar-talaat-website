@@ -8,8 +8,8 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
 
   const availableImages = [
     "/assets/category1.png",
-    "/assets/category2.png",
-    "/assets/category3.png",
+    "/assets/category11.png",
+    "/assets/category12.png",
     "/assets/category4.png",
   ];
 
@@ -23,7 +23,7 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
     {
       id: 2,
       name: "Zoanthids",
-      image: availableImages[0],
+      image: availableImages[1],
       description: "Colorful colonial marine organisms",
     },
     {
@@ -134,7 +134,7 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
                   src={category.image}
                   alt={category.name}
                   fill
-                  className="object-cover group-hover:scale-110  duration-300"
+                  className="object-cover group-hover:scale-125  duration-300"
                 />
               </div>
               <h3 className="text-white font-semibold text-sm mb-1 text-center">

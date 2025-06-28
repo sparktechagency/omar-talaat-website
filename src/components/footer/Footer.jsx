@@ -52,31 +52,31 @@ export default function Footer() {
               <div className="space-y-2">
                 <Link
                   href="/all-coral"
-                  className="block text-gray-300 hover:text-white transition-colors"
+                  className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                 >
                   All Coral
                 </Link>
                 <Link
                   href="/zoanthids"
-                  className="block text-gray-300 hover:text-white transition-colors"
+                  className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                 >
                   Zoanthids
                 </Link>
                 <Link
                   href="/sps"
-                  className="block text-gray-300 hover:text-white transition-colors"
+                  className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                 >
                   SPS
                 </Link>
                 <Link
                   href="/lps"
-                  className="block text-gray-300 hover:text-white transition-colors"
+                  className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                 >
                   LPS
                 </Link>
                 <Link
                   href="/acropora"
-                  className="block text-gray-300 hover:text-white transition-colors"
+                  className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                 >
                   Acropora
                 </Link>
@@ -86,31 +86,31 @@ export default function Footer() {
                 <div className="space-y-2">
                   <Link
                     href="/montipora"
-                    className="block text-gray-300 hover:text-white transition-colors"
+                    className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                   >
                     Montipora
                   </Link>
                   <Link
                     href="/soft-corals"
-                    className="block text-gray-300 hover:text-white transition-colors"
+                    className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                   >
                     Soft Corals
                   </Link>
                   <Link
                     href="/wysiwyg"
-                    className="block text-gray-300 hover:text-white transition-colors"
+                    className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                   >
                     WYSIWYG
                   </Link>
                   <Link
                     href="/live-food"
-                    className="block text-gray-300 hover:text-white transition-colors"
+                    className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                   >
                     Live Food
                   </Link>
                   <Link
                     href="/the-vault"
-                    className="block text-gray-300 hover:text-white transition-colors"
+                    className="block text-gray-300 hover:text-white transition-colors relative hover:underline decoration-2 underline-offset-4"
                   >
                     The Vault
                   </Link>
@@ -124,7 +124,7 @@ export default function Footer() {
             <div>
               <Link
                 href="/doa-form"
-                className="block text-gray-300 hover:text-white transition-colors font-medium"
+                className="block text-gray-300 hover:text-white transition-colors font-medium relative hover:underline decoration-2 underline-offset-4"
               >
                 DOA Form
               </Link>
