@@ -8,6 +8,7 @@ import { X, Copy, Check } from "lucide-react";
 import AnimatedShopButton from "../share/utils/AnimatedShopButton";
 import { useRouter } from "next/navigation";
 import { FaRegCopy } from "react-icons/fa";
+import BannerButtonAnimation from "../share/utils/BannerButtonAnimation";
 
 const Banner = () => {
   const { userType } = useUser();
@@ -160,12 +161,14 @@ const Banner = () => {
           </p>
 
           {/* Animated Shop Button */}
-          <AnimatedShopButton
-            onClick={handleShopClick}
-            size="xl"
-            text="Shop Now"
-            className="mb-6 lg:mb-16 shadow-xl hover:shadow-2xl"
-          />
+          <div>
+            <BannerButtonAnimation
+              onClick={handleShopClick}
+              size="md"
+              text="Shop Now"
+              className="mb-6 lg:mb-16 shadow-xl hover:shadow-2xl"
+            />
+          </div>
 
           {/* Countdown Timer */}
           <div className="flex items-center justify-center space-x-8 mb-6 lg:mb-12">
@@ -224,9 +227,8 @@ const Banner = () => {
                   size="md"
                   text="Get Code"
                   icon={FaRegCopy}
-                  className="  shadow-xl hover:shadow-2xl"
+                  className="  shadow-xl hover:shadow-2xl "
                 />
-               
               </div>
             ))}
           </div>

@@ -114,12 +114,14 @@ const CountdownProgressTracker = () => {
               <Star />
             </motion.div>
 
-            {/* Fixed Number and Hover Content */}
+            {/* Fixed Number 7 and Hover Content */}
             <div className="relative">
               {/* Fixed Number 7 */}
-              <span className="font-bold font-brush text-7xl text-white absolute top-0 left-0">
-                7
-              </span>
+              {!isHovered && (
+                <span className="font-bold font-brush text-7xl text-white absolute top-0 left-0">
+                  7
+                </span>
+              )}
 
               {/* Hover content below number 7 */}
               {isHovered && (

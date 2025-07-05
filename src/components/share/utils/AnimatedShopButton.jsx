@@ -1,13 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { ShoppingBag } from "lucide-react";
 
 const AnimatedShopButton = ({
   onClick = () => {},
   className = "",
   size = "lg",
   text = "Shop Now",
-  icon: CustomIcon = ShoppingBag,
+  icon: CustomIcon = null, // Default icon set to null
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -46,25 +45,23 @@ const AnimatedShopButton = ({
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
-      {/* Icon */}
-      <CustomIcon
-        className={`
-          transition-all duration-500 ease-in-out
-          ${isHovered ? "mr-2 scale-90" : "scale-100"}
-        `}
-        size={size === "sm" ? 16 : size === "md" ? 18 : size === "lg" ? 20 : 24}
-      />
+      {/* Conditionally render the icon if passed as a prop */}
+      {CustomIcon && (
+        <CustomIcon
+          className={`
+            transition-all duration-500 ease-in-out
+            ${isHovered ? "mr-2 scale-90" : "scale-100"}
+          `}
+          size={size === "sm" ? 16 : size === "md" ? 18 : size === "lg" ? 20 : 24}
+        />
+      )}
 
       {/* Text */}
       <span
         className={`
           transition-all duration-500 ease-in-out
           whitespace-nowrap
-          ${
-            isHovered
-              ? "opacity-100 translate-x-0 max-w-xs"
-              : "opacity-0 -translate-x-4 max-w-0"
-          }
+          ${isHovered ? "opacity-100 translate-x-0 max-w-xs" : "opacity-0 -translate-x-4 max-w-0"}
         `}
       >
         {text}
@@ -82,4 +79,5 @@ const AnimatedShopButton = ({
     </button>
   );
 };
+
 export default AnimatedShopButton;
