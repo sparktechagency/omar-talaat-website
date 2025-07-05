@@ -1,18 +1,37 @@
 "use client";
 
-import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Edit } from "lucide-react";
+import { useEffect, useState } from "react";
+import { MainLogo } from '../share/svg/Logo';
 
-// Profile Tab Component
+// Profile Tab Component with Scrolling
 const ProfileTab = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-h-[60vh] overflow-y-auto" style={{
+      scrollbarWidth: 'thin',
+      scrollbarColor: '#4B5563 transparent'
+    }}>
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          width: 6px;
+        }
+        div::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        div::-webkit-scrollbar-thumb {
+          background: #4B5563;
+          border-radius: 3px;
+        }
+        div::-webkit-scrollbar-thumb:hover {
+          background: #6B7280;
+        }
+      `}</style>
       {/* Profile Picture Section */}
       <div className="flex justify-start mb-8">
         <div className="relative">
@@ -45,7 +64,7 @@ const ProfileTab = () => {
           <Input
             id="firstName"
             placeholder="Emily Jane"
-            className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+            className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
           />
         </div>
 
@@ -62,7 +81,7 @@ const ProfileTab = () => {
           <Input
             id="lastName"
             placeholder="Emily Jane"
-            className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+            className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
           />
         </div>
       </div>
@@ -77,7 +96,7 @@ const ProfileTab = () => {
         <Input
           id="username"
           placeholder="Emily Jane"
-          className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+          className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
         />
       </div>
 
@@ -89,7 +108,7 @@ const ProfileTab = () => {
           id="email"
           type="email"
           placeholder="emily@gmail.com"
-          className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+          className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
         />
       </div>
 
@@ -100,7 +119,7 @@ const ProfileTab = () => {
         <Input
           id="contact"
           placeholder="+99-01846875456"
-          className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+          className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
         />
       </div>
 
@@ -114,7 +133,7 @@ const ProfileTab = () => {
         <Input
           id="deliverTo"
           placeholder="example Location Here"
-          className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+          className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
         />
       </div>
 
@@ -140,7 +159,7 @@ const ChangePasswordTab = () => {
           id="currentPassword"
           type="password"
           placeholder="Enter current password"
-          className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+          className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
         />
       </div>
 
@@ -155,7 +174,7 @@ const ChangePasswordTab = () => {
           id="newPassword"
           type="password"
           placeholder="Enter new password"
-          className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+          className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
         />
       </div>
 
@@ -170,7 +189,7 @@ const ChangePasswordTab = () => {
           id="confirmPassword"
           type="password"
           placeholder="Confirm new password"
-          className="bg-transparent border-gray-600 text-white placeholder:text-gray-400"
+          className="bg-transparent outline-none focus:outline-none focus:ring-0 border-gray-600 text-white placeholder:text-gray-400"
         />
       </div>
 
@@ -198,11 +217,10 @@ const LeaderboardTab = () => {
         {leaderboardData.map((player) => (
           <div
             key={player.rank}
-            className={`flex items-center justify-between p-4 rounded-lg border ${
-              player.username === "Emily Jane"
-                ? "border-blue-500 bg-blue-500/10"
-                : "border-gray-600 bg-gray-800/50"
-            }`}
+            className={`flex items-center justify-between p-4 rounded-lg border ${player.username === "Emily Jane"
+              ? "border-blue-500 bg-blue-500/10"
+              : "border-gray-600 bg-gray-800/50"
+              }`}
           >
             <div className="flex items-center space-x-4">
               <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold">
@@ -220,109 +238,184 @@ const LeaderboardTab = () => {
   );
 };
 
+
+const TreeLogo = ({ className = "w-16 h-16", color = "currentColor" }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M50 85V70M50 70C45 65 35 60 30 50C25 40 30 30 40 25C45 22 50 25 50 30C50 25 55 22 60 25C70 30 75 40 70 50C65 60 55 65 50 70Z"
+      stroke={color}
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+    <path
+      d="M45 85H55M42 88H58"
+      stroke={color}
+      strokeWidth="3"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
 // My Membership Tab Component
 const MyMembershipTab = () => {
   return (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-white mb-6">My Membership</h3>
-
-      <Card className="bg-gradient-to-br from-purple-600 to-blue-600 border-0">
-        <CardContent className="p-6">
-          <div className="text-center text-white">
-            <h4 className="text-2xl font-bold mb-2">Premium Member</h4>
-            <p className="text-purple-100 mb-4">Active since January 2024</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-4 border border-gray-600 rounded-lg">
-          <h5 className="text-white font-semibold mb-2">Benefits</h5>
-          <ul className="text-gray-300 text-sm space-y-1">
-            <li>• Unlimited access</li>
-            <li>• Priority support</li>
-            <li>• Exclusive content</li>
-            <li>• No advertisements</li>
-          </ul>
-        </div>
-
-        <div className="p-4 border border-gray-600 rounded-lg">
-          <h5 className="text-white font-semibold mb-2">
-            Subscription Details
-          </h5>
-          <div className="text-gray-300 text-sm space-y-1">
-            <p>Plan: Premium Monthly</p>
-            <p>Next billing: July 25, 2025</p>
-            <p>Amount: $9.99/month</p>
-          </div>
-        </div>
+    <div className="space-y-8 max-w-4xl mx-auto">
+      {/* Header with Logo */}
+      <div className="text-center">
+        <MainLogo className="w-16 h-16 mx-auto mb-6" color="#ffffff" />
+        <h3 className="text-3xl font-bold text-white mb-2">My Membership</h3>
       </div>
 
-      <div className="flex gap-4">
-        <Button
-          variant="outline"
-          className="flex-1 border-gray-600 text-white hover:bg-gray-800"
-        >
-          Cancel Subscription
-        </Button>
-        <Button className="flex-1 bg-white text-black hover:bg-gray-200">
-          Upgrade Plan
-        </Button>
+      {/* Membership Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Advanced Membership Card */}
+        <Card className="bg-transparent border-2 border-cyan-400 rounded-2xl overflow-hidden">
+          <CardContent className="p-8 text-center">
+            <h4 className="text-2xl font-bold text-cyan-400 mb-4">Advanced Membership</h4>
+
+            <MainLogo className="w-20 h-20 mx-auto mb-6" color="#22d3ee" />
+
+            <p className="text-gray-300 mb-8 text-sm leading-relaxed">
+              Upgrade to 'Advanced Membership' - The First Level!
+            </p>
+
+            <Button className="w-full bg-cyan-400 hover:bg-cyan-500 text-black font-bold py-4 rounded-xl text-lg transition-all duration-200">
+              AED 300
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Premium Membership Card */}
+        <Card className="bg-transparent border-2 border-yellow-400 rounded-2xl overflow-hidden">
+          <CardContent className="p-8 text-center">
+            <div className="mb-4">
+              <h4 className="text-2xl font-bold text-yellow-400">Premium Membership</h4>
+              <p className="text-yellow-300 text-sm font-medium">(Fast-Track)</p>
+            </div>
+
+            <MainLogo className="w-16 h-16 mx-auto mb-6" color="#facc15" />
+
+            <p className="text-gray-300 mb-8 text-sm leading-relaxed">
+              Skip the 'Advanced Membership' and Upgrade Directly to the 'Premium Membership' for a Discounted Price
+            </p>
+
+            <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 rounded-xl text-lg transition-all duration-200">
+              AED 900
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 };
 
 // Main Profile Page Component
-// In ProfileDashboardComponents
 export default function ProfileDashboardComponents({
-  isProfileModalOpen,
-  setIsProfileModalOpen,
-  setIsProfileOpen,
+  isProfileModalOpen = true,
+  setIsProfileModalOpen = () => { },
+  setIsProfileOpen = () => { },
 }) {
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  // Lock/unlock body scroll when modal opens/closes
+  useEffect(() => {
+    if (isProfileModalOpen) {
+      setShouldRender(true);
+      // Small delay to trigger animation after render
+      setTimeout(() => setIsAnimating(true), 10);
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      setIsAnimating(false);
+      // Wait for animation to complete before hiding
+      setTimeout(() => setShouldRender(false), 300);
+      // Restore body scroll when modal is closed
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup function to restore scroll when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isProfileModalOpen]);
+
+  const handleClose = () => {
+    setIsAnimating(false);
+    setTimeout(() => {
+      setIsProfileModalOpen(false);
+    }, 300);
+  };
+
   return (
-    <div className="mt-16">
+    <div className="mt-16 z-[9999]">
       {/* Modal Overlay and Content */}
-      {isProfileModalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center">
-          <div className="relative bg-black text-white rounded-lg p-8 max-w-6xl w-full">
+      {shouldRender && (
+        <div
+          className={`fixed inset-0 z-50 flex justify-center items-center transition-all duration-300 ease-in-out ${isAnimating ? 'opacity-100' : 'opacity-0'
+            }`}
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+        >
+          <div
+            className={`relative backdrop-blur-lg border bg-gray/10 text-white rounded-xl p-8 max-w-6xl w-full max-h-[90vh] transition-all duration-300 ease-in-out transform ${isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+              }`}
+            style={{
+              overflow: 'hidden',
+            }}
+          >
             <button
-              onClick={() => setIsProfileOpen(false)} // Close Profile Dashboard Modal
-              className="absolute top-4 right-4 text-white text-xl font-bold"
+              onClick={handleClose}
+              className="absolute top-4 right-4 cursor-pointer text-white text-xl font-bold hover:text-gray-300 transition-colors z-10"
             >
               ✕
             </button>
-            {/* Modal Content */}
-            <div className="max-w-full">
+
+            {/* Modal Content with Hidden Scrollbar */}
+            <div
+              className="max-w-full h-full"
+              style={{
+                overflow: 'auto',
+                scrollbarWidth: '2px', /* Firefox */
+                msOverflowStyle: '2px', /* IE and Edge */
+              }}
+            >
+              <style jsx>{`
+                div::-webkit-scrollbar {
+                  display: block; /* Chrome, Safari, Opera */
+                }
+              `}</style>
+
               <Tabs defaultValue="profile" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="flex  backdrop-blur-lg bg-gray/0 w-full">
                   <TabsTrigger
                     value="profile"
-                    className="data-[state=active]:text-white data-[state=active]:text-2xl"
+                    className="data-[state=active]:text-white data-[state=active]:text-xl cursor-pointer"
                   >
                     Edit Profile
                   </TabsTrigger>
                   <TabsTrigger
                     value="password"
-                    className="data-[state=active]:text-white data-[state=active]:text-2xl"
+                    className="data-[state=active]:text-white data-[state=active]:text-xl cursor-pointer"
                   >
                     Change Password
                   </TabsTrigger>
                   <TabsTrigger
                     value="leaderboard"
-                    className="data-[state=active]:text-white data-[state=active]:text-2xl"
+                    className="data-[state=active]:text-white data-[state=active]:text-xl cursor-pointer"
                   >
                     Leaderboard
                   </TabsTrigger>
                   <TabsTrigger
                     value="membership"
-                    className="data-[state=active]:text-white data-[state=active]:text-2xl"
+                    className="data-[state=active]:text-white data-[state=active]:text-xl cursor-pointer"
                   >
                     My Membership
                   </TabsTrigger>
                 </TabsList>
 
-                <Card className="mt-6 bg-black/85">
+                <Card className="mt-6 backdrop-blur-lg bg-gray/0">
                   <CardContent className="p-8">
                     <TabsContent value="profile" className="mt-0">
                       <ProfileTab />
@@ -349,5 +442,3 @@ export default function ProfileDashboardComponents({
     </div>
   );
 }
-
-// export default ProfileDashboardComponents;

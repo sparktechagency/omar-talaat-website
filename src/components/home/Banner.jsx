@@ -1,13 +1,13 @@
 
-import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useUser } from "../share/UserProvider";
-import { getUserStyles } from "../share/utils/userStyles";
-import { MainLogo } from "../share/svg/Logo";
-import { X, Copy, Check } from "lucide-react";
-import AnimatedShopButton from "../share/utils/AnimatedShopButton";
+import { Check, Copy, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaRegCopy } from "react-icons/fa";
+import { MainLogo } from "../share/svg/Logo";
+import { useUser } from "../share/UserProvider";
+import AnimatedShopButton from "../share/utils/AnimatedShopButton";
+import { getUserStyles } from "../share/utils/userStyles";
 
 const Banner = () => {
   const { userType } = useUser();
@@ -23,7 +23,7 @@ const Banner = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [copied, setCopied] = useState(false);
-  const router=useRouter()
+  const router = useRouter()
 
   // Discount offers data
   const discountOffers = [
@@ -98,7 +98,6 @@ const Banner = () => {
           document.body.appendChild(textArea);
           textArea.focus();
           textArea.select();
-
           try {
             document.execCommand("copy");
             setCopied(true);
@@ -127,7 +126,7 @@ const Banner = () => {
 
   return (
     <>
-      <div className={`h-auto pt-32 lg:pt-60 ${bg}  overflow-hidden`}>
+      <div className={`h-auto z-20 pt-32 lg:pt-60 ${bg}  overflow-hidden`}>
         <div className="absolute inset-0 ">
           <div
             className="absolute inset-0 bg-cover bg-center mt-0 lg:mt-24 h-screen lg:h-[1100px]"
@@ -140,6 +139,8 @@ const Banner = () => {
         {/* Main Content */}
         <div className="relative top-0 z-10 flex flex-col items-center justify-center px-4 text-center">
           {/* Logo */}
+
+
           <div className="mb:2 lg:mb-8">
             <MainLogo
               className="w-32 h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-6"
@@ -226,7 +227,7 @@ const Banner = () => {
                   icon={FaRegCopy}
                   className="  shadow-xl hover:shadow-2xl"
                 />
-               
+
               </div>
             ))}
           </div>
