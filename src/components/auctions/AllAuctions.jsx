@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
+import Image from "next/image";
 
 const AllAuctions = ({ setActiveTab }) => {
   const auctions = [
@@ -19,12 +20,6 @@ const AllAuctions = ({ setActiveTab }) => {
       csAuraWorth: 92,
       totalBids: 3,
       highestBidder: "Sabbir Ahmed",
-      EndTime: {
-        days: 0,
-        hours: 2,
-        mins: 30,
-        secs: 15,
-      },
     },
     {
       id: 2,
@@ -37,18 +32,12 @@ const AllAuctions = ({ setActiveTab }) => {
       coins: 235,
       membership: "normal",
       type: "upcoming",
-      startTime: {
-        days: 1,
-        hours: 12,
-        mins: 30,
-        secs: 45,
-      },
     },
     {
       id: 3,
       name: "CS Rainbow Incinerator",
       currentBid: 199.5,
-      image: "/assets/category3.png",
+      image: "/assets/category11.png",
       status: "My Bid",
       timeLeft: "3h 45m",
       available: false,
@@ -134,40 +123,40 @@ const AllAuctions = ({ setActiveTab }) => {
     const getTimerDisplay = (auction) => {
       if (auction.startTime) {
         return (
-          <div className="absolute bottom-0 left-0 right-0 p-3  rounded-b-2xl">
+          <div className="absolute bottom-0 left-0 right-0 p-3 rounded-b-2xl">
             <div className="text-center flex items-center px-6 justify-between">
               <div className="text-white text-xs mb-1">Starts In:</div>
               <div>
-              <div className="flex justify-center gap-1 text-white text-sm font-mono">
-                <span className=" px-2 py-1 rounded">
-                  {String(auction.startTime.days).padStart(2, "0")}
-                </span>
-                <span className="text-gray-400">:</span>
-                <span className=" px-2 py-1 rounded">
-                  {String(auction.startTime.hours).padStart(2, "0")}
-                </span>
-                <span className="text-gray-400">:</span>
-                <span className=" px-2 py-1 rounded">
-                  {String(auction.startTime.mins).padStart(2, "0")}
-                </span>
-                <span className="text-gray-400">:</span>
-                <span className=" px-2 py-1 rounded">
-                  {String(auction.startTime.secs).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="flex justify-center gap-4 text-xs text-gray-300 mt-1">
-                <span>Days</span>
-                <span>Hours</span>
-                <span>Mins</span>
-                <span>Secs</span>
-              </div>
+                <div className="flex justify-center gap-1 text-white text-sm font-mono">
+                  <span className=" px-2 py-1 rounded">
+                    {String(auction.startTime.days).padStart(2, "0")}
+                  </span>
+                  <span className="text-gray-400">:</span>
+                  <span className=" px-2 py-1 rounded">
+                    {String(auction.startTime.hours).padStart(2, "0")}
+                  </span>
+                  <span className="text-gray-400">:</span>
+                  <span className=" px-2 py-1 rounded">
+                    {String(auction.startTime.mins).padStart(2, "0")}
+                  </span>
+                  <span className="text-gray-400">:</span>
+                  <span className=" px-2 py-1 rounded">
+                    {String(auction.startTime.secs).padStart(2, "0")}
+                  </span>
+                </div>
+                <div className="flex justify-center gap-4 text-xs text-gray-300 mt-1">
+                  <span>Days</span>
+                  <span>Hours</span>
+                  <span>Mins</span>
+                  <span>Secs</span>
+                </div>
               </div>
             </div>
           </div>
         );
       } else if (auction.EndTime) {
         return (
-          <div className="absolute bottom-0 left-0 right-0   p-3 rounded-b-2xl">
+          <div className="absolute bottom-0 left-0 right-0 p-3 rounded-b-2xl">
             <div className="text-center flex items-center px-6 justify-between">
               <div className="text-white text-xs mb-1 ">Ends In:</div>
               <div>
@@ -209,15 +198,17 @@ const AllAuctions = ({ setActiveTab }) => {
         }`}
         onClick={() => handleAuctionClick(auction)}
       >
-        <div className=" backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
+        <div className="backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
           {/* Auction Image */}
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
-              <img
+              <Image
                 src={auction.image}
+                height={300}
+                width={300}
                 alt={auction.name}
                 onError={handleImageError}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-500"
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-800 to-yellow-600 flex items-center justify-center relative">
@@ -231,7 +222,7 @@ const AllAuctions = ({ setActiveTab }) => {
 
             {/* View Auction Button for Available Auctions */}
             {auction.available && (
-              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 flex items-center justify-center">
                 <button
                   className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                   onClick={(e) => {
@@ -271,7 +262,7 @@ const AllAuctions = ({ setActiveTab }) => {
 
             {/* Coins Overlay */}
             {showCoinsOverlay && (
-              <div className="absolute inset-0  backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
+              <div className="absolute inset-0 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
                 <div className="mb-4">{getCoinsDisplay(auction)}</div>
               </div>
             )}
@@ -279,27 +270,10 @@ const AllAuctions = ({ setActiveTab }) => {
             {/* Timer Display - Always at bottom */}
             {getTimerDisplay(auction)}
           </div>
-
-          {/* Auction Info */}
-          {/* <div className="p-4">
-            <h3 className="text-white font-bold text-lg mb-2 truncate">
-              {auction.name}
-            </h3>
-            <div className="flex items-center justify-between">
-              <span className="text-green-400 text-sm font-medium">
-                {auction.status}
-              </span>
-              <span className="text-white font-bold">
-                AED {auction.currentBid}
-              </span>
-            </div>
-          </div> */}
         </div>
       </div>
     );
   };
-
-
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
