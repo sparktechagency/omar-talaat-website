@@ -224,7 +224,7 @@ const AllAuctions = ({ setActiveTab }) => {
             {auction.available && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <button
-                  className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                  className="bg-white text-black px-5 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleViewAuction();
