@@ -118,22 +118,21 @@ const AuctionInterface = () => {
         };
       case "advance":
         return {
-          cardBg: "bg-purple-900/30 border-purple-600",
+          cardBg: "#057199",
           accentColor: "text-purple-400",
-          gradientBorder: " border-l-purple-500",
+          gradientBorder: "border-2 border-[#69CDFF]",
         };
       case "premium":
         return {
-          cardBg:
-            "bg-gradient-to-br from-yellow-900/30 to-orange-900/30 border-yellow-500",
+          cardBg: "bg-gradient-to-br from-yellow-900/30 to-orange-900/30",
           accentColor: "text-yellow-400",
-          gradientBorder: "border-l-yellow-500",
+          gradientBorder: "border-2 border-[#DB9D17]",
         };
       default:
         return {
           cardBg: "bg-gray-900 border-gray-700",
           accentColor: "text-blue-400",
-          gradientBorder: "border-l-blue-500",
+          gradientBorder: "border-1 border-white/50",
         };
     }
   };
@@ -151,7 +150,7 @@ const AuctionInterface = () => {
     const bidData = bidInfo[auction.id];
 
     return (
-      <div className={`bg-black  text-white overflow-hidden `}>
+      <div className={`bg-black text-white overflow-hidden`}>
         <CardContent className="p-0">
           <div className="flex flex-col lg:flex-row">
             {/* Image Section */}
@@ -164,28 +163,28 @@ const AuctionInterface = () => {
                   quality={80}
                   src={auction?.image}
                   alt={auction?.title}
-                  className={`${styles.cardBg} border text-white rounded-2xl overflow-hidden ${styles.gradientBorder}`}
+                  className={`${styles.cardBg} rounded-2xl overflow-hidden ${styles.gradientBorder}`}
                 />
-                {/* {auction.type === "premium" && (
-                  <div className="absolute top-2 right-2 bg-yellow-500 text-black px-2 py-1 rounded-full text-xs font-bold">
+                {auction.type === "premium" && (
+                  <div className="absolute top-2 right-2 bg-[#DB9D17]/80 text-black px-2 py-1 rounded-full text-xs font-bold">
                     PREMIUM
                   </div>
                 )}
                 {auction.type === "advance" && (
-                  <div className="absolute top-2 right-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                    ADVANCE
+                  <div className="absolute top-2 right-2 bg-[#69CDFF]/80 text-white px-2 py-1 rounded-full text-xs font-bold">
+                    ADVANCED
                   </div>
-                )} */}
+                )}
               </div>
             </div>
 
             {/* Content Section */}
-            <div className="  flex flex-col ">
-              <div className="flex flex-col lg:flex-row  lg:items-start ">
+            <div className="flex flex-col">
+              <div className="flex flex-col lg:flex-row lg:items-start">
                 {/* Left Column */}
-                <div className="lg:w-[622px]   mb-2.5 lg:mb-0 bg-[#181818] pl-12 p-6 mx-5 rounded-lg ">
+                <div className="lg:w-[622px] mb-2.5 lg:mb-0 bg-[#181818] pl-12 p-6 mx-5 rounded-lg">
                   <div className="flex items-center gap-3 mb-4">
-                    <h2 className={`text-xl lg:text-2xl font-bold `}>
+                    <h2 className={`text-xl lg:text-2xl font-bold`}>
                       {auction.title}
                     </h2>
                     {!auction.isStarted && <span className="text-2xl">🔥</span>}
@@ -203,7 +202,7 @@ const AuctionInterface = () => {
 
                     <div className="flex items-center gap-2">
                       <span className="text-white">Credits Used:</span>
-                      <div className={`font-bold flex gap-2 `}>
+                      <div className={`font-bold flex gap-2`}>
                         <CoinsLogo />{" "}
                         <span className="font-brush text-2xl text-yellow-400">
                           {auction.creditsUsed}
@@ -213,9 +212,9 @@ const AuctionInterface = () => {
 
                     <div className="flex items-center gap-2">
                       <span className="text-white">Credits Worth:</span>
-                      <div className={`font-bold flex gap-2 `}>
+                      <div className={`font-bold flex gap-2`}>
                         <CoinsLogo />{" "}
-                        <span className="font-brush text-2xl text-yellow-400">
+                        <span className="font-brush text-2xl accentColor">
                           {auction.creditsWorth}
                         </span>
                       </div>
@@ -223,9 +222,9 @@ const AuctionInterface = () => {
 
                     <div className="flex items-center gap-2">
                       <span className="text-white">CS Aura Worth:</span>
-                      <div className={`font-bold flex gap-2 `}>
+                      <div className={`font-bold flex gap-2`}>
                         <Logo />{" "}
-                        <span className="font-brush text-2xl text-yellow-400">
+                        <span className="font-brush text-2xl accentColor">
                           {auction.csAuraWorth}
                         </span>
                       </div>

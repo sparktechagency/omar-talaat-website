@@ -104,19 +104,19 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
   const getMedalIcon = (position) => {
     if (position === 1)
       return (
-        <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+        <div className="w-8 h-8  rounded-full flex items-center justify-center">
           <Image src="/assets/first.png" width={20} height={20} alt="First" />
         </div>
       );
     if (position === 2)
       return (
-        <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full flex items-center justify-center">
           <Image src="/assets/second.png" width={40} height={40} alt="Second" />
         </div>
       );
     if (position === 3)
       return (
-        <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center">
+        <div className="w-8 h-8  rounded-full flex items-center justify-center">
           <Image src="/assets/third.png" width={20} height={20} alt="Third" />
         </div>
       );

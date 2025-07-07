@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
+import Image from "next/image";
 
-const UpcomingAuctions = () => {
+const UpcomingAuctions = ({ setActiveTab }) => {
   const upcomingAuctions = [
     {
       id: 1,
@@ -14,12 +15,7 @@ const UpcomingAuctions = () => {
       creditsUsed: 235,
       creditsWorth: 1000,
       csAuraWorth: 92,
-      // startTime: {
-      //   days: 2,
-      //   hours: 5,
-      //   mins: 30,
-      //   secs: 45,
-      // },
+     
     },
     {
       id: 2,
@@ -29,12 +25,7 @@ const UpcomingAuctions = () => {
       available: false,
       membership: "normal",
       coins: 235,
-      // startTime: {
-      //   days: 1,
-      //   hours: 12,
-      //   mins: 15,
-      //   secs: 20,
-      // },
+    
     },
     {
       id: 3,
@@ -90,9 +81,9 @@ const UpcomingAuctions = () => {
 
     const getMembershipIcon = (membership) => {
       if (membership === "advanced") {
-        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#057199" />;
+        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#69CDFF" />;
       } else if (membership === "premium") {
-        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#FEF488" />;
+        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#DB9D17" />;
       }
       return null;
     };
@@ -149,6 +140,16 @@ const UpcomingAuctions = () => {
       return null;
     };
 
+    // Define border style based on membership
+    const getBorderStyle = () => {
+      if (auction.membership === "premium") {
+        return "border-2 border-[#DB9D17]"; // Updated premium color
+      } else if (auction.membership === "advanced") {
+        return "border-2 border-[#69CDFF]"; // Updated advanced color
+      }
+      return "border border-gray-700/50 hover:border-gray-600/50"; // Default border
+    };
+
     return (
       <div
         className={`relative group ${
@@ -156,13 +157,15 @@ const UpcomingAuctions = () => {
         }`}
         onClick={() => handleAuctionClick(auction)}
       >
-        <div className="backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
+        <div className={`backdrop-blur-sm rounded-2xl overflow-hidden ${getBorderStyle()} transition-all duration-300 hover:transform hover:scale-[1.02]`}>
           {/* Auction Image */}
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
-              <img
+              <Image
                 src={auction.image}
                 alt={auction.name}
+                height={300}
+                width={300}
                 onError={handleImageError}
                 className="w-full h-full object-cover transition-transform duration-500"
               />
@@ -176,10 +179,29 @@ const UpcomingAuctions = () => {
               </div>
             )}
 
+            {/* Membership Badge */}
+            {auction.membership && auction.membership !== "normal" && (
+              <div className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full ${
+                auction.membership === "premium" 
+                  ? "bg-[#DB9D17]/80 text-black" 
+                  : "bg-[#69CDFF]/80 text-white"
+              }`}>
+                {auction.membership === "premium" ? "Premium" : "Advanced"}
+              </div>
+            )}
+
             {/* View Auction Button for Available Auctions */}
             {auction.available && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <button className="bg-white text-black px-5 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                <button 
+                  className="bg-white text-black px-5 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (setActiveTab) {
+                      setActiveTab("my_auction");
+                    }
+                  }}
+                >
                   View Auction
                 </button>
               </div>
@@ -201,7 +223,7 @@ const UpcomingAuctions = () => {
                 </p>
                 {auction.coins && (
                   <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-1 px-3 rounded-full">
-                    <CoinsLogo className="w-5 h-5" />
+                    <CoinsLogo className="w-5 h-5 " />
                     <span className="text-white font-bold text-sm">
                       {auction.coins}
                     </span>
@@ -239,9 +261,11 @@ const UpcomingAuctions = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Auction Image */}
           <div className="relative">
-            <img
+            <Image
               src={selectedAuction.image}
               alt={selectedAuction.name}
+              height={300}
+              width={300}
               className="w-full aspect-square object-cover rounded-2xl"
             />
           </div>
@@ -261,13 +285,13 @@ const UpcomingAuctions = () => {
 
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <CoinsLogo className="w-5 h-5" />
+                  <CoinsLogo className="w-5 h-5 " />
                   <span className="text-white">
                     {selectedAuction.creditsUsed || 235}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CoinsLogo className="w-5 h-5" />
+                  <CoinsLogo className="w-5 h-5 " />
                   <span className="text-white">
                     {selectedAuction.creditsWorth || 1000}
                   </span>

@@ -99,9 +99,9 @@ const AllAuctions = ({ setActiveTab }) => {
 
     const getMembershipIcon = (membership) => {
       if (membership === "advanced") {
-        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#057199" />;
+        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#69CDFF" />;
       } else if (membership === "premium") {
-        return <MainLogo className="w-12 h-12 mx-auto mb-4" color="#FEF488" />;
+        return <MainLogo className="w-12 h-12 mx-auto mb-4" color="#DB9D17" />;
       }
       return null;
     };
@@ -191,6 +191,16 @@ const AllAuctions = ({ setActiveTab }) => {
       return null;
     };
 
+    // Define border style based on membership
+    const getBorderStyle = () => {
+      if (auction.membership === "premium") {
+        return "border-2 border-[#DB9D17]"; // Updated premium color
+      } else if (auction.membership === "advanced") {
+        return "border-2 border-[#69CDFF]"; // Updated advanced color
+      }
+      return "border border-gray-700/50 hover:border-gray-600/50"; // Default border
+    };
+
     return (
       <div
         className={`relative group ${
@@ -198,7 +208,7 @@ const AllAuctions = ({ setActiveTab }) => {
         }`}
         onClick={() => handleAuctionClick(auction)}
       >
-        <div className="backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
+        <div className={`backdrop-blur-sm rounded-2xl overflow-hidden ${getBorderStyle()} transition-all duration-300 hover:transform hover:scale-[1.02]`}>
           {/* Auction Image */}
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
@@ -217,6 +227,17 @@ const AllAuctions = ({ setActiveTab }) => {
                   <div className="text-6xl mb-2">🪸</div>
                   <p className="text-sm opacity-75">Coral Preview</p>
                 </div>
+              </div>
+            )}
+
+            {/* Membership Badge */}
+            {auction.membership && auction.membership !== "normal" && (
+              <div className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full ${
+                auction.membership === "premium" 
+                  ? "bg-[#DB9D17]/80 text-black" 
+                  : "bg-[#69CDFF]/80 text-white"
+              }`}>
+                {auction.membership === "premium" ? "Premium" : "Advanced"}
               </div>
             )}
 

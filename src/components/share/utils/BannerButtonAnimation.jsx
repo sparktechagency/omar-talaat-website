@@ -12,7 +12,7 @@ const BannerButtonAnimation = ({
 
   const sizeClasses = {
     sm: "w-8 h-6 text-sm",
-    md: "w-8 h-6 text-base",
+    md: "w-6 h-6 text-base",
     lg: "w-40 h-10 text-lg", // <-- fix button width & height here
     xl: "w-44 h-12 text-xl",
   };

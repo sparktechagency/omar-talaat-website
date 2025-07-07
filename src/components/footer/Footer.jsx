@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { FooterLogo, MainLogo } from "../share/svg/Logo";
 import { GoArrowRight } from "react-icons/go";
 import styles from "./footer.module.css"; // Import your CSS module
+import DoaFormModal from "../doaForm/DoaFormModal";
 
 export default function Footer() {
   return (
@@ -121,13 +122,18 @@ export default function Footer() {
 
           <div className="lg:col-span-1 text-center">
             <h3 className="text-lg font-semibold mb-4">Information Links</h3>
-            <div>
-              <Link
-                href="/doa-form"
-                className="block text-gray-300 hover:text-white transition-colors font-medium relative hover:underline decoration-2 underline-offset-4"
-              >
-                DOA Form
-              </Link>
+            <div className=" ">
+              <DoaFormModal 
+                showAcceptButton={false}
+                triggerComponent={
+                 <button
+  className="block w-full text-center text-gray-300 hover:text-white transition-colors font-medium relative hover:underline decoration-2 underline-offset-4 bg-transparent border-none p-0 cursor-pointer"
+>
+  DOA Form
+</button>
+
+                }
+              />
             </div>
           </div>
 

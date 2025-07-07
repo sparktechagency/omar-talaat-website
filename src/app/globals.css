@@ -86,8 +86,8 @@
   --text-primary:#191820;
   --font-dm-sans: 'DM Sans', sans-serif;
   --font-comforter-brush: 'Comforter Brush', cursive;
-  --premium: #eab308;
-  --advanced: #E8505B;
+  --premium: #DB9D17;
+  --advanced: #69CDFF;
   --normal: #fff;
   --card-bg: #181818
 
@@ -185,24 +185,24 @@ body {
 /* Normal user style */
 .user-normal {
   --user-bg: var(--normal);
-  --user-text: var(--text-primary);
-  --user-border: #cccccc;
-  --user-icon: #7c7c7c;
+  --user-text:#fff;
+  --user-border: #fff;
+  --user-icon: #fff;
 }
 
 /* Advanced user style */
 .user-advanced {
   --user-bg: var(--advanced);
-  --user-text: #fff;
-  --user-border: #E8505B;
-  --user-icon: #E8505B;
+  --user-text: #057199;
+  --user-border: #057199;
+  --user-icon: #057199;
 }
 
 /* Premium user style */
 .user-premium {
   --user-bg: var(--premium);
-  --user-text: #000;
-  --user-border: #eab308;
-  --user-icon: #eab308;
+  --user-text: #DB9D17;
+  --user-border: #DB9D17;
+  --user-icon: #DB9D17;
 }
 

@@ -17,13 +17,13 @@ const AuctionsContainer = () => {
   const renderActiveComponent = () => {
     switch (activeTab) {
       case "all":
-        return <AllAuctions />;
+        return <AllAuctions setActiveTab={setActiveTab} />;
       case "upcoming":
-        return <UpcomingAuctions />;
+        return <UpcomingAuctions setActiveTab={setActiveTab} />;
       case "my_auction":
         return <MyAuctions />;
       default:
-        return <AllAuctions />;
+        return <AllAuctions setActiveTab={setActiveTab} />;
     }
   };
 

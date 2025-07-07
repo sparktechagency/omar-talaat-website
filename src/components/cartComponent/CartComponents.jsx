@@ -5,6 +5,7 @@ import Image from "next/image";
 import Container from "../share/Container";
 import { Button } from "../ui/button";
 import styles from './cartComponent.module.css'
+import DoaFormModal from "../doaForm/DoaFormModal";
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([
@@ -605,9 +606,14 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Checkout Button */}
-                    <button className="w-full mt-9 border border-red-500 text-white py-3 lg:py-[10px] rounded-lg font-medium text-base lg:text-lg  transition-colors">
-                      Proceed To Checkout
-                    </button>
+                    <DoaFormModal 
+                      showAcceptButton={true}
+                      triggerComponent={
+                        <button className="w-full mt-9 border border-red-500 text-white py-3 lg:py-[10px] rounded-lg font-medium text-base lg:text-lg transition-colors">
+                          Proceed To Checkout
+                        </button>
+                      }
+                    />
                   </div>
                 </div>
               </div>
