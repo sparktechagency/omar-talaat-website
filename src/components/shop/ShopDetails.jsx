@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { CoinsLogo, Logo } from "../share/svg/Logo";
+import RelatedProducts from "./RelaventProducts";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
@@ -66,7 +67,7 @@ const ProductDetails = () => {
             {/* Main Image */}
             <div className="relative   rounded-2xl overflow-hidden border border-purple-500/20">
               <Image
-                src={productImages[selectedImage]}
+                src="/assets/category1.png"
                 alt="CS Purple Hornets Zoanthids"
                 height={747}
                 width={747}
@@ -199,70 +200,13 @@ const ProductDetails = () => {
               </p>
             </div>
 
-            {/* Care Instructions */}
-            {/* <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-white">
-                Care Instructions:
-              </h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div className="space-y-1">
-                  <p className="text-purple-400 font-medium">Lighting:</p>
-                  <p className="text-gray-300">Medium to High</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-purple-400 font-medium">Flow:</p>
-                  <p className="text-gray-300">Low to Medium</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-purple-400 font-medium">Difficulty:</p>
-                  <p className="text-gray-300">Beginner</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-purple-400 font-medium">Placement:</p>
-                  <p className="text-gray-300">Bottom to Middle</p>
-                </div>
-              </div>
-            </div> */}
+         
           </div>
         </div>
 
-        {/* You may also like section */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold text-white mb-8">
-            You may also like
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {relatedProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-gray-900 border border-gray-800 hover:border-purple-500/50 transition-all hover:scale-105 cursor-pointer group rounded-lg overflow-hidden"
-              >
-                <div className="p-4">
-                  <div className="aspect-square rounded-lg mb-4 relative overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                    <div className="absolute top-2 right-2">
-                      <button className="h-8 w-8 hover:bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-full flex items-center justify-center">
-                        <Heart className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                  <h3 className="font-medium text-white mb-2 line-clamp-2">
-                    {product.name}
-                  </h3>
-                  <p className="text-white opacity-50 italic">Cut to Order</p>
-                  <p className="text-xl font-bold  ml-2">
-                    AED {product.price}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      
+
+        <RelatedProducts />
       </div>
     </div>
   );

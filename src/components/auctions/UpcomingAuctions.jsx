@@ -140,19 +140,19 @@ const UpcomingAuctions = ({ setActiveTab }) => {
       return null;
     };
 
-    // Define border style based on membership
+    // Define border style based on membership with neon infinity effect
     const getBorderStyle = () => {
       if (auction.membership === "premium") {
-        return "border-2 border-[#DB9D17]"; // Updated premium color
+        return "border-[3px] border-[#DB9D17] neon-border-premium"; // Premium with neon effect
       } else if (auction.membership === "advanced") {
-        return "border-2 border-[#69CDFF]"; // Updated advanced color
+        return "border-[3px] border-[#69CDFF] neon-border-advanced"; // Advanced with neon effect
       }
       return "border border-gray-700/50 hover:border-gray-600/50"; // Default border
     };
 
     return (
       <div
-        className={`relative group ${
+        className={`relative group auction-card ${
           auction.available ? "cursor-pointer" : "cursor-default"
         }`}
         onClick={() => handleAuctionClick(auction)}

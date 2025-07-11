@@ -104,19 +104,19 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
   const getMedalIcon = (position) => {
     if (position === 1)
       return (
-        <div className="w-8 h-8  rounded-full flex items-center justify-center">
+        <div className="w-8 h-8  rounded-full flex items-center ">
           <Image src="/assets/first.png" width={20} height={20} alt="First" />
         </div>
       );
     if (position === 2)
       return (
-        <div className="w-8 h-8 rounded-full flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full flex items-center ">
           <Image src="/assets/second.png" width={40} height={40} alt="Second" />
         </div>
       );
     if (position === 3)
       return (
-        <div className="w-8 h-8  rounded-full flex items-center justify-center">
+        <div className="w-8 h-8  rounded-full flex items-center ">
           <Image src="/assets/third.png" width={20} height={20} alt="Third" />
         </div>
       );
@@ -126,11 +126,11 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-end z-50 px-4 mr-48 mt-16">
-          <div className="rounded-xl border bg-black p-5 w-[512px] overflow-hidden">
+        <div className="fixed inset-0  flex items-center justify-end z-50 px-4 mr-48 mt-8">
+          <div className="rounded-xl border  bg-black/70 p-5 w-[500px] overflow-hidden">
             {/* Header */}
-            <div className="bg-black text-white w-full px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center justify-center m-2 mx-auto px-4 py-2 rounded-2xl border space-x-1">
+            <div className=" text-white w-full px-6   flex items-center justify-between">
+              <div className="flex items-center justify-center mb-5 mx-auto px-4 py-2 rounded-md border space-x-1">
                 <Ranking className="w-6 h-6 text-yellow-400" />
                 <h2 className="text-xl font-semibold">Leaderboard</h2>
               </div>
@@ -143,16 +143,16 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
             </div>
 
             {/* Table Header */}
-            <div className="border text-white px-3 py-2">
+            <div className="border border-white/60 bg-[#181818] text-white px-3 py-2">
               <div className="grid grid-cols-12 gap-4 items-center text-[12px] font-medium">
                 <div className="col-span-1">Pos</div>
-                <div className="col-span-4">Name</div>
+                <div className="col-span-5">Name</div>
 
                 <div
-                  className="col-span-3 flex items-center space-x-1 cursor-pointer"
+                  className="col-span-2 flex items-center space-x- cursor-pointer"
                   onClick={() => handleSort("cmPoints")}
                 >
-                  <span>CM Points</span>
+                  <span>CMPoints</span>
                   <svg
                     className="w-3 h-3"
                     fill="currentColor"
@@ -205,12 +205,12 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
             </div>
 
             {/* Table Body */}
-            <div className="border text-white">
+            <div className="border border-white/60 bg-[#181818] text-white">
               {sortedLeaderboardData.map((user, index) => (
-                <div key={index} className="border last:border-b-0">
-                  <div className="grid grid-cols-12 gap-4 items-center px-6 py-2 transition-colors">
+                <div key={index} className="border-1 border-white/60 last:border-b-0">
+                  <div className="grid grid-cols-12 gap-4 items-center  px-2 py-2 transition-colors">
                     {/* Dynamic Position */}
-                    <div className="col-span-1 flex items-center">
+                    <div className="col-span-1 flex ">
                       {index + 1 <= 3 ? (
                         getMedalIcon(index + 1)
                       ) : (
@@ -222,28 +222,30 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
 
                     {/* Name + Avatar */}
                     <div className="col-span-5 flex items-center space-x-1">
-                      <div className="w-10 h-10 bg-gray-600 rounded-full overflow-hidden">
+                      <div className="w-8 h-8  rounded-full overflow-hidden">
                         <Image
                           src={user.avatar}
                           alt={user.name}
-                          height={20}
-                          width={20}
+                          height={32}
+                          width={32}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <span className="font-medium">{user.name}</span>
+                      <span className="font-bold text-[12px]">{user.name}</span>
                     </div>
 
                     {/* CM Points */}
                     <div className="col-span-2 flex items-center space-x-2">
-                      <CalenderLogo className="w-4 h-4 text-green-400 fill-green-400" />
-                      <span>{user.cmPoints}</span>
+                      <CalenderLogo className="w-3 h-3 text-green-400 fill-green-400 " />
+                      <span className="font-brush text-xl">{user.cmPoints}</span>
                     </div>
 
                     {/* Credits */}
                     <div className="col-span-2 flex items-center space-x-2">
-                      <CoinsLogo className="w-4 h-4 text-yellow-400" />
-                      <span className="text-yellow-400 font-medium">
+                     <div className="w-6 h-6 ">
+                     <CoinsLogo className="w-4 h-4 text-yellow-400" />
+                     </div>
+                      <span className="text-yellow-400 text-xl font-medium font-brush ml-2">
                         {user.credits}
                       </span>
                     </div>
@@ -251,7 +253,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                     {/* CS Aura */}
                     <div className="col-span-2 flex items-center space-x-2">
                       <Logo className="w-4 h-4 text-blue-400" />
-                      <span className="text-blue-400 font-medium">
+                      <span className="text-[#A2A2A2] font-medium text-xl font-brush">
                         {user.csAura}
                       </span>
                     </div>

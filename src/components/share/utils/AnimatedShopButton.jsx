@@ -6,22 +6,22 @@ const AnimatedShopButton = ({
   className = "",
   size = "lg",
   text = "Shop Now",
-  icon: CustomIcon = null, // Default icon set to null
+  icon: CustomIcon = null,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const sizeClasses = {
-    sm: "w-12 h-6 text-sm",
-    md: "w-14 h-8 text-base",
+    sm: "w-10 h-6 text-sm",
+    md: "w-12 h-8 text-base",
     lg: "w-16 h-10 text-lg",
     xl: "w-20 h-12 text-xl",
   };
 
   const expandedSizeClasses = {
-    sm: "w-32 px-6",
-    md: "w-36 px-7",
-    lg: "w-40 px-8",
-    xl: "w-44 px-9",
+    sm: "w-32 px-2",
+    md: "w-28 px-3",
+    lg: "w-40 px-4",
+    xl: "w-44 px-6",
   };
 
   return (
@@ -45,12 +45,12 @@ const AnimatedShopButton = ({
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
-      {/* Conditionally render the icon if passed as a prop */}
+      {/* Conditionally render the icon */}
       {CustomIcon && (
         <CustomIcon
           className={`
             transition-all duration-500 ease-in-out
-            ${isHovered ? "mr-2 scale-90" : "scale-100"}
+            ${isHovered ? "opacity-0 scale-0" : "opacity-100 scale-100"}
           `}
           size={size === "sm" ? 16 : size === "md" ? 18 : size === "lg" ? 20 : 24}
         />
@@ -67,7 +67,7 @@ const AnimatedShopButton = ({
         {text}
       </span>
 
-      {/* Ripple effect on hover */}
+      {/* Ripple effect */}
       <div
         className={`
           absolute inset-0 rounded-full

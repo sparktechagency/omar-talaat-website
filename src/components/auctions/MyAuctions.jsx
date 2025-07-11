@@ -120,13 +120,13 @@ const AuctionInterface = () => {
         return {
           cardBg: "#057199",
           accentColor: "text-purple-400",
-          gradientBorder: "border-2 border-[#69CDFF]",
+          gradientBorder: "border-[3px] border-[#69CDFF] neon-border-advanced rounded-lg",
         };
       case "premium":
         return {
           cardBg: "bg-gradient-to-br from-yellow-900/30 to-orange-900/30",
           accentColor: "text-yellow-400",
-          gradientBorder: "border-2 border-[#DB9D17]",
+          gradientBorder: "border-[3px] border-[#DB9D17] neon-border-premium rounded-lg",
         };
       default:
         return {
@@ -204,7 +204,7 @@ const AuctionInterface = () => {
                       <span className="text-white">Credits Used:</span>
                       <div className={`font-bold flex gap-2`}>
                         <CoinsLogo />{" "}
-                        <span className="font-brush text-2xl text-yellow-400">
+                        <span className="font-brush text-2xl text-[#DB9D17]">
                           {auction.creditsUsed}
                         </span>
                       </div>
@@ -214,7 +214,7 @@ const AuctionInterface = () => {
                       <span className="text-white">Credits Worth:</span>
                       <div className={`font-bold flex gap-2`}>
                         <CoinsLogo />{" "}
-                        <span className="font-brush text-2xl accentColor">
+                        <span className="font-brush text-2xl text-[#DB9D17]">
                           {auction.creditsWorth}
                         </span>
                       </div>
@@ -224,7 +224,7 @@ const AuctionInterface = () => {
                       <span className="text-white">CS Aura Worth:</span>
                       <div className={`font-bold flex gap-2`}>
                         <Logo />{" "}
-                        <span className="font-brush text-2xl accentColor">
+                        <span className="font-brush text-2xl text-[#DB9D17]">
                           {auction.csAuraWorth}
                         </span>
                       </div>

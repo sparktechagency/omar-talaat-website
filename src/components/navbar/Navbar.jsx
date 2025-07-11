@@ -28,6 +28,7 @@ export default function Navbar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
+  const [mobileMenubarOpen, setMobileMenubarOpen] = useState(false);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isShopHovered, setIsShopHovered] = useState(false); // New state for shop dropdown
@@ -193,7 +194,7 @@ export default function Navbar() {
                     onKeyPress={handleKeyPress}
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() => setIsSearchFocused(false)}
-                    className="bg-transparent  text-white placeholder-white/60  outline-none w-[600px]"
+                    className="bg-transparent  text-white placeholder-white/60  outline-none md:w-[600px] w-[200px]"
                   />
                 </div>
               </form>
@@ -223,7 +224,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-4 text-sm">
               {/* Calendar Icon with number */}
               <div className="flex items-center space-x-1">
-                <div className="hover:scale-115">
+                <div className="hover:scale-125">
                   <CalenderLogo />
                 </div>
                 <span className="text-white text-4xl font-brush drop-shadow-lg">
@@ -233,7 +234,7 @@ export default function Navbar() {
 
               {/* Coral Icon with number */}
               <div className="flex items-center space-x-1">
-                <div className="hover:scale-115">
+                <div className="hover:scale-125">
                   <Logo />
                 </div>
                 <span className="text-white font-brush text-4xl drop-shadow-lg">
@@ -243,7 +244,7 @@ export default function Navbar() {
 
               {/* Coin Icon with number - Show directly on large devices */}
               <div className="flex items-center space-x-1">
-                <div className="hover:scale-115">
+                <div className="hover:scale-125">
                   <CoinsLogo />
                 </div>
                 <span className="text-white font-brush text-4xl drop-shadow-lg">
@@ -255,7 +256,7 @@ export default function Navbar() {
             {/* Coin Icon with tooltip - Show only on mobile */}
             <div className="relative group md:hidden">
               <button className="flex items-center space-x-1">
-                <div className="hover:scale-115">
+                <div className="hover:scale-125">
                   <CoinsLogo />
                 </div>
               </button>
@@ -285,7 +286,7 @@ export default function Navbar() {
                 src="/assets/image 10.png"
                 height={55}
                 width={55}
-                className="drop-shadow-lg hover:scale-115"
+                className="drop-shadow-lg hover:scale-125"
                 alt="Cart Icon"
               />
             </Link>
@@ -293,7 +294,7 @@ export default function Navbar() {
             {/* Profile Dropdown */}
             <div className="relative profile-menu">
               <button
-                className="text-xl flex items-center cursor-pointer justify-center w-8 h-8 text-white hover:text-white/80 transition-colors duration-300"
+                className="text-xl flex items-center cursor-pointer justify-center w-[55px] h-[55px] text-white hover:scale-125 hover:text-white/80 transition-colors duration-300"
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
               >
                 <MyProfile />
@@ -403,9 +404,9 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden text-xl flex items-center justify-center w-8 h-8 ml-2 text-white hover:text-white/80 transition-colors duration-300"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setMobileMenubarOpen(!mobileMenubarOpen)}
             >
-              {isOpen ? (
+              {mobileMenubarOpen ? (
                 <AiOutlineClose className="text-white drop-shadow-lg" />
               ) : (
                 <FiMenu className="text-white drop-shadow-lg" />
@@ -415,7 +416,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        {isOpen && (
+          {mobileMenubarOpen && (
           <div className="lg:hidden backdrop-blur-md bg-black/40 border-t border-white/20 text-white">
             {/* Mobile Navigation Links */}
             <ul className="p-4 space-y-3">
@@ -455,7 +456,7 @@ export default function Navbar() {
         isShopHovered={isShopHovered}
         setIsShopHovered={setIsShopHovered}
       />
-      <LeaderboardModal isOpen={isOpen} setIsOpen={setIsOpen} />
+          <LeaderboardModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 }

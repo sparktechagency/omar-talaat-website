@@ -206,3 +206,49 @@ body {
   --user-icon: #DB9D17;
 }
 
+/* Neon Border Effect for Premium - Enhanced Intensity */
+.neon-border-premium {
+  position: relative;
+  box-shadow: 0 0 3px #DB9D17, 0 0 6px #DB9D17, 0 0 12px rgba(219, 157, 23, 0.7);
+  z-index: 1;
+  border: 3px solid #DB9D17 !important;
+  animation: premiumBorderPulse 1.5s infinite alternate;
+}
+
+@keyframes premiumBorderPulse {
+  0% {
+    box-shadow: 0 0 3px #DB9D17, 0 0 6px #DB9D17;
+  }
+  100% {
+    box-shadow: 0 0 4px #DB9D17, 0 0 12px #DB9D17, 0 0 16px rgba(219, 157, 23, 0.8);
+  }
+}
+
+/* Neon Border Effect for Advanced - Enhanced Intensity */
+.neon-border-advanced {
+  position: relative;
+  box-shadow: 0 0 4px #69CDFF, 0 0 7px #69CDFF, 0 0 12px rgba(105, 205, 255, 0.7);
+  z-index: 1;
+  border: 3px solid #69CDFF !important;
+  animation: advancedBorderPulse 1.5s infinite alternate;
+}
+
+@keyframes advancedBorderPulse {
+  0% {
+    box-shadow: 0 0 3px #69CDFF, 0 0 6px #69CDFF;
+  }
+  100% {
+    box-shadow: 0 0 6px #69CDFF, 0 0 12px #69CDFF, 0 0 16px rgba(105, 205, 255, 0.8);
+  }
+}
+
+@keyframes neonBorderSpin {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 200%;
+  }
+}
+
+

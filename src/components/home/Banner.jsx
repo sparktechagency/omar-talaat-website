@@ -162,7 +162,7 @@ const Banner = () => {
           </p>
 
           {/* Animated Shop Button */}
-          <div>
+          <div className="h-20">
             <BannerButtonAnimation
               onClick={handleShopClick}
               size="md"
@@ -219,7 +219,7 @@ const Banner = () => {
             {discountOffers.map((offer) => (
               <div
                 key={offer.id}
-                className="flex items-center justify-between pr-10 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 h-[67px] py-4"
+                className="flex items-center justify-between pr-10 backdrop-blur-[5px] bg-black/30 border-2 border-white/50 rounded-full px-6 h-[67px] py-4"
               >
                 <span className="text-white font-medium">{offer.title}</span>
 

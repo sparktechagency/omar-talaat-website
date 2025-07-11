@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MainLogo } from '../share/svg/Logo';
+import LeaderboardModal from "../navbar/LeaderBoard";
 
 // Profile Tab Component with Scrolling
 const ProfileTab = () => {
@@ -202,38 +203,11 @@ const ChangePasswordTab = () => {
 
 // Leaderboard Tab Component
 const LeaderboardTab = () => {
-  const leaderboardData = [
-    { rank: 1, username: "TopPlayer", score: 2500 },
-    { rank: 2, username: "ProGamer", score: 2350 },
-    { rank: 3, username: "ChampionX", score: 2200 },
-    { rank: 4, username: "Emily Jane", score: 1980 },
-    { rank: 5, username: "GameMaster", score: 1850 },
-  ];
+const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="space-y-4">
-      <h3 className="text-xl font-semibold text-white mb-6">Leaderboard</h3>
-      <div className="space-y-3">
-        {leaderboardData.map((player) => (
-          <div
-            key={player.rank}
-            className={`flex items-center justify-between p-4 rounded-lg border ${player.username === "Emily Jane"
-              ? "border-blue-500 bg-blue-500/10"
-              : "border-gray-600 bg-gray-800/50"
-              }`}
-          >
-            <div className="flex items-center space-x-4">
-              <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold">
-                {player.rank}
-              </div>
-              <span className="text-white font-medium">{player.username}</span>
-            </div>
-            <div className="text-gray-300 font-semibold">
-              {player.score.toLocaleString()} pts
-            </div>
-          </div>
-        ))}
-      </div>
+      <LeaderboardModal isOpen={isOpen} setIsOpen={setIsOpen}/>
     </div>
   );
 };

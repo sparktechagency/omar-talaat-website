@@ -86,7 +86,7 @@ const ShopCategory = () => {
     },
   ];
 
-  const visibleCount = Math.min(9, minerals.length);
+  const visibleCount = Math.min(4, minerals.length);
   const maxIndex = Math.max(0, minerals.length - visibleCount);
 
   // Auto-play functionality
@@ -116,89 +116,118 @@ const ShopCategory = () => {
     <div className="container w-full mx-auto bg-black my-20 flex flex-col justify-center">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-4  bg-clip-text ">
           Shop Categories
         </h1>
       </div>
 
-      {/* Main Slider Container */}
-      <div className="relative">
-        {/* Navigation Buttons */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 rounded-full p-3 transition-all duration-300 backdrop-blur-sm border border-white/20"
-        >
-          <ChevronLeft className="w-6 h-6 text-white" />
-        </button>
-
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 rounded-full p-3 transition-all duration-300 backdrop-blur-sm border border-white/20"
-        >
-          <ChevronRight className="w-6 h-6 text-white" />
-        </button>
-
-        {/* Slider Track */}
-        <div className="overflow-hidden rounded-2xl">
-          <div
-            className="flex transition-transform duration-500 ease-out gap-6 px-16 py-10"
-            style={{
-              transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
-              width: `${(minerals.length / visibleCount) * 100}%`,
-            }}
+      {/* Slider for Small/Medium Devices */}
+      <div className="lg:hidden">
+        {/* Main Slider Container */}
+        <div className="relative">
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 rounded-full p-3 transition-all duration-300 backdrop-blur-sm border border-white/20"
           >
-            {minerals.map((mineral, index) => (
-              <div
-                key={mineral.id}
-                className="flex-shrink-0 relative group cursor-pointer"
-                style={{ width: `${100 / minerals.length}%` }}
-                onClick={() => goToSlide(index)}
-              >
-                {/* Mineral Card */}
-                <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
-                  <Image
-                    src={mineral.image}
-                    alt={mineral.name}
-                    height={130}
-                    width={130}
-                    className="absolute inset-0 object-cover transition-all duration-300 group-hover:scale-125"
-                  />
-                </div>
+            <ChevronLeft className="w-6 h-6 text-white" />
+          </button>
 
-                {/* Title */}
-                <h3 className="text-white font-semibold text-xs truncate mt-2 text-center">
-                  {mineral.name}
-                </h3>
-              </div>
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 rounded-full p-3 transition-all duration-300 backdrop-blur-sm border border-white/20"
+          >
+            <ChevronRight className="w-6 h-6 text-white" />
+          </button>
+
+          {/* Slider Track */}
+          <div className="overflow-hidden rounded-2xl">
+            <div
+              className="flex transition-transform duration-500 ease-out gap-6 px-16 py-10"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
+                width: `${(minerals.length / visibleCount) * 100}%`,
+              }}
+            >
+              {minerals.map((mineral, index) => (
+                <div
+                  key={mineral.id}
+                  className="flex-shrink-0 relative group cursor-pointer"
+                  style={{ width: `${100 / minerals.length}%` }}
+                  onClick={() => goToSlide(index)}
+                >
+                  {/* Mineral Card */}
+                  <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
+                    <Image
+                      src={mineral.image}
+                      alt={mineral.name}
+                      height={130}
+                      width={130}
+                      className="absolute inset-0 object-cover transition-all duration-300 group-hover:scale-125"
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-white font-semibold text-xs truncate mt-2 text-center">
+                    {mineral.name}
+                  </h3>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-center mt-8 gap-6">
+          {/* Dots Indicator */}
+          <div className="flex gap-2">
+            {[...Array(maxIndex + 1)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  currentIndex === index
+                    ? "bg-cyan-400 shadow-lg shadow-cyan-400/50"
+                    : "bg-white/30 hover:bg-white/50"
+                }`}
+              />
             ))}
           </div>
+
+          {/* Auto-play Toggle */}
+          <button
+            onClick={() => setIsAutoPlay(!isAutoPlay)}
+            className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm transition-all duration-300 backdrop-blur-sm border border-white/20"
+          >
+            {isAutoPlay ? "Pause" : "Play"}
+          </button>
         </div>
       </div>
 
-      {/* Controls */}
-      <div className="flex items-center justify-center mt-8 gap-6">
-        {/* Dots Indicator */}
-        <div className="flex gap-2">
-          {[...Array(maxIndex + 1)].map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                currentIndex === index
-                  ? "bg-cyan-400 shadow-lg shadow-cyan-400/50"
-                  : "bg-white/30 hover:bg-white/50"
-              }`}
-            />
-          ))}
-        </div>
+      {/* Grid Layout for Large Devices */}
+      <div className="hidden lg:grid lg:grid-cols-11 gap-6 px-4">
+        {minerals.map((mineral) => (
+          <div
+            key={mineral.id}
+            className="flex flex-col items-center cursor-pointer group"
+          >
+            {/* Mineral Card */}
+            <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
+              <Image
+                src={mineral.image}
+                alt={mineral.name}
+                height={130}
+                width={130}
+                className="absolute inset-0 object-cover transition-all duration-300 group-hover:scale-125"
+              />
+            </div>
 
-        {/* Auto-play Toggle */}
-        <button
-          onClick={() => setIsAutoPlay(!isAutoPlay)}
-          className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm transition-all duration-300 backdrop-blur-sm border border-white/20"
-        >
-          {isAutoPlay ? "Pause" : "Play"}
-        </button>
+            {/* Title */}
+            <h3 className="text-white font-semibold text-sm truncate mt-2 text-center">
+              {mineral.name}
+            </h3>
+          </div>
+        ))}
       </div>
     </div>
   );
