@@ -45,7 +45,7 @@ export const imageVariants = {
 export const cartIconVariants = {
   hidden: {
     opacity: 0,
-    y: 10,
+    y: 15,
   },
   visible: {
     opacity: 1,

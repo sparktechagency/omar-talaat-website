@@ -4,8 +4,10 @@ import { Minus, Plus, Edit3, Trash2, Calendar, Clock } from "lucide-react";
 import Image from "next/image";
 import Container from "../share/Container";
 import { Button } from "../ui/button";
-import styles from './cartComponent.module.css'
+import styles from "./cartComponent.module.css";
 import DoaFormModal from "../doaForm/DoaFormModal";
+import { MdOutlineModeEdit } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([
@@ -13,7 +15,7 @@ const CheckoutPage = () => {
       id: 1,
       name: "CS Purple Hornets Zenithids",
       description:
-        "Extra color, bring the food and everything, We recommend a spelling level of 2 meals. Spicy delivery Res Hams...",
+        "Extra color, bring the food and everything, We recommend a spelling level of 2 meals. Spicy delivery Res HamsExtra color, bring the food and everything, We recommend a spelling level of 2 meals. Spicy delivery Res Hams ...",
       price: 99,
       quantity: 1,
       image: "/assets/category1.png",
@@ -40,7 +42,6 @@ const CheckoutPage = () => {
   const currentDate = new Date();
   const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth());
   const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear());
-
 
   const monthNames = [
     "January",
@@ -74,6 +75,30 @@ const CheckoutPage = () => {
   for (let day = 1; day <= daysInMonth; day++) {
     calendarDays.push(day);
   }
+
+  // Description truncation logic with "See More/See Less"
+  const DescriptionWithToggle = ({ description }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const truncatedDescription = description.slice(0, 100);
+    const fullDescription = description;
+
+    return (
+      <div className="relative ">
+        <p className="text-xs lg:text-sm  mb-2 ">
+          {isExpanded ? fullDescription : truncatedDescription}
+          ...
+          {description.length > 100 && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="font-bold  hover:underline"
+            >
+              {isExpanded ? "See Less" : "See More"}
+            </button>
+          )}
+        </p>
+      </div>
+    );
+  };
 
   // Navigation functions
   const goToPreviousMonth = () => {
@@ -150,7 +175,9 @@ const CheckoutPage = () => {
           <div className="lg:col-span-12 space-y-6 lg:space-y-8">
             {/* Cart Items */}
             <div className="space-y-4">
-              <h2 className="text-lg font-medium lg:text-xl">Your Order</h2>
+              <div className="opacity-15">
+                <hr className="" />
+              </div>
               <div className="space-y-4">
                 {cartItems.map((item) => (
                   <div key={item.id} className="space-y-3">
@@ -174,9 +201,9 @@ const CheckoutPage = () => {
                             {item.name}
                           </h3>
                           {/* Description */}
-                          <p className="text-xs lg:text-sm text-gray-400 mb-2">
-                            {item.description}
-                          </p>
+                          <DescriptionWithToggle
+                            description={item.description}
+                          />
                         </div>
                       </div>
 
@@ -185,7 +212,7 @@ const CheckoutPage = () => {
                           {/* Quantity controls */}
                           <button
                             onClick={() => updateQuantity(item.id, -1)}
-                            className="w-6 h-6 lg:w-8 lg:h-8  rounded-full flex items-center justify-center hover: transition-colors"
+                            className="w-6 h-6 lg:w-8 lg:h-8 cursor-pointer rounded-full flex items-center justify-center hover: transition-colors"
                           >
                             <Minus size={12} className="lg:w-4 lg:h-4" />
                           </button>
@@ -194,7 +221,7 @@ const CheckoutPage = () => {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, 1)}
-                            className="w-6 h-6 lg:w-8 lg:h-8  rounded-full flex items-center justify-center hover: transition-colors"
+                            className="w-6 h-6 lg:w-8 lg:h-8 cursor-pointer rounded-full flex items-center justify-center hover: transition-colors"
                           >
                             <Plus size={12} className="lg:w-4 lg:h-4" />
                           </button>
@@ -203,7 +230,7 @@ const CheckoutPage = () => {
                         <div className="flex items-center space-x-2 lg:space-x-3">
                           {/* Price - now shows total for this item */}
                           <div>
-                            <span className="font-medium lg:text-lg">
+                            <span className="font-medium lg:text-3xl">
                               ${item.price * item.quantity}
                             </span>
                           </div>
@@ -211,22 +238,28 @@ const CheckoutPage = () => {
 
                         {/* Edit button */}
                         <div className="flex items-center space-x-2 lg:space-x-3">
-                          <button className="text-gray-400 hover:text-white transition-colors">
-                            <Edit3 size={14} className="lg:w-5 lg:h-5" />
+                          <button className="cursor-pointer transition-colors">
+                            <MdOutlineModeEdit
+                              size={24}
+                              className="lg:w-7 lg:h-7"
+                            />
                           </button>
 
                           {/* Delete button */}
                           <button
                             onClick={() => removeItem(item.id)}
-                            className="text-gray-400 hover:text-red-400 transition-colors"
+                            className=" cursor-pointer transition-colors"
                           >
-                            <Trash2 size={14} className="lg:w-5 lg:h-5" />
+                            <RxCross2 size={24} className="lg:w-7 lg:h-7" />
                           </button>
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="opacity-15">
+                <hr className="" />
               </div>
             </div>
 
@@ -236,9 +269,9 @@ const CheckoutPage = () => {
                 {/* Optional heading and progress value */}
               </div>
 
-              <div className="w-full bg-gray-700 rounded-full h-3 mb-2">
+              <div className="w-full border rounded-full h-[30px] mb-2">
                 <div
-                  className="bg-white h-3 rounded-full transition-all duration-500"
+                  className="bg-white h-[28px] rounded-full transition-all duration-500"
                   style={{ width: `${progressPercentage}%` }}
                 ></div>
               </div>
@@ -248,13 +281,15 @@ const CheckoutPage = () => {
                   🎉 Congratulations! You've qualified for free delivery!
                 </p>
               ) : (
-                <p className=" text-sm">
-                  Spend 
-                  <span className="transition-all duration-300 group-hover:font-bold group-hover:text-xl">
-                    AED ${remainingAmount}
+                <div className="flex gap-2">
+                  <p className="text-sm flex h-6">
+                  Spend{" "}
+                  <span className=" w-20  ml-2 transition-all duration-300 group-hover:font-bold group-hover:text-[16px] ">
+                     AED ${remainingAmount}
                   </span>{" "}
                   more and get free shipping! (Free shipping is from AED 1000).
                 </p>
+                </div>
               )}
             </div>
 
@@ -469,9 +504,7 @@ const CheckoutPage = () => {
             </div>
 
             <div className="flex justify-center items-center space-y-7 mt-16">
-              <div
-                className={`w-24 h-24 lg:w-36 lg:h-36 `}
-              >
+              <div className={`w-24 h-24 lg:w-36 lg:h-36 `}>
                 <div className={styles.imageWithBubbles}>
                   <Image
                     src="/assets/image 10.png"
@@ -606,7 +639,7 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Checkout Button */}
-                    <DoaFormModal 
+                    <DoaFormModal
                       showAcceptButton={true}
                       triggerComponent={
                         <button className="w-full mt-9 border border-red-500 text-white py-3 lg:py-[10px] rounded-lg font-medium text-base lg:text-lg transition-colors">
@@ -625,10 +658,4 @@ const CheckoutPage = () => {
   );
 };
 
-
-
 export default CheckoutPage;
-
-
-
-
