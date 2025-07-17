@@ -265,7 +265,7 @@ const CheckoutPage = () => {
 
             {/* Overall Progress Bar */}
             <div className="group">
-              <div className="flex justify-between items-center mb-3">
+              <div className="flex justify-between items-center mb-10">
                 {/* Optional heading and progress value */}
               </div>
 
@@ -283,45 +283,44 @@ const CheckoutPage = () => {
               ) : (
                 <div className="flex gap-2">
                   <p className="text-sm flex h-6">
-                  Spend{" "}
-                  <span className=" w-20  ml-2 transition-all duration-300 group-hover:font-bold group-hover:text-[16px] ">
-                     AED ${remainingAmount}
-                  </span>{" "}
-                  more and get free shipping! (Free shipping is from AED 1000).
-                </p>
+                    Spend{" "}
+                    <span className=" w-20  ml-2 transition-all duration-300 group-hover:font-bold group-hover:text-[16px] ">
+                      AED ${remainingAmount}
+                    </span>{" "}
+                    more and get free shipping! (Free shipping is from AED
+                    1000).
+                  </p>
                 </div>
               )}
             </div>
 
-            {/* Promo Code */}
-            <div>
-              <h2 className="text-lg font-medium lg:text-xl mb-4">
-                Promo Code
-              </h2>
-              <div className="flex space-x-6 w-1/2">
-                <input
-                  type="text"
-                  placeholder="Enter promo code"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  className="flex-1  rounded-lg  border px-3 py-2 lg:px-4 lg:py-3 text-sm lg:text-base text-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-                <button className="border  text-white px-4 py-2 lg:px-6 lg:py-3 rounded-lg font-medium transition-colors">
-                  Apply Promo Code
-                </button>
-              </div>
-            </div>
-
             {/* Delivery Options */}
-            <div className="flex gap-20 justify-between w-full">
-              <div className="w-3/5">
+            <div className="flex gap-32 justify-between w-full ">
+              <div className="w-5/8">
+                {/* Promo Code */}
+                <div className="mb-10">
+            
+                  <div className="flex space-x-6 w-3/5">
+                    <input
+                      type="text"
+                      placeholder="Enter promo code"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value)}
+                      className="flex-1  rounded-full  border px-3 py-1 lg:px-4 lg:py-2 text-sm lg:text-base text-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    />
+                    <button className="border  text-white px-4 py-1 lg:px-6 lg:py-2 rounded-lg font-medium transition-colors">
+                      Apply Promo Code
+                    </button>
+                  </div>
+                </div>
+
                 <h2 className="text-lg font-medium lg:text-xl mb-4">
                   Delivery Options
                 </h2>
                 <div className="space-y-4">
-                  <div className="space-y-6 mb-8">
+                  <div className="space-y-5 mb-8">
                     {/* Radio Buttons */}
-                    <label className="flex items-center space-x-3 border  rounded-lg p-3 lg:p-4 cursor-pointer  transition-colors">
+                    <label className="flex items-center space-x-3 border  rounded-2xl p-3 lg:p-5 cursor-pointer  transition-colors">
                       <input
                         type="radio"
                         name="delivery"
@@ -338,7 +337,7 @@ const CheckoutPage = () => {
                       </span>
                     </label>
 
-                    <label className="flex items-center space-x-3 border  rounded-lg p-3 lg:p-4 cursor-pointer  transition-colors">
+                    <label className="flex items-center space-x-3 border  rounded-2xl p-3 lg:p-5 cursor-pointer  transition-colors">
                       <input
                         type="radio"
                         name="delivery"
@@ -390,11 +389,13 @@ const CheckoutPage = () => {
                           id="orderNumber"
                           value={orderNumber}
                           onChange={(e) => setOrderNumber(e.target.value)}
-                          className="w-full mt-2 border  text-white rounded-lg p-2 lg:p-3 text-sm lg:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          className="w-full mt-[10px] border  text-white rounded-lg p-2 lg:p-2 text-sm lg:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                           placeholder="Enter your previous order number"
                         />
 
-                        <Button className="h-12 px-8">Submit</Button>
+                        <Button className="h-[42px] px-10 mt-[10px]">
+                          Submit
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -402,7 +403,7 @@ const CheckoutPage = () => {
               </div>
 
               {/* Calendar */}
-              <div className="w-2/5">
+              <div className="w-3/8">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-medium lg:text-xl">
                     Select Delivery Date
@@ -432,7 +433,7 @@ const CheckoutPage = () => {
                       (day) => (
                         <div
                           key={day}
-                          className="text-center text-xs lg:text-lg font-bold py-2"
+                          className="text-center text-xs lg:text-lg font-bold py-3"
                         >
                           {day}
                         </div>
@@ -443,7 +444,7 @@ const CheckoutPage = () => {
                       <button
                         key={index}
                         onClick={() => day && setSelectedDate(day)}
-                        className={`h-8 lg:h-10 text-xs lg:text-sm rounded border-2 font-bold transition-colors ${
+                        className={`h-8 lg:h-10  text-xs lg:text-sm rounded border-2 font-bold transition-colors ${
                           day
                             ? day === selectedDate
                               ? "bg-white text-black"

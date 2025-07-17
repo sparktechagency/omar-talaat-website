@@ -1,225 +1,366 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { CalenderLogo, CoinsLogo, Logo, MainLogo } from "../share/svg/Logo";
 
-const ShopCategories = () => {
+const AllCategories = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsToShow, setItemsToShow] = useState(5);
-   const router = useRouter();
-   
-  const images = [
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [isVaultUnlocked, setIsVaultUnlocked] = useState(false);
+  const [showVaultModal, setShowVaultModal] = useState(false);
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+
+  // Available images to cycle through
+  const availableImages = [
+    "/assets/category1.png",
+    "/assets/category11.png",
+    "/assets/category12.png",
+    "/assets/category4.png",
+  ];
+
+  // Mineral data with images
+  const minerals = [
     {
       id: 1,
-      src: "/assets/category3.png",
-      alt: "Coral Reef Aquarium",
-      title: "Coral Reef",
+      name: "All Coral",
+      image: availableImages[0],
+      description: "Browse all available coral types",
     },
     {
       id: 2,
-      src: "/assets/category2.png",
-      alt: "Underwater Landscape",
-      title: "Ocean Depths",
+      name: "Zoanthids",
+      image: availableImages[1],
+      description: "Colorful colonial marine organisms",
     },
     {
       id: 3,
-      src: "/assets/category1.png",
-      alt: "Aquatic Plants",
-      title: "Sea Flora",
+      name: "SPS",
+      image: availableImages[1],
+      description: "Small Polyp Stony corals with intricate structures",
     },
     {
       id: 4,
-      src: "/assets/category6.png",
-      alt: "Marine Ecosystem",
-      title: "Marine Life",
+      name: "LPS",
+      image: availableImages[2],
+      description: "Large Polyp Stony corals with flowing tentacles",
     },
     {
       id: 5,
-      src: "/assets/category3.png",
-      alt: "Tropical Waters",
-      title: "Tropical Zone",
+      name: "Acropora",
+      image: availableImages[0],
+      description: "Fast-growing branching SPS corals",
     },
     {
       id: 6,
-      src: "/assets/category8.png",
-      alt: "Aquarium Setup",
-      title: "Aquascaping",
-   
+      name: "Montipora",
+      image: availableImages[1],
+      description: "Plating and encrusting SPS corals",
     },
     {
       id: 7,
-      src: "/assets/category4.png",
-      alt: "Blue Waters",
-      title: "Blue Depths",
+      name: "Soft Corals",
+      image: availableImages[2],
+      description: "Flexible corals that sway with the current",
     },
     {
       id: 8,
-      src: "/assets/category1.png",
-      alt: "Water Garden",
-      title: "Water Garden",
+      name: "Anemones",
+      image: availableImages[3],
+      description: "Sea anemones and related species",
     },
     {
       id: 9,
-      src: "/assets/category2.png",
-      alt: "Ocean Floor",
-      title: "Ocean Floor",
+      name: "WYSIWYG",
+      image: availableImages[0],
+      description: "What You See Is What You Get specimens",
     },
     {
       id: 10,
-      src: "/assets/category4.png",
-      alt: "Reef Habitat",
-      title: "Reef Habitat",
+      name: "Zoanth",
+      image: availableImages[1],
+      description: "Premium zoanthid collections",
     },
     {
       id: 11,
-      src: "/assets/category2.png",
-      alt: "Ocean Floor",
-      title: "Ocean Floor",
-    },
-    {
-      id: 12,
-      src: "/assets/category5.png",
-      alt: "Reef Habitat",
-      title: "Reef Habitat",
+      name: "The Vault",
+      image: availableImages[2],
+      description: "Rare and exclusive coral specimens",
+      isLocked: true,
     },
   ];
 
-  // Handle responsive items to show
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setItemsToShow(4); // Mobile: 2 items
-      } else if (window.innerWidth < 1024) {
-        setItemsToShow(6); // Tablet: 3 items
-      } else {
-        setItemsToShow(8); // Desktop: 5 items
-      }
-    };
+  const visibleCount = 4;
+  const maxIndex = Math.floor(minerals.length / visibleCount + 2);
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // Auto-play functionality
+  useEffect(() => {
+    if (!isAutoPlay) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlay, maxIndex]);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex + itemsToShow >= images.length ? 0 : prevIndex + 1
-    );
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? Math.max(0, images.length - itemsToShow) : prevIndex - 1
-    );
-  };
-  const handleProductClick = (category) => {
-    router.push(`/category/${category.id}`);
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
   };
 
-  const canGoPrev = currentIndex > 0;
-  const canGoNext = currentIndex + itemsToShow < images.length;
+  const goToSlide = (index) => {
+    setCurrentIndex(Math.min(index, maxIndex));
+  };
 
-  return (
-    <div className="container mx-auto  py-8 ">
-      <h2 className="text-center text-3xl font-bold mb-6">All Categories</h2>
-      <div className="relative">
-        {/* Navigation Buttons */}
+  const handleCategoryClick = (mineral) => {
+    if (mineral.isLocked && !isVaultUnlocked) {
+      setShowVaultModal(true);
+      // Reset password state when opening modal
+      setPassword("");
+      setPasswordError("");
+      return;
+    }
+    
+    // Normal category navigation
+    // router.push(`/category/${mineral.id}`);
+    console.log(`Navigating to category: ${mineral.name}`);
+  };
+
+  const handlePasswordSubmit = () => {
+    // For demo purposes, any password will unlock the vault
+    if (password.trim() !== "") {
+      setIsVaultUnlocked(true);
+      setShowVaultModal(false);
+      setPassword("");
+      setPasswordError("");
+    } else {
+      setPasswordError("Please enter a password.");
+    }
+  };
+
+  const closeModal = () => {
+    setShowVaultModal(false);
+    setPassword("");
+    setPasswordError("");
+  };
+
+  const VaultModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+      <div className="bg-black border border-white/20 rounded-2xl p-8 max-w-md w-full relative">
+        {/* Close button */}
         <button
-          onClick={prevSlide}
-          disabled={!canGoPrev}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full shadow-lg transition-all duration-200 ${
-            canGoPrev
-              ? "bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 cursor-pointer"
-              : "bg-gray-100 text-gray-400 cursor-not-allowed"
-          }`}
-          aria-label="Previous images"
+          onClick={closeModal}
+          className="absolute top-4 left-4 text-white/70 hover:text-white transition-colors"
         >
-          <ChevronLeft className="w-6 h-6" />
+          <ArrowLeft className="w-6 h-6" />
         </button>
 
-        <button
-          onClick={nextSlide}
-          disabled={!canGoNext}
-          className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full shadow-lg transition-all duration-200 ${
-            canGoNext
-              ? "bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 cursor-pointer"
-              : "bg-gray-100 text-gray-400 cursor-not-allowed"
-          }`}
-          aria-label="Next images"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
+        {/* Modal content */}
+        <div className="text-center">
+          <div className="mb-6">
+            <div className="w-20 h-20 mx-auto mb-4  rounded-full flex items-center justify-center">
+              <Lock className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2">The Vault</h2>
+          </div>
 
-        {/* Image Container */}
-        <div className="overflow-hidden mx-8">
-          <div
-            className="flex transition-transform duration-300 ease-in-out gap-4"
-            style={{
-              transform: `translateX(-${(currentIndex * 100) / itemsToShow}%)`,
-            }}
-          >
-            {images.map((image) => (
-              <div
-                key={image.id}
-                className="flex-shrink-0"
-                style={{ width: `130px`, height: `170px` }}
-                onClick={() => handleProductClick(image)}
-              >
-                <div className="group cursor-pointer mx-2">
-                  <div className="aspect-square bg-black rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-200 relative">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      height={130}
-                      width={130}
-                      className="object-cover group-hover:scale-125 transition-transform duration-200"
-                      loading="lazy"
-                    />
-                    {/* Overlay for titles */}
-                    {/* <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <div className="absolute bottom-0 left-0 right-0 p-3">
-                        <h3 className="text-white font-semibold text-sm mb-1">
-                          {image.title}
-                        </h3>
-                      </div>
-                    </div> */}
-                  </div>
-                  {/* Titles below image - always visible */}
-                  <div className="mt-2 text-center">
-                    {" "}
-                    {/* Adjust margin */}
-                    <h3 className="text-white font-medium text-sm m">
-                      {image.title}
-                    </h3>
-                  </div>
+          <div className="mb-6">
+            <p className="text-white/80 mb-4">Minimum Requirements To Ask For Permission:</p>
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center">
+                <MainLogo className="bg-premium  " color="#DB9D17" />
+               
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+              
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8   flex items-center justify-center">
+                <CalenderLogo />
+                </div>
+                <span className="text-[40px] font-bold font-brush">5</span>
+              </div>
 
-        {/* Indicators */}
-        <div className="flex justify-center mt-6 space-x-2">
-          {Array.from({
-            length: Math.ceil(images.length - itemsToShow + 1),
-          }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                currentIndex === index
-                  ? "bg-blue-600"
-                  : "bg-gray-300 hover:bg-gray-400"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center">
+                <Logo />
+               
+                </div>
+                <span className="text-[40px] font-bold font-brush">1000</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8  flex items-center justify-center">
+                <CoinsLogo />
+                </div>
+                <span className="text-yellow-500 text-[40px] font-brush font-bold">1000</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-white/70 text-start text-sm mb-2">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError(""); // Clear error when typing
+                }}
+                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/40 pr-12"
+                placeholder="Enter password"
+                autoComplete="off"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handlePasswordSubmit();
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform  -translate-y-1/2 text-white/50 hover:text-white/70"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+            {passwordError && (
+              <p className="text-red-400 text-sm mt-2">{passwordError}</p>
+            )}
+          </div>
+
+          <button
+            onClick={handlePasswordSubmit}
+            className="w-full border border-white/40  p-2 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+          >
+            Unlock The Vault
+          </button>
         </div>
       </div>
     </div>
   );
+
+  return (
+    <div className="container w-full mx-auto bg-black lg:my-20 my-10 flex flex-col justify-center">
+      {/* Header */}
+      <div className="text-center lg:mb-12 mb-5">
+        <h1 className="text-4xl font-bold bg-clip-text text-white">Shop Categories</h1>
+      </div>
+
+      {/* Slider for Small/Medium Devices */}
+      <div className="lg:hidden">
+        <div className="relative">
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 rounded-full p-3 transition-all duration-300 backdrop-blur-sm border border-white/20"
+          >
+            <ChevronLeft className="w-6 h-6 text-white" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 rounded-full p-3 transition-all duration-300 backdrop-blur-sm border border-white/20"
+          >
+            <ChevronRight className="w-6 h-6 text-white" />
+          </button>
+
+          <div className="overflow-hidden rounded-2xl">
+            <div
+              className="flex transition-transform duration-500 ease-out gap-6 px-16 lg:py-10 py-6"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
+                width: `${(minerals.length / visibleCount) * 100}%`,
+              }}
+            >
+              {minerals.map((mineral, index) => (
+                <div
+                  key={mineral.id}
+                  className="flex-shrink-0 relative group cursor-pointer"
+                  style={{ width: `${100 / minerals.length}%` }}
+                  onClick={() => handleCategoryClick(mineral)}
+                >
+                  <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
+                    <img
+                      src={mineral.image}
+                      alt={mineral.name}
+                      className="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-125"
+                    />
+                    {mineral.isLocked && !isVaultUnlocked && (
+                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                        <Lock className="w-8 h-8 text-yellow-400" />
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="text-white font-semibold text-xs truncate mt-2 text-center">
+                    {mineral.name}
+                  </h3>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center lg:mt-8 mt-0 gap-6">
+          <div className="flex gap-2">
+            {[...Array(maxIndex + 1)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  currentIndex === index
+                    ? "bg-cyan-400 shadow-lg shadow-cyan-400/50"
+                    : "bg-white/30 hover:bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={() => setIsAutoPlay(!isAutoPlay)}
+            className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm transition-all duration-300 backdrop-blur-sm border border-white/20"
+          >
+            {isAutoPlay ? "Pause" : "Play"}
+          </button>
+        </div>
+      </div>
+
+      {/* Grid Layout for Large Devices */}
+      <div className="hidden lg:grid lg:grid-cols-11 gap-6 px-4">
+        {minerals.map((mineral) => (
+          <div
+            key={mineral.id}
+            className="flex flex-col items-center cursor-pointer group"
+            onClick={() => handleCategoryClick(mineral)}
+          >
+            <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
+              <img
+                src={mineral.image}
+                alt={mineral.name}
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-125"
+              />
+              {mineral.isLocked && !isVaultUnlocked && (
+                <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                  <Lock className="w-8 h-8 text-yellow-400" />
+                </div>
+              )}
+            </div>
+            <h3 className="text-white font-semibold text-sm truncate mt-2 text-center">
+              {mineral.name}
+            </h3>
+          </div>
+        ))}
+      </div>
+
+      {/* Vault Modal */}
+      {showVaultModal && <VaultModal />}
+    </div>
+  );
 };
 
-export default ShopCategories;
+export default AllCategories;

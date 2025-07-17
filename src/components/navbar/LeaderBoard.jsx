@@ -126,7 +126,7 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0  flex items-center justify-end z-50 px-4 mr-48 mt-8">
+        <div className="fixed inset-0  flex items-center justify-center z-50 px-4">
           <div className="rounded-xl border  bg-black/70 p-5 w-[500px] overflow-hidden">
             {/* Header */}
             <div className=" text-white w-full px-6   flex items-center justify-between">

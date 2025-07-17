@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="lg:col-span-6 text-center">
             <div className=" mb-6 ">
               <div className="flex justify-center">
-              <FooterLogo className="text-center"/>
+                <FooterLogo className="text-center" />
               </div>
               <div className="">
                 <h3 className="text-[20px] font-bold  my-3">
@@ -122,25 +122,22 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="lg:col-span-4 text-center">
+          <div className="lg:col-span-4 text-center my-5 lg:my-0">
             <h3 className="text-lg font-semibold mb-4">Information Links</h3>
             <div className=" ">
-              <DoaFormModal 
+              <DoaFormModal
                 showAcceptButton={false}
                 triggerComponent={
-                 <button
-  className="block w-full text-center text-gray-300 hover:text-white transition-colors font-medium relative hover:underline decoration-2 underline-offset-4 bg-transparent border-none p-0 cursor-pointer"
->
-  DOA Form
-</button>
-
+                  <button className="block w-full text-center text-gray-300 hover:text-white transition-colors font-medium relative hover:underline decoration-2 underline-offset-4 bg-transparent border-none p-0 cursor-pointer">
+                    DOA Form
+                  </button>
                 }
               />
             </div>
           </div>
 
           {/* Information Links & WhatsApp */}
-          <div className="lg:col-span-5 text-center lg:pr-8">
+          <div className="lg:col-span-5 text-center lg:pr-8  ">
             <div className="space-y-4">
               <div className="">
                 <h4 className="text-lg font-semibold mb-3">
@@ -176,21 +173,20 @@ export default function Footer() {
           <div className="lg:col-span-5 text-center pl-8">
             <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
             <p className="text-gray-300 text-sm mb-4">
-            Sign up for exclusive offers, <br />
-            additions and more.
+              Sign up for exclusive offers, <br />
+              additions and more.
             </p>
 
             <div className="flex relative">
-  <Input
-    type="email"
-    placeholder="Your email"
-    className="bg-[#181818] text-white placeholder-gray-400 rounded-full focus:border-gray-600  opacity-70"
-  />
-  <button className="absolute right-3 text-white h-10">
-    <GoArrowRight size={24} />
-  </button>
-</div>
-
+              <Input
+                type="email"
+                placeholder="Your email"
+                className="bg-[#181818] text-white placeholder-gray-400 rounded-full focus:border-gray-600  opacity-70"
+              />
+              <button className="absolute right-3 text-white h-10">
+                <GoArrowRight size={24} />
+              </button>
+            </div>
           </div>
         </div>
 

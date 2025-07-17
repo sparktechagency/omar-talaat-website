@@ -42,15 +42,15 @@ const AuctionsContainer = () => {
 
         {/* Tabs */}
         <div className="mb-8">
-          <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+          <div className="flex flex-wrap gap-2 border-y border-white/20 justify-center sm:justify-start">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                className={` py-3  font-medium transition-all duration-300 ${
                   activeTab === tab.id
-                    ? "border text-black bg-white"
-                    : "bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 text-white hover:bg-gray-700/50"
+                    ? " text-white font-black text-xl "
+                    : " backdrop-blur-sm   text-white "
                 }`}
               >
                 {tab.label}

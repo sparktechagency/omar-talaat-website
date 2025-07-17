@@ -147,7 +147,7 @@ const Banner = () => {
               className="w-32 h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-8"
               color={`${logo}`}
             />
-            <h1 className="text-5xl md:text-6xl font-bold font-brush text-white mb-2 lg:mb-6">
+            <h1 className="text-[40px] md:text-6xl font-bold font-brush text-white mb-2 lg:mb-6">
               Coral Stash
             </h1>
           </div>
@@ -174,41 +174,41 @@ const Banner = () => {
           {/* Countdown Timer */}
           <div className="flex items-center justify-center space-x-8 mb-6 lg:mb-12">
             <div className="text-center">
-              <div className="text-4xl flex justify-center gap-3 items-center md:text-5xl font-bold text-white mb-1">
+              <div className="text-[40px] flex justify-center gap-3 items-center md:text-[40px] font-bold text-white mb-1">
                 {formatTime(timeLeft.days)}
                 <div className="text-white text-3xl">:</div>
               </div>
 
-              <div className="text-white/70 text-sm uppercase tracking-wider">
+              <div className="text-white/70 text-sm uppercase tracking-wider mr-3">
                 Days
               </div>
             </div>
 
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-white mb-1 flex items-center justify-center gap-3">
+              <div className="text-4xl md:text-[40px] font-bold text-white mb-1 flex items-center justify-center gap-3">
                 {formatTime(timeLeft.hours)}
                 <div className="text-white text-3xl">:</div>
               </div>
-              <div className="text-white/70 text-sm uppercase tracking-wider">
+              <div className="text-white/70 text-sm uppercase tracking-wider mr-3">
                 Hours
               </div>
             </div>
 
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-white mb-1 flex items-center justify-center gap-3">
+              <div className="text-4xl md:text-[40px] font-bold text-white mb-1 flex items-center justify-center gap-3">
                 {formatTime(timeLeft.mins)}
                 <div className="text-white text-3xl ">:</div>
               </div>
-              <div className="text-white/70 text-sm uppercase tracking-wider">
+              <div className="text-white/70 text-sm uppercase tracking-wider mr-3">
                 Mins
               </div>
             </div>
 
             <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-white mb-1">
+              <div className="text-4xl md:text-[40px] font-bold text-white mb-1">
                 {formatTime(timeLeft.secs)}
               </div>
-              <div className="text-white/70 text-sm uppercase tracking-wider">
+              <div className="text-white/70 text-sm uppercase tracking-wider ">
                 Secs
               </div>
             </div>

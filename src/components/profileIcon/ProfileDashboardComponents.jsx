@@ -202,15 +202,15 @@ const ChangePasswordTab = () => {
 };
 
 // Leaderboard Tab Component
-const LeaderboardTab = () => {
-const [isOpen, setIsOpen] = useState(false);
+// const LeaderboardTab = () => {
+// const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <div className="space-y-4">
-      <LeaderboardModal isOpen={isOpen} setIsOpen={setIsOpen}/>
-    </div>
-  );
-};
+//   return (
+//     <div className="space-y-4">
+//       <LeaderboardModal isOpen={isOpen} setIsOpen={setIsOpen}/>
+//     </div>
+//   );
+// };
 
 
 const TreeLogo = ({ className = "w-16 h-16", color = "currentColor" }) => (
@@ -375,12 +375,12 @@ export default function ProfileDashboardComponents({
                   >
                     Change Password
                   </TabsTrigger>
-                  <TabsTrigger
+                  {/* <TabsTrigger
                     value="leaderboard"
                     className="data-[state=active]:text-white data-[state=active]:text-xl cursor-pointer"
                   >
                     Leaderboard
-                  </TabsTrigger>
+                  </TabsTrigger> */}
                   <TabsTrigger
                     value="membership"
                     className="data-[state=active]:text-white data-[state=active]:text-xl cursor-pointer"
@@ -399,9 +399,9 @@ export default function ProfileDashboardComponents({
                       <ChangePasswordTab />
                     </TabsContent>
 
-                    <TabsContent value="leaderboard" className="mt-0">
+                    {/* <TabsContent value="leaderboard" className="mt-0">
                       <LeaderboardTab />
-                    </TabsContent>
+                    </TabsContent> */}
 
                     <TabsContent value="membership" className="mt-0">
                       <MyMembershipTab />

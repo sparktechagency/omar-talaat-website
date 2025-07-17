@@ -1,11 +1,11 @@
 
-import ShopCategories from './ShopCategories'
 import CoralShopGrid from './Products'
+import AllCategories from './ShopCategories'
 
 const ShopContainer = () => {
   return (
     <div className=''>
-      <ShopCategories />
+      <AllCategories />
       <CoralShopGrid />
     </div>
   )

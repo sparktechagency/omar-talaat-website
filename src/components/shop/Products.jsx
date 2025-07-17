@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { Search, Filter, ChevronDown, Lock, X, Menu } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import { CoinsLogo, MainLogo } from "../share/svg/Logo";
+import { CoinsLogo, FilterIcon, MainLogo } from "../share/svg/Logo";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Container from "../share/Container";
@@ -18,11 +18,15 @@ const CoralShopGrid = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isFilterVisible, setIsFilterVisible] = useState(true); // New state for filter visibility
+  const [isAnimating, setIsAnimating] = useState(false);
   const router = useRouter();
 
   // Grid container reference for animation
   const gridRef = useRef(null);
+  const filterRef = useRef(null);
   const isGridInView = useInView(gridRef, { once: true, amount: 0.1 });
+  const filterAnimation = useAnimation();
 
   // Simple filters
   const [priceRange, setPriceRange] = useState([0, 400]);
@@ -58,6 +62,79 @@ const CoralShopGrid = () => {
       document.body.style.overflow = "unset";
     };
   }, [isMobileFilterOpen]);
+
+  // Toggle filter visibility with animation
+  const toggleFilterVisibility = (e) => {
+    // Prevent default behavior that might cause page reload
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isAnimating) return;
+
+    setIsAnimating(true);
+
+    if (isFilterVisible) {
+      // Hide filter with smooth animation
+      filterAnimation
+        .start({
+          width: 0,
+          opacity: 0,
+          marginRight: 0,
+          scale: 0.9,
+          transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
+        })
+        .then(() => {
+          setIsFilterVisible(false);
+          setTimeout(() => {
+            setIsAnimating(false);
+          }, 100);
+        });
+    } else {
+      // Show filter with smooth animation
+      setIsFilterVisible(true);
+
+      // Small delay to ensure state is updated before animation
+      setTimeout(() => {
+        filterAnimation
+          .start({
+            width: "16.666667%",
+            opacity: 1,
+            scale: 1,
+            marginRight: "1rem",
+            transition: {
+              duration: 0.8,
+              ease: [0.4, 0, 0.2, 1],
+              opacity: { duration: 0.9 },
+              scale: { duration: 0.7, delay: 0.1 },
+            },
+          })
+          .then(() => {
+            setTimeout(() => {
+              setIsAnimating(false);
+            }, 100);
+          });
+      }, 10);
+    }
+  };
+
+  // Initialize filter animation on mount
+  useEffect(() => {
+    if (isFilterVisible) {
+      filterAnimation.start({
+        width: "16.666667%",
+        opacity: 1,
+        scale: 1,
+        marginRight: "1rem",
+      });
+    } else {
+      filterAnimation.start({
+        width: 0,
+        opacity: 0,
+        scale: 0.9,
+        marginRight: 0,
+      });
+    }
+  }, []);
 
   // Sample product data
   const products = [
@@ -147,6 +224,7 @@ const CoralShopGrid = () => {
     "Name Z-A",
   ];
 
+  // Memoize the filtered and sorted products to prevent unnecessary re-renders
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products.filter((product) => {
       const matchesSearch = product.name
@@ -199,12 +277,9 @@ const CoralShopGrid = () => {
     toast.success(`${product.name} successfully added to cart!`);
   };
 
- 
-
   const ProductCard = ({ product, index }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [imageError, setImageError] = useState(false);
-
 
     const handleAddToCart = (e, product) => {
       e.stopPropagation();
@@ -219,7 +294,6 @@ const CoralShopGrid = () => {
         console.log("Product name or product is undefined");
       }
     };
-    
 
     const showMembershipOverlay =
       !product.available &&
@@ -417,14 +491,6 @@ const CoralShopGrid = () => {
   return (
     <Container className="min-h-screen text-white">
       <div className="mx-auto">
-        {/* Header */}
-        {/* <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-            Coral Shop
-          </h1>
-          <p className="text-gray-400">Premium corals for your reef aquarium</p>
-        </div> */}
-
         {/* Header Controls */}
         <div className="flex flex-col gap-4 mb-8">
           {/* Mobile Controls - Filter Left, Sort Right */}
@@ -479,83 +545,126 @@ const CoralShopGrid = () => {
           </div>
 
           {/* Desktop Controls */}
-          <div className="hidden sm:flex gap-4">
-            <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-2 bg-[#181818]/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 min-w-[160px] justify-between transition-all duration-300"
+          <div className="border-y border-gray-700/50 flex items-center gap-10 py-3 hidden sm:flex">
+            <motion.button
+              className="flex items-center gap-2 cursor-pointer hover:text-yellow-400 transition-colors duration-500 bg-transparent border-none focus:outline-none"
+              onClick={toggleFilterVisibility}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              disabled={isAnimating}
+            >
+              <p className="text-white font-bold">Filter</p>
+              <motion.div
+                animate={{ rotate: isFilterVisible ? 0 : 180 }}
+                transition={{ duration: 0.9 }}
               >
-                <span className="flex items-center space-x-2">
-                  <Filter className="w-4 h-4" />
-                  <span className="text-sm">Sort by</span>
-                  <span className="font-medium">{sortBy}</span>
-                </span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform ${
-                    isDropdownOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
+                <FilterIcon />
+              </motion.div>
+            </motion.button>
 
-              {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-1 w-full bg-[#181818] border border-gray-700 rounded-lg shadow-lg z-50">
-                  {sortOptions.map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => {
-                        setSortBy(option);
-                        setIsDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg ${
-                        sortBy === option
-                          ? "bg-gray-700 text-yellow-400"
-                          : "text-white"
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              )}
+            <div className="hidden sm:flex gap-4">
+              <div className="relative">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="flex items-center space-x-2 border-none px-4 py-3 text-white focus:outline-none focus:border-none min-w-[160px] justify-between transition-all duration-300"
+                >
+                  <span className="flex items-center border-none space-x-2">
+                    <Filter className="w-4 h-4" />
+                    <span className="text-sm">Sort by</span>
+                    <span className="font-medium">{sortBy}</span>
+                  </span>
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-full bg-[#181818] shadow-lg z-50">
+                    {sortOptions.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          setSortBy(option);
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg ${
+                          sortBy === option
+                            ? "bg-gray-700 text-yellow-400"
+                            : "text-white"
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-
         {/* Mobile Filter Overlay */}
+     
         {isMobileFilterOpen && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] lg:hidden">
+          <div className="fixed inset-0 z-[9999] lg:hidden">
             <div
-              className={`mobile-filter-drawer fixed left-0 top-0 h-full w-[80%] bg-gray-900 border-r border-gray-700 overflow-y-auto transform transition-transform duration-[300ms] ease-in-out ${
+              className={`mobile-filter-drawer fixed left-0 top-0 h-full w-[70%] overflow-y-auto transform transition-all duration-[500ms] ease-in-out ${
                 isMobileFilterOpen ? "translate-x-0" : "translate-x-[-100%]"
               }`}
             >
-              <div className="p-4 h-full">
+              <div className="mt-16">
                 <FilterSection isMobile={true} />
               </div>
             </div>
           </div>
         )}
-
-        {/* Product Grid */}
-        <div className="flex gap-4">
+        {/* Product Grid with smooth animation */}
+        <div className="flex gap-4 relative overflow-hidden">
           {/* Desktop Filtering Sidebar */}
-          <div className="hidden lg:block lg:w-1/6">
-            <FilterSection />
-          </div>
+          <motion.div
+            ref={filterRef}
+            animate={filterAnimation}
+            initial={{
+              width: "16.666667%",
+              opacity: 1,
+              marginRight: "1rem",
+              scale: 1,
+            }}
+            className="lg:block hidden transition-all overflow-hidden" // Hide on mobile/tablets, show on desktop (lg)
+            style={{ width: "16.666667%", transformOrigin: "left center" }}
+          >
+            <div className="pr-2">
+              <FilterSection />
+            </div>
+          </motion.div>
 
-          {/* Products */}
+          {/* Products with smooth grid transition */}
           <div className="flex-1">
             <div
               ref={gridRef}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+              className={`grid grid-cols-1 sm:grid-cols-2 ${
+                isFilterVisible
+                  ? "lg:grid-cols-3 xl:grid-cols-4"
+                  : "lg:grid-cols-4 xl:grid-cols-4"
+              } gap-5 transition-all duration-1000 ease-in-out`}
+              style={{
+                transition: "all 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
             >
-              {filteredAndSortedProducts.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
-              ))}
+              {filteredAndSortedProducts.length > 0 ? (
+                filteredAndSortedProducts.map((product, index) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    index={index}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-gray-400 text-lg">
+                    No products found matching your search.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
-
         {/* No Results */}
         {filteredAndSortedProducts.length === 0 && (
           <div className="text-center py-12">

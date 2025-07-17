@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 
-const ShopCategory = () => {
+const AllCategories = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
 
@@ -86,8 +86,8 @@ const ShopCategory = () => {
     },
   ];
 
-  const visibleCount = Math.min(4, minerals.length);
-  const maxIndex = Math.max(0, minerals.length - visibleCount);
+  const visibleCount = 4; // Limit the visible count to 4 slides
+  const maxIndex = Math.floor(minerals.length / visibleCount +2); // Adjust maxIndex based on visible slides
 
   // Auto-play functionality
   useEffect(() => {
@@ -113,12 +113,10 @@ const ShopCategory = () => {
   };
 
   return (
-    <div className="container w-full mx-auto bg-black my-20 flex flex-col justify-center">
+    <div className="container w-full mx-auto bg-black lg:my-20 my-10 flex flex-col justify-center">
       {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4  bg-clip-text ">
-          Shop Categories
-        </h1>
+      <div className="text-center lg:mb-12 mb-5">
+        <h1 className="text-4xl font-bold   bg-clip-text ">Shop Categories</h1>
       </div>
 
       {/* Slider for Small/Medium Devices */}
@@ -143,9 +141,11 @@ const ShopCategory = () => {
           {/* Slider Track */}
           <div className="overflow-hidden rounded-2xl">
             <div
-              className="flex transition-transform duration-500 ease-out gap-6 px-16 py-10"
+              className="flex transition-transform duration-500 ease-out gap-6 px-16 lg:py-10 py-6"
               style={{
-                transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
+                transform: `translateX(-${
+                  currentIndex * (100 / visibleCount)
+                }%)`,
                 width: `${(minerals.length / visibleCount) * 100}%`,
               }}
             >
@@ -178,7 +178,7 @@ const ShopCategory = () => {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-center mt-8 gap-6">
+        <div className="flex items-center justify-center lg:mt-8 mt-0 gap-6">
           {/* Dots Indicator */}
           <div className="flex gap-2">
             {[...Array(maxIndex + 1)].map((_, index) => (
@@ -233,4 +233,4 @@ const ShopCategory = () => {
   );
 };
 
-export default ShopCategory;
+export default AllCategories;

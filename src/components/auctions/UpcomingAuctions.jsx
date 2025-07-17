@@ -157,8 +157,9 @@ const UpcomingAuctions = ({ setActiveTab }) => {
         }`}
         onClick={() => handleAuctionClick(auction)}
       >
-        <div className={`backdrop-blur-sm rounded-2xl overflow-hidden ${getBorderStyle()} transition-all duration-300 hover:transform hover:scale-[1.02]`}>
+        <div className={`backdrop-blur-sm rounded-2xl border overflow-hidden ${getBorderStyle()} transition-all duration-300 hover:transform hover:scale-[1.02]`}>
           {/* Auction Image */}
+          <p className="text-white  text-sm  mt-2 ml-2 text-start">{auction.name}</p>
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
               <Image

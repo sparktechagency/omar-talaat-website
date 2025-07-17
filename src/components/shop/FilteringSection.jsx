@@ -62,7 +62,7 @@ const FilterSection = ({ isMobile = false }) => {
 
   return (
     <div
-      className={`backdrop-blur-sm rounded-2xl p-4 border border-gray-700/50 ${
+      className={`backdrop-blur-[5px] rounded-2xl p-4 border bg-black/30 border-gray-700/50 ${
         isMobile ? "h-full" : ""
       }`}
     >
@@ -92,7 +92,10 @@ const FilterSection = ({ isMobile = false }) => {
               onClick={() => handleCheckboxChange("productType", "cutToOrder")}
             >
               <CustomCheckbox checked={productType.includes("cutToOrder")} />
-              Cut to Order (4)
+             <div className="flex items-center justify-between w-full">
+              <p>Cut to Order</p>
+              <p>(4)</p>
+              </div> 
             </label>
           </div>
         )}
@@ -115,8 +118,8 @@ const FilterSection = ({ isMobile = false }) => {
         </div>
         {openSections.price && (
           <>
-            <div className="flex justify-between gap-2 mt-6 mb-7">
-              <span className="px-6 py-2 bg-[#181818] border border-gray-600 rounded-full text-xs text-white">
+            <div className="flex justify-between items-center gap-2 mt-6 mb-7">
+              <span className="px-6 py-3 bg-[#181818] border border-gray-600 rounded-full text-xs text-white">
                 AED {priceRange[0]}
               </span>
               <span className="text-gray-400 mt-2">-</span>
@@ -159,29 +162,25 @@ const FilterSection = ({ isMobile = false }) => {
               onClick={() => handleCheckboxChange("availability", "inStock")}
             >
               <CustomCheckbox checked={availability.includes("inStock")} />
-              In stock (3)
+             <div className="flex items-center justify-between w-full">
+              <p> In stock </p>
+              <p>(3)</p>
+             </div>
             </label>
             <label
               className="flex items-center text-sm text-white cursor-pointer select-none"
               onClick={() => handleCheckboxChange("availability", "outOfStock")}
             >
               <CustomCheckbox checked={availability.includes("outOfStock")} />
-              Out of stock (1)
+            <div className="flex items-center justify-between w-full">
+              <p>  Out of stock</p>
+              <p>(1)</p>
+            </div>
             </label>
           </div>
         )}
       </div>
 
-      {isMobile && (
-        <div className="mt-8">
-          <button
-            onClick={() => console.log("Filters applied")}
-            className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black px-4 py-3 rounded-xl font-semibold transition-all duration-300"
-          >
-            Apply Filters
-          </button>
-        </div>
-      )}
     </div>
   );
 };
