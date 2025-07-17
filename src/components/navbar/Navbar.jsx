@@ -53,7 +53,7 @@ function SearchComponent({ onSearchChange }) {
           isSearchFocused ? "ring-2 ring-white/50 bg-[#181818]" : ""
         }`}
       >
-        <FaSearch className="text-white/70 mr-3 lg:mr-0" />
+        <FaSearch className="text-white/70 mr-3 lg:mr-2" />
         <input
           type="text"
           placeholder="Search Corals"
