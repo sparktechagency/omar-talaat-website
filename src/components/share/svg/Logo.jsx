@@ -976,6 +976,22 @@ const FilterIcon=()=>(
   <path d="M13.6699 17.5C15.3268 17.5 16.6699 16.1569 16.6699 14.5C16.6699 12.8431 15.3268 11.5 13.6699 11.5C12.0131 11.5 10.6699 12.8431 10.6699 14.5C10.6699 16.1569 12.0131 17.5 13.6699 17.5Z" fill="black" stroke="white" strokeWidth="1.25"/>
 </svg>
 )
+const LeftSideArrow=()=>(
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+  <path d="M13.9802 5.81999L10.7702 9.02999L8.80023 10.99C7.97023 11.82 7.97023 13.17 8.80023 14L13.9802 19.18C14.6602 19.86 15.8202 19.37 15.8202 18.42V12.81V6.57999C15.8202 5.61999 14.6602 5.13999 13.9802 5.81999Z" fill="#808080"/>
+</svg>
+)
+const RightSideArrow=()=>(
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+  <path d="M15.1997 10.99L13.2297 9.02005L10.0197 5.81005C9.33969 5.14005 8.17969 5.62005 8.17969 6.58005V12.8101V18.4201C8.17969 19.3801 9.33969 19.8601 10.0197 19.1801L15.1997 14C16.0297 13.18 16.0297 11.82 15.1997 10.99Z" fill="url(#paint0_linear_168_981)"/>
+  <defs>
+    <linearGradient id="paint0_linear_168_981" x1="15.8222" y1="12.4985" x2="8.17969" y2="12.4985" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#057199"/>
+      <stop offset="1" stop-color="#69CDFF"/>
+    </linearGradient>
+  </defs>
+</svg>
+)
 
 
-export {MainLogo, CalenderLogo, Logo,MobileLogo, CoinsLogo, Ranking, MyBug, MyProfile,Star, FooterLogo,FilterIcon}
+export {MainLogo, CalenderLogo, Logo,MobileLogo, CoinsLogo, Ranking, MyBug, MyProfile,Star, FooterLogo,FilterIcon,LeftSideArrow,RightSideArrow}

@@ -235,23 +235,23 @@ const TreeLogo = ({ className = "w-16 h-16", color = "currentColor" }) => (
 // My Membership Tab Component
 const MyMembershipTab = () => {
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="lg:space-y-8 space-y-2 max-w-4xl mx-auto">
       {/* Header with Logo */}
       <div className="text-center">
-        <MainLogo className="w-16 h-16 mx-auto mb-6" color="#ffffff" />
-        <h3 className="text-3xl font-bold text-white mb-2">My Membership</h3>
+        <MainLogo className="w-12 h-12 lg:w-16 lg:h-16 mx-auto lg:mb-6 mb-2" color="#ffffff" />
+        <h3 className="lg:text-3xl text-xl font-bold text-white mb-2">My Membership</h3>
       </div>
 
       {/* Membership Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Advanced Membership Card */}
         <Card className="bg-transparent border-2 border-cyan-400 rounded-2xl overflow-hidden">
-          <CardContent className="p-8 text-center">
-            <h4 className="text-2xl font-bold text-cyan-400 mb-4">Advanced Membership</h4>
+          <CardContent className="lg:p-8 p-4 text-center">
+            <h4 className="lg:text-2xl text-xl font-bold text-cyan-400 lg:mb-4 mb-2">Advanced Membership</h4>
 
-            <MainLogo className="w-20 h-20 mx-auto mb-6" color="#22d3ee" />
+            <MainLogo className="w-12 h-12 lg:w-20 lg:h-20 mx-auto lg:mb-6 mb-2" color="#22d3ee" />
 
-            <p className="text-gray-300 mb-8 text-sm leading-relaxed">
+            <p className="text-gray-300 lg:mb-8 mb-4 text-sm leading-relaxed">
               Upgrade to 'Advanced Membership' - The First Level!
             </p>
 
@@ -390,7 +390,7 @@ export default function ProfileDashboardComponents({
                 </TabsList>
 
                 <Card className="mt-6 backdrop-blur-lg bg-gray/0">
-                  <CardContent className="p-8">
+                  <CardContent className="lg:p-8">
                     <TabsContent value="profile" className="mt-0">
                       <ProfileTab />
                     </TabsContent>

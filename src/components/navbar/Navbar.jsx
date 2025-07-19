@@ -416,7 +416,7 @@ export default function Navbar() {
                           My Cart
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <button
                           className="block w-full text-left cursor-pointer px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                           onClick={() => setIsSettingsOpen(!isSettingsOpen)}
@@ -441,7 +441,7 @@ export default function Navbar() {
                                 Contact us
                               </Link>
                             </li>
-                            {/* <li>
+                            <li>
                             <Link
                               href="/terms"
                               className="block px-4 py-2 cursor-pointer hover:bg-white/10 transition-colors duration-200"
@@ -449,8 +449,8 @@ export default function Navbar() {
                             >
                               Terms & Conditions
                             </Link>
-                          </li> */}
-                            {/* <li>
+                          </li>
+                            <li>
                             <Link
                               href="/change-password"
                               className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
@@ -458,8 +458,8 @@ export default function Navbar() {
                             >
                               Change Password
                             </Link>
-                          </li> */}
-                            {/* <li>
+                          </li>
+                            <li>
                             <Link
                               href="/policy"
                               className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
@@ -467,10 +467,10 @@ export default function Navbar() {
                             >
                               Privacy Policy
                             </Link>
-                          </li> */}
+                          </li>
                           </ul>
                         )}
-                      </li>
+                      </li> */}
                       <li>
                         <Link
                           href="/login"
