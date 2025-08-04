@@ -132,30 +132,14 @@ const AllCategories = () => {
     console.log(`Navigating to category: ${mineral.name}`);
   };
 
-  const handlePasswordSubmit = () => {
-    // For demo purposes, any password will unlock the vault
-    if (password.trim() !== "") {
-      setIsVaultUnlocked(true);
-      setShowVaultModal(false);
-      setPassword("");
-      setPasswordError("");
-    } else {
-      setPasswordError("Please enter a password.");
-    }
-  };
 
-  const closeModal = () => {
-    setShowVaultModal(false);
-    setPassword("");
-    setPasswordError("");
-  };
+
 
   const VaultModal = () => (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-black border border-white/20 rounded-2xl p-8 max-w-md w-full relative">
         {/* Close button */}
         <button
-          onClick={closeModal}
           className="absolute top-4 left-4 text-white/70 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-6 h-6" />

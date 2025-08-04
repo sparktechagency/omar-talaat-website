@@ -7,7 +7,7 @@ const AuthLayout = ({ children }) => {
   return (
     <div
       style={{
-        background: `linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(0, 0, 0, 0.70) 100%), url(${bgImage})`,
+        background: `#000`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",

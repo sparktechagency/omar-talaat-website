@@ -29,10 +29,11 @@ export default function LoginUser() {
     try {
       const res = await login({ email, password }).unwrap();
       console.log(res);
-      const { accessToken, refreshToken } = res.data;
+      const accessToken = res.data;
+      console.log(accessToken);
 
       // Save tokens to localStorage
-      localStorage.setItem("token", accessToken);
+      localStorage.setItem("accessToken", accessToken);
 
       // Dispatch only accessToken (no user)
       dispatch(loginSuccess(accessToken));

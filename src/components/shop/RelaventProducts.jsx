@@ -13,6 +13,9 @@ import {
   cartIconVariants,
 } from "@/components/share/utils/motionVariants";
 import { toast } from "sonner";
+import { ClientOnlyIcon, createDynamicIcon } from "@/components/ui/client-only-icon";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/redux/featured/cart/cartSlice";
 
 const productsData = [
   {
@@ -48,9 +51,25 @@ const productsData = [
 const ProductCard = ({ product, controls }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const dispatch = useDispatch();
+  console.log(product)
+  console.log(controls)
 
   const handleAddToCart = (e, product) => {
     e.stopPropagation();
+
+    // Add to cart using Redux
+    dispatch(addToCart({
+      id: product.id,
+      name: product.title,
+      price: parseFloat(product.price),
+      image: product.image,
+      stock: 10, // Default stock value
+      status: product.subtitle,
+      available: true,
+      membership: "normal",
+      description: "Premium coral product with exceptional quality and vibrant colors."
+    }));
 
     toast.success(`Add to cart successfully`);
   };
@@ -146,7 +165,16 @@ const ProductCard = ({ product, controls }) => {
               animate={isHovered ? "visible" : "hidden"}
               onClick={handleAddToCart}
             >
-              <TbShoppingBagPlus size={32} className="scale-110"/>
+                             <ClientOnlyIcon
+                 fallback={
+                   <div 
+                     className="scale-110"
+                     style={{ width: 32, height: 32 }}
+                   />
+                 }
+               >
+                 <TbShoppingBagPlus size={32} className="scale-110"/>
+               </ClientOnlyIcon>
             </motion.button>
           </CardContent>
         </Card>

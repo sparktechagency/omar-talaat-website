@@ -1,95 +1,115 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { useGetCategoriesQuery } from "@/redux/featured/category/categoryApi";
+
+// Move static data outside component to prevent recreation on every render
+const availableImages = [
+  "/assets/category1.png",
+  "/assets/category11.png",
+  "/assets/category12.png",
+  "/assets/category4.png",
+];
+
+const minerals = [
+  {
+    id: 1,
+    name: "All Coral",
+    image: availableImages[0],
+    description: "Browse all available coral types",
+  },
+  {
+    id: 2,
+    name: "Zoanthids",
+    image: availableImages[1],
+    description: "Colorful colonial marine organisms",
+  },
+  {
+    id: 3,
+    name: "SPS",
+    image: availableImages[1],
+    description: "Small Polyp Stony corals with intricate structures",
+  },
+  {
+    id: 4,
+    name: "LPS",
+    image: availableImages[2],
+    description: "Large Polyp Stony corals with flowing tentacles",
+  },
+  {
+    id: 5,
+    name: "Acropora",
+    image: availableImages[0],
+    description: "Fast-growing branching SPS corals",
+  },
+  {
+    id: 6,
+    name: "Montipora",
+    image: availableImages[1],
+    description: "Plating and encrusting SPS corals",
+  },
+  {
+    id: 7,
+    name: "Soft Corals",
+    image: availableImages[2],
+    description: "Flexible corals that sway with the current",
+  },
+  {
+    id: 8,
+    name: "Anemones",
+    image: availableImages[3],
+    description: "Sea anemones and related species",
+  },
+  {
+    id: 9,
+    name: "WYSIWYG",
+    image: availableImages[0],
+    description: "What You See Is What You Get specimens",
+  },
+  {
+    id: 10,
+    name: "Zoanth",
+    image: availableImages[1],
+    description: "Premium zoanthid collections",
+  },
+  {
+    id: 11,
+    name: "The Vault",
+    image: availableImages[2],
+    description: "Rare and exclusive coral specimens",
+  },
+];
 
 const AllCategories = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const { data: categories } = useGetCategoriesQuery();
+  
+  // Memoize computed values to prevent recalculation on every render
+  const categoryData = useMemo(() => categories?.data, [categories]);
+  const visibleCount = 4;
+  const maxIndex = useMemo(() => Math.floor(minerals.length / visibleCount + 2), []);
 
-  // Available images to cycle through
-  const availableImages = [
-    "/assets/category1.png",
-    "/assets/category11.png",
-    "/assets/category12.png",
-    "/assets/category4.png",
-  ];
+  // Memoize callback functions to prevent recreation on every render
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  }, [maxIndex]);
 
-  // Mineral data with images
-  const minerals = [
-    {
-      id: 1,
-      name: "All Coral",
-      image: availableImages[0],
-      description: "Browse all available coral types",
-    },
-    {
-      id: 2,
-      name: "Zoanthids",
-      image: availableImages[1],
-      description: "Colorful colonial marine organisms",
-    },
-    {
-      id: 3,
-      name: "SPS",
-      image: availableImages[1],
-      description: "Small Polyp Stony corals with intricate structures",
-    },
-    {
-      id: 4,
-      name: "LPS",
-      image: availableImages[2],
-      description: "Large Polyp Stony corals with flowing tentacles",
-    },
-    {
-      id: 5,
-      name: "Acropora",
-      image: availableImages[0],
-      description: "Fast-growing branching SPS corals",
-    },
-    {
-      id: 6,
-      name: "Montipora",
-      image: availableImages[1],
-      description: "Plating and encrusting SPS corals",
-    },
-    {
-      id: 7,
-      name: "Soft Corals",
-      image: availableImages[2],
-      description: "Flexible corals that sway with the current",
-    },
-    {
-      id: 8,
-      name: "Anemones",
-      image: availableImages[3],
-      description: "Sea anemones and related species",
-    },
-    {
-      id: 9,
-      name: "WYSIWYG",
-      image: availableImages[0],
-      description: "What You See Is What You Get specimens",
-    },
-    {
-      id: 10,
-      name: "Zoanth",
-      image: availableImages[1],
-      description: "Premium zoanthid collections",
-    },
-    {
-      id: 11,
-      name: "The Vault",
-      image: availableImages[2],
-      description: "Rare and exclusive coral specimens",
-    },
-  ];
+  const prevSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+  }, [maxIndex]);
 
-  const visibleCount = 4; // Limit the visible count to 4 slides
-  const maxIndex = Math.floor(minerals.length / visibleCount +2); // Adjust maxIndex based on visible slides
+  const goToSlide = useCallback((index) => {
+    setCurrentIndex(Math.min(index, maxIndex));
+  }, [maxIndex]);
 
-  // Auto-play functionality
+  const toggleAutoPlay = useCallback(() => {
+    setIsAutoPlay(prev => !prev);
+  }, []);
+
+  // Optimize useEffect to prevent unnecessary re-creation
   useEffect(() => {
     if (!isAutoPlay) return;
 
@@ -100,23 +120,14 @@ const AllCategories = () => {
     return () => clearInterval(interval);
   }, [isAutoPlay, maxIndex]);
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
-  };
-
-  const goToSlide = (index) => {
-    setCurrentIndex(Math.min(index, maxIndex));
-  };
+  // Memoize the dots array to prevent recreation
+  const dotsArray = useMemo(() => [...Array(maxIndex + 1)], [maxIndex]);
 
   return (
     <div className="container w-full mx-auto bg-black lg:my-20 my-10 flex flex-col justify-center">
       {/* Header */}
       <div className="text-center lg:mb-12 mb-5">
-        <h1 className="text-4xl font-bold   bg-clip-text ">Shop Categories</h1>
+        <h1 className="text-4xl font-bold bg-clip-text">Shop Categories</h1>
       </div>
 
       {/* Slider for Small/Medium Devices */}
@@ -181,7 +192,7 @@ const AllCategories = () => {
         <div className="flex items-center justify-center lg:mt-8 mt-0 gap-6">
           {/* Dots Indicator */}
           <div className="flex gap-2">
-            {[...Array(maxIndex + 1)].map((_, index) => (
+            {dotsArray.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
@@ -196,7 +207,7 @@ const AllCategories = () => {
 
           {/* Auto-play Toggle */}
           <button
-            onClick={() => setIsAutoPlay(!isAutoPlay)}
+            onClick={toggleAutoPlay}
             className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm transition-all duration-300 backdrop-blur-sm border border-white/20"
           >
             {isAutoPlay ? "Pause" : "Play"}

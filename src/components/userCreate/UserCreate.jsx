@@ -1,15 +1,18 @@
+// Updated UserCreate Component
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import Image from "next/image";
 import { useRegisterMutation } from "@/redux/featured/auth/authApi";
-import { useDispatch } from "react-redux";
-import { registerSuccess } from "@/redux/featured/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { registerSuccess, setError, clearError } from "@/redux/featured/auth/authSlice";
 import { useRouter } from "next/navigation";
+import { MainLogo } from "../share/svg/Logo";
+import { toast } from "sonner";
+// import { toast } from "react-hot-toast"; // Optional: for better UX
 
 export default function UserCreate() {
   const {
@@ -17,83 +20,241 @@ export default function UserCreate() {
     handleSubmit,
     formState: { errors },
     getValues,
+    setError: setFormError,
+    clearErrors,
   } = useForm();
+  
   const [registerUser, { isLoading }] = useRegisterMutation();
   const dispatch = useDispatch();
   const router = useRouter();
-
+  const { error: authError } = useSelector((state) => state.auth);
+  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [registrationStatus, setRegistrationStatus] = useState("");
+
+  // Clear errors when component mounts
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
+
+  // Handle auth errors
+  useEffect(() => {
+    if (authError) {
+      setRegistrationStatus(authError.message || "Registration failed");
+    }
+  }, [authError]);
 
   const onSubmit = async (data) => {
     try {
-      // First register the user
-      const res = await registerUser(data).unwrap();
+      // Clear previous errors
+      dispatch(clearError());
+      setRegistrationStatus("");
+      clearErrors();
 
-      // Instead of directly saving token and redirecting to dashboard,
-      // redirect to the OTP verification page with email in URL
-      const email = encodeURIComponent(data.email);
+      // Prepare registration data
+      const registrationData = {
+        firstName: data.firstName.trim(),
+        lastName: data.lastName.trim(),
+        userName: data.userName.trim().toLowerCase(),
+        email: data.email.trim().toLowerCase(),
+        contact: data.contactNo.trim(),
+        address: data.deliveryAddress.trim(),
+        password: data.password,
+      };
 
-      // Here we're setting a verification type parameter so OTP page knows this is for account creation
-      router.push(`/otp-verify?email=${email}&type=registration`);
+      console.log("Registering user with data:", {
+        ...registrationData,
+        password: "[HIDDEN]"
+      });
 
-      // You might want to show a success message before redirecting
-      setRegistrationStatus("Account created! Please verify your email.");
+      // Make registration API call
+      const response = await registerUser(registrationData).unwrap();
+      
+      console.log("Registration response:", response);
 
-      // Note: We'll store the token and user data only after OTP verification
+      // Handle successful registration
+      if (response.success) {
+        // Dispatch success action
+        dispatch(registerSuccess({
+          user: response.user || null,
+          accessToken: response.accessToken || response.token,
+          email: registrationData.email,
+        }));
+
+        // Show success message
+        setRegistrationStatus("Account created successfully!");
+        toast?.success("Account created successfully!");
+
+        // Redirect based on whether email verification is needed
+        if (response.needsVerification || !response.accessToken) {
+          // Needs email verification
+          const email = encodeURIComponent(registrationData.email);
+          router.push(`/otp-verify?email=${email}&type=registration`);
+        } else {
+          // Auto-login successful
+          toast?.success("Welcome! You're now logged in.");
+          router.push("/dashboard"); // or wherever you want to redirect
+        }
+      }
     } catch (error) {
       console.error("Registration failed:", error);
-      setRegistrationStatus("Failed to create account. Please try again.");
+      
+      // Handle different types of errors
+      if (error.data) {
+        const errorData = error.data;
+        
+        // Handle validation errors
+        if (errorData.errors && Array.isArray(errorData.errors)) {
+          errorData.errors.forEach(err => {
+            if (err.field && err.message) {
+              setFormError(err.field, { 
+                type: "server", 
+                message: err.message 
+              });
+            }
+          });
+        }
+        
+        // Handle specific error messages
+        if (errorData.message) {
+          if (errorData.message.includes("email")) {
+            setFormError("email", { 
+              type: "server", 
+              message: "Email is already registered" 
+            });
+          } else if (errorData.message.includes("username")) {
+            setFormError("username", { 
+              type: "server", 
+              message: "Username is already taken" 
+            });
+          }
+          
+          setRegistrationStatus(errorData.message);
+          dispatch(setError(errorData));
+        }
+      } else {
+        // Network or other errors
+        const errorMessage = error.message || "Registration failed. Please try again.";
+        setRegistrationStatus(errorMessage);
+        dispatch(setError({ message: errorMessage }));
+        toast?.error(errorMessage);
+      }
+    }
+  };
+
+  const togglePasswordVisibility = (field) => {
+    if (field === "password") {
+      setShowPassword(!showPassword);
+    } else {
+      setShowConfirmPassword(!showConfirmPassword);
     }
   };
 
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row justify-center">
-      {/* Left side image */}
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center">
-        <div className="h-auto max-h-[900px] w-full max-w-[900px] p-4">
-          <Image
-            src="/assests/registerImage.png"
-            alt="Side Illustration"
-            width={900}
-            height={700}
-            className="object-cover w-full h-full"
-            priority
-          />
-        </div>
-      </div>
-
       {/* Right side form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8">
-        <div className="bg-[#FCFCFC3B] border-2 border-[#A92C2C] backdrop-blur-md rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
+        <div className="rounded-lg p-6 md:p-8 w-full mx-auto">
           <div className="flex justify-center mb-4">
-            <Image
-              src="/assests/logo.png"
-              height={120}
-              width={160}
-              alt="Logo"
-              className="mx-auto"
-            />
+            <MainLogo className="w-20 h-20" />
           </div>
 
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center text-white">
             Create an account
           </h2>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Full Name */}
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-5 grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            {/* First Name */}
             <div>
-              <label htmlFor="name" className="block text-sm mb-2 text-white">
-                Name*
+              <label htmlFor="firstName" className="block text-sm mb-2 text-white">
+                First Name*
               </label>
               <Input
-                id="name"
-                placeholder="Enter your full name"
-                {...register("name", { required: " Name is required" })}
-                className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
+                id="firstName"
+                placeholder="Enter your first name"
+                {...register("firstName", {
+                  required: "First name is required",
+                  minLength: {
+                    value: 2,
+                    message: "First name must be at least 2 characters"
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z\s]+$/,
+                    message: "First name can only contain letters and spaces"
+                  }
+                })}
+                className="w-full py-6 text-white border rounded-lg"
+                disabled={isLoading}
               />
-              {errors.name && (
+              {errors.firstName && (
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.name.message}
+                  {errors.firstName.message}
+                </p>
+              )}
+            </div>
+
+            {/* Last Name */}
+            <div>
+              <label htmlFor="lastName" className="block text-sm mb-2 text-white">
+                Last Name*
+              </label>
+              <Input
+                id="lastName"
+                placeholder="Enter your last name"
+                {...register("lastName", { 
+                  required: "Last name is required",
+                  minLength: {
+                    value: 2,
+                    message: "Last name must be at least 2 characters"
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z\s]+$/,
+                    message: "Last name can only contain letters and spaces"
+                  }
+                })}
+                className="w-full py-6 text-white border rounded-lg"
+                disabled={isLoading}
+              />
+              {errors.lastName && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.lastName.message}
+                </p>
+              )}
+            </div>
+
+            {/* Username */}
+            <div>
+              <label htmlFor="userName" className="block text-sm mb-2 text-white">
+                Username*
+              </label>
+              <Input
+                id="userName"
+                placeholder="Enter your username"
+                {...register("userName", {
+                  required: "Username is required",
+                  minLength: {
+                    value: 3,
+                    message: "Username must be at least 3 characters long",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Username cannot exceed 20 characters"
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9_]+$/,
+                    message: "Username can only contain letters, numbers, and underscores",
+                  },
+                })}
+                className="w-full py-6 text-white border rounded-lg"
+                disabled={isLoading}
+              />
+              {errors.username && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.username.message}
                 </p>
               )}
             </div>
@@ -114,7 +275,8 @@ export default function UserCreate() {
                     message: "Please enter a valid email address",
                   },
                 })}
-                className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
+                className="w-full py-6 text-white border rounded-lg"
+                disabled={isLoading}
               />
               {errors.email && (
                 <p className="text-red-500 text-xs mt-1">
@@ -123,27 +285,104 @@ export default function UserCreate() {
               )}
             </div>
 
-            {/* Password */}
+            {/* Contact Number */}
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm mb-2 text-white"
-              >
-                Password*
+              <label htmlFor="contactNo" className="block text-sm mb-2 text-white">
+                Contact Number*
               </label>
               <Input
-                id="password"
-                placeholder="Enter your password"
-                type="password"
-                {...register("password", {
-                  required: "Password is required",
+                id="contactNo"
+                placeholder="Enter your contact number"
+                type="tel"
+                {...register("contactNo", {
+                  required: "Contact number is required",
+                  pattern: {
+                    value: /^[0-9+\-\s()]+$/,
+                    message: "Please enter a valid contact number",
+                  },
                   minLength: {
-                    value: 8,
-                    message: "Password must have at least 8 characters",
+                    value: 10,
+                    message: "Contact number must be at least 10 digits",
                   },
                 })}
-                className="w-full py-6 text-black bg-white border border-[#2E2E2EF5] rounded-lg"
+                className="w-full py-6 text-white border rounded-lg"
+                disabled={isLoading}
               />
+              {errors.contactNo && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.contactNo.message}
+                </p>
+              )}
+            </div>
+
+            {/* Delivery Address */}
+            <div>
+              <label htmlFor="deliveryAddress" className="block text-sm mb-2 text-white">
+                Delivery Address*
+              </label>
+              <textarea
+                id="deliveryAddress"
+                placeholder="Enter your delivery address"
+                {...register("deliveryAddress", {
+                  required: "Delivery address is required",
+                  minLength: {
+                    value: 10,
+                    message: "Please provide a complete address",
+                  },
+                })}
+                className="w-full py-3 px-3 text-white border rounded-lg resize-none"
+                rows="1"
+                disabled={isLoading}
+              />
+              {errors.deliveryAddress && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.deliveryAddress.message}
+                </p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-sm mb-2 text-white">
+                Password*
+              </label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  placeholder="Enter your password"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must have at least 8 characters",
+                    },
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+                      message: "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+                    }
+                  })}
+                  className="w-full py-6 text-white border rounded-lg"
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                  onClick={() => togglePasswordVisibility("password")}
+                  disabled={isLoading}
+                >
+                  {showPassword ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1">
                   {errors.password.message}
@@ -151,26 +390,85 @@ export default function UserCreate() {
               )}
             </div>
 
+            {/* Confirm Password */}
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm mb-2 text-white">
+                Confirm Password*
+              </label>
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  placeholder="Confirm your password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  {...register("confirmPassword", {
+                    required: "Confirm Password is required",
+                    validate: (value) =>
+                      value === getValues("password") || "Passwords do not match",
+                  })}
+                  className="w-full py-6 text-white border rounded-lg"
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                  onClick={() => togglePasswordVisibility("confirmPassword")}
+                  disabled={isLoading}
+                >
+                  {showConfirmPassword ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
+
             {/* Submit Button */}
-            <Button
-              type="submit"
-              className="bg-button text-white w-full h-10 md:h-12 rounded-md my-4 md:my-6"
-              disabled={isLoading}
-            >
-              {isLoading ? "Creating..." : "Create account"}
-            </Button>
+            <div className="col-span-1 md:col-span-2 flex justify-center items-center">
+              <Button
+                type="submit"
+                className="text-white border w-full md:w-60 h-10 md:h-12 rounded-md my-4 md:my-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating...
+                  </div>
+                ) : (
+                  "Create account"
+                )}
+              </Button>
+            </div>
           </form>
 
           {registrationStatus && (
-            <p className="text-center mt-4 text-red-500">
+            <div className={`text-center mt-4 p-3 rounded ${
+              registrationStatus.includes("successfully") || registrationStatus.includes("created") 
+                ? "text-green-500 bg-green-100/10" 
+                : "text-red-500 bg-red-100/10"
+            }`}>
               {registrationStatus}
-            </p>
+            </div>
           )}
 
           <p className="text-sm md:text-base mt-4 text-center text-white">
             If you already have an account, please{" "}
             <Link
-              className="text-white font-bold md:font-black md:text-2xl ml-1 hover:text-red-400"
+              className="text-white font-bold md:font-black md:text-2xl ml-1 hover:text-red-400 transition-colors"
               href="/login"
             >
               Login

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FooterLogo, MainLogo } from "../share/svg/Logo";
 import { GoArrowRight } from "react-icons/go";
+import { ClientOnlyIcon } from "@/components/ui/client-only-icon";
 import styles from "./footer.module.css"; // Import your CSS module
 import DoaFormModal from "../doaForm/DoaFormModal";
 
@@ -184,7 +185,11 @@ export default function Footer() {
                 className="bg-[#181818] text-white placeholder-gray-400 rounded-full focus:border-gray-600  opacity-70"
               />
               <button className="absolute right-3 text-white h-10">
-                <GoArrowRight size={24} />
+                <ClientOnlyIcon
+                  fallback={<div style={{ width: 24, height: 24 }} />}
+                >
+                  <GoArrowRight size={24} />
+                </ClientOnlyIcon>
               </button>
             </div>
           </div>

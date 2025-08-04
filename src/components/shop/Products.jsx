@@ -1,26 +1,57 @@
 "use client";
-import React, { useState, useMemo, useEffect, useRef } from "react";
-import { Search, Filter, ChevronDown, Lock, X, Menu } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
-import { CoinsLogo, FilterIcon, MainLogo } from "../share/svg/Logo";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Container from "../share/Container";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
-import { cardVariants, cartIconVariants } from "../share/utils/motionVariants";
-import { TbShoppingBagPlus } from "react-icons/tb";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import Container from "../share/Container";
 import FilterSection from "./FilteringSection";
+import ProductCard from "./ProductCard";
+import ProductControls from "./ProductControls";
+import { addToCart } from "@/redux/featured/cart/cartSlice";
+import { useGetProductsQuery } from "@/redux/featured/shop/shopApi";
+import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
+import { saveProductToCart } from "../share/utils/cart";
+import { saveToRecentViews } from "../share/utils/recentView";
 
 const CoralShopGrid = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("Featured");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFilterVisible, setIsFilterVisible] = useState(true); // New state for filter visibility
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isFilterVisible, setIsFilterVisible] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);;
+  
+  // Get user profile for cart identification
+  const { data: user } = useGetMyProfileQuery();
+  const currentUser = user?.data;
+  const userEmail = user?.data?.email;
+
+  
+  // Improved data fetching with proper loading states and error handling
+  const { 
+    data: allProduct, 
+    isLoading, 
+    error, 
+    refetch,
+    isFetching 
+  } = useGetProductsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: false,
+    refetchOnReconnect: true,
+  });
+  
+  const productData = allProduct?.data?.result || [];
+  
+  console.log("Product Data:", productData);
+  console.log("All Product:", allProduct);
+  console.log("Is Loading:", isLoading);
+  console.log("Is Fetching:", isFetching);
+  console.log("Error:", error);
+  console.log("Current User:", currentUser);
+  
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // Grid container reference for animation
   const gridRef = useRef(null);
@@ -31,6 +62,22 @@ const CoralShopGrid = () => {
   // Simple filters
   const [priceRange, setPriceRange] = useState([0, 400]);
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
+
+  const sortOptions = [
+    "Featured",
+    "Price: Low to High",
+    "Price: High to Low",
+    "Name A-Z",
+    "Name Z-A",
+  ];
+
+  // Force refetch on component mount
+  useEffect(() => {
+    if (!isLoading && !productData.length && !error) {
+      console.log("Forcing refetch due to empty data...");
+      refetch();
+    }
+  }, [isLoading, productData.length, error, refetch]);
 
   // Close mobile filter drawer when clicking outside
   useEffect(() => {
@@ -65,7 +112,6 @@ const CoralShopGrid = () => {
 
   // Toggle filter visibility with animation
   const toggleFilterVisibility = (e) => {
-    // Prevent default behavior that might cause page reload
     e.preventDefault();
     e.stopPropagation();
 
@@ -74,7 +120,6 @@ const CoralShopGrid = () => {
     setIsAnimating(true);
 
     if (isFilterVisible) {
-      // Hide filter with smooth animation
       filterAnimation
         .start({
           width: 0,
@@ -90,10 +135,8 @@ const CoralShopGrid = () => {
           }, 100);
         });
     } else {
-      // Show filter with smooth animation
       setIsFilterVisible(true);
 
-      // Small delay to ensure state is updated before animation
       setTimeout(() => {
         filterAnimation
           .start({
@@ -136,471 +179,136 @@ const CoralShopGrid = () => {
     }
   }, []);
 
-  // Sample product data
-  const products = [
-    {
-      id: 1,
-      name: "CS Purple Hornets Zoanthids",
-      price: 99.5,
-      image: "/assets/category1.png",
-      status: "Cut to Order",
-      available: true,
-      membership: "normal",
-    },
-    {
-      id: 2,
-      name: "CS Blue Matrix Zoanthids",
-      price: 149.99,
-      image: "/assets/category8.png",
-      status: "In Stock",
-      available: false,
-      coins: 235,
-      membership: "normal",
-    },
-    {
-      id: 3,
-      name: "CS Rainbow Incinerator",
-      price: 199.5,
-      image: "/assets/category3.png",
-      status: "Cut to Order",
-      available: false,
-      membership: "advanced",
-    },
-    {
-      id: 4,
-      name: "CS Fire and Ice",
-      price: 299.0,
-      image: "/assets/category4.png",
-      status: "Cut to Order",
-      available: false,
-      membership: "premium",
-    },
-    {
-      id: 5,
-      name: "CS Green Bay Packers",
-      price: 89.99,
-      image: "/assets/category4.png",
-      status: "Cut to Order",
-      available: true,
-      membership: "normal",
-    },
-    {
-      id: 6,
-      name: "CS Sunny Delight",
-      price: 129.5,
-      image: "/assets/category9.png",
-      status: "In Stock",
-      coins: 235,
-      available: false,
-      membership: "normal",
-    },
-    {
-      id: 7,
-      name: "CS Dragon Eyes",
-      price: 249.99,
-      image: "/assets/category7.png",
-      status: "Cut to Order",
-      available: false,
-      coins: 235,
-      membership: "advanced",
-    },
-    {
-      id: 8,
-      name: "CS Ultra Rare Collector",
-      price: 399.0,
-      image: "/assets/category8.png",
-      status: "Cut to Order",
-      available: false,
-      coins: 235,
-      membership: "premium",
-    },
-  ];
-
-  const sortOptions = [
-    "Featured",
-    "Price: Low to High",
-    "Price: High to Low",
-    "Name A-Z",
-    "Name Z-A",
-  ];
-
-  // Memoize the filtered and sorted products to prevent unnecessary re-renders
-  const filteredAndSortedProducts = useMemo(() => {
-    let filtered = products.filter((product) => {
-      const matchesSearch = product.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const matchesPrice =
-        product.price >= priceRange[0] && product.price <= priceRange[1];
-
-      let matchesAvailability = true;
-      if (availabilityFilter === "available") {
-        matchesAvailability = product.available;
-      } else if (availabilityFilter === "out-of-stock") {
-        matchesAvailability = !product.available;
-      } else if (availabilityFilter === "cut-to-order") {
-        matchesAvailability = product.status === "Cut to Order";
-      }
-
-      return matchesSearch && matchesPrice && matchesAvailability;
-    });
-
-    switch (sortBy) {
-      case "Price: Low to High":
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case "Price: High to Low":
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case "Name A-Z":
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "Name Z-A":
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      default:
-        break;
+  // Helper function to get user-specific cart key
+  const getUserCartKey = () => {
+    if (currentUser?.email) {
+      return `coral_cart_${currentUser.email}`;
+    } else if (currentUser?._id) {
+      return `coral_cart_${currentUser._id}`;
     }
+    // Fallback to generic cart if no user
+    return 'coral_cart_guest';
+  };
 
-    return filtered;
-  }, [searchTerm, sortBy, priceRange, availabilityFilter]);
+  // Map API data to the required format for the UI
+  const products = React.useMemo(() => {
+    if (!productData || !Array.isArray(productData)) return [];
+    
+    return productData.map((item) => ({
+      _id: item._id,
+      name: item.name,
+      price: item.price,
+      images: item.images ,
+      // && item.images.length > 0 ? item.images[0] : ''
+      status: item.status === 'active' ? (item.isStock ? 'In Stock' : 'Out of Stock') : item.status,
+      available: item.creditNeeds === 0 && !item.premiumMembership && !item.advanceMembership,
+      creditNeeds: item.creditNeeds,
+      membership: item.premiumMembership
+        ? 'premium'
+        : item.advanceMembership
+        ? 'advanced'
+        : 'normal',
+      description: item.description,
+      stock: item.stock,
+    }));
+  }, [productData]);
 
   const handleProductClick = (product) => {
+     if (userEmail && product) {
+          saveToRecentViews(product, userEmail);
+        }
     if (product.available) {
-      router.push(`/shop/${product.id}`);
+      router.push(`/shop/${product._id}`);
     }
   };
 
-  const handleAddToCart = (e, product) => {
-    e.stopPropagation();
-    // Show toast notification on adding to cart
-    toast.success(`${product.name} successfully added to cart!`);
+  // Enhanced add to cart function with user-specific storage
+   const handleAddToCart = (e, product) => {
+      e.stopPropagation();
+      saveProductToCart(product, userEmail);
+   
   };
 
-  const ProductCard = ({ product, index }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const [imageError, setImageError] = useState(false);
-
-    const handleAddToCart = (e, product) => {
-      e.stopPropagation();
-
-      if (product && product.name) {
-        // If product and product.name are valid, show toast
-        toast.success(`Added ${product.name} to cart`);
-        console.log(`Added ${product.name} to cart`);
-      } else {
-        // In case product or product.name is undefined, show error
-        toast.error("Something went wrong! Product details are missing.");
-        console.log("Product name or product is undefined");
-      }
-    };
-
-    const showMembershipOverlay =
-      !product.available &&
-      (product.membership === "advanced" || product.membership === "premium");
-    const showCoinsOverlay =
-      !product.available && product.membership === "normal" && product.coins;
-
-    const handleImageError = () => {
-      setImageError(true);
-    };
-
-    const getMembershipIcon = (membership) => {
-      if (membership === "advanced") {
-        return (
-          <MainLogo
-            className="w-32 h-36 lg:w-[100px] lg:h-[122px] mx-auto mb-6"
-            color="#057199"
-          />
-        );
-      } else if (membership === "premium") {
-        return (
-          <MainLogo
-            className="w-32 h-36 lg:w-[100px] lg:h-[122px] mx-auto mb-6"
-            color="#FEF488"
-          />
-        );
-      }
-      return null;
-    };
-
-    const getCoinsDisplay = (product) => {
-      if (showCoinsOverlay) {
-        return (
-          <div className="flex gap-2 border-2 border-amber-200 py-1 px-6 rounded-full">
-            <CoinsLogo />
-            <span className="text-white font-semibold text-4xl font-brush">
-              {product.coins}
-            </span>
-          </div>
-        );
-      }
-      return null;
-    };
-
+  // Enhanced loading state with retry option
+  if (isLoading || isFetching) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isGridInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{
-          duration: 0.5,
-          delay: index * 0.1,
-          ease: "easeOut",
-        }}
-        whileHover={{ y: -5, transition: { duration: 0.3, ease: "easeOut" } }}
-        className={`relative group ${
-          product.available ? "cursor-pointer" : "cursor-default"
-        }`}
-        onClick={() => handleProductClick(product)}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="bg-[#181818] backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
-          {/* Product Image */}
-          <div className="relative aspect-square overflow-hidden">
-            {!imageError ? (
-              <Image
-                src={product.image}
-                alt={product.name}
-                height={300}
-                width={300}
-                loading="lazy"
-                quality={80}
-                onError={handleImageError}
-                className="w-full h-full object-cover transition-transform duration-500"
-              />
-            ) : (
-              /* Fallback coral pattern background */
-              <div className="w-full h-full bg-[#181818] flex items-center justify-center relative">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="text-white text-center p-4 relative z-10">
-                  <div className="text-6xl mb-2">🪸</div>
-                  <p className="text-sm opacity-75">Coral Preview</p>
-                </div>
-              </div>
-            )}
-
-            {/* Membership Lock Overlay - For advanced/premium products */}
-            {showMembershipOverlay && (
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
-                <div className="mb-">
-                  {getMembershipIcon(product.membership)}
-                </div>
-                <h4 className="font-bold mb-2 text-sm">
-                  {product.membership === "advanced" ? "Advanced" : "Premium"}{" "}
-                  Membership Required
-                </h4>
-                <p className="text-[12px] opacity-90 mb-4 leading-relaxed">
-                  You have to upgrade your membership status to view this
-                  product
-                </p>
-                {product.coins ? (
-                  <div>
-                    <div className="flex gap-2 border-2 border-amber-200 py-1 px-6 rounded-full">
-                      <CoinsLogo />
-                      <span className="text-white font-semibold text-4xl font-brush">
-                        {product.coins}
-                      </span>
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            )}
-
-            {/* Coins Overlay - For normal membership products with coins */}
-            {showCoinsOverlay && (
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
-                <div className="mb-4">{getCoinsDisplay(product)}</div>
-              </div>
-            )}
-          </div>
-
-          {/* Product Info */}
-          <div className="p-4">
-            <h3 className="text-white font-medium text-lg mb-1 transition-colors">
-              {product.name}
-            </h3>
-            <p className="text-gray-400 text-sm mb-3 italic">
-              {product.status}
+      <Container className="min-h-screen text-white">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+            <p className="text-gray-400">
+              {isLoading ? "Loading products..." : "Refreshing data..."}
             </p>
-            <div className="flex items-center justify-between min-h-[30px]">
-              {product.available ? (
-                <div className="absolute bottom-2 left-4 flex items-end gap-1">
-                  <motion.span
-                    className="text-lg font-bold text-white"
-                    animate={isHovered ? { opacity: 0 } : { opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    AED
-                  </motion.span>
-                  <motion.div
-                    className="flex items-baseline gap-0.5"
-                    animate={isHovered ? { x: -36 } : { x: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <span className="text-lg font-bold text-white">
-                      {product.price.toFixed(2).split(".")[0]}{" "}
-                      {/* Get the whole number part */}
-                    </span>
-                    <motion.span
-                      className="text-sm text-white"
-                      animate={
-                        isHovered ? { y: -10, scale: 0.8 } : { y: 0, scale: 1 }
-                      }
-                      transition={{ duration: 0.5 }}
-                      style={{ transformOrigin: "bottom left" }}
-                    >
-                      {isHovered ? (
-                        <sup className="text-xs">
-                          {product.price.toFixed(2).split(".")[1]}
-                        </sup>
-                      ) : (
-                        `.${product.price.toFixed(2).split(".")[1]}`
-                      )}
-                    </motion.span>
-                  </motion.div>
-                </div>
-              ) : (
-                <div className="h-6"></div>
-              )}
-            </div>
-
-            {product.available ? (
-              <motion.button
-                className="absolute bottom-2 right-3 w-10 h-10 cursor-pointer hover:scale-110 rounded-full flex items-center justify-center text-black bg-white p-2"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={
-                  isHovered
-                    ? { opacity: 1, scale: 1 }
-                    : { opacity: 0, scale: 0 }
-                }
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                onClick={(e) => handleAddToCart(e, product)}
-              >
-                <TbShoppingBagPlus size={32} className="scale-110" />
-              </motion.button>
-            ) : (
-              <div className=""></div>
-            )}
           </div>
         </div>
-      </motion.div>
+      </Container>
     );
-  };
+  }
+
+  // Enhanced error state with retry functionality
+  if (error) {
+    return (
+      <Container className="min-h-screen text-white">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <p className="text-red-400 mb-4">
+              Error loading products: {error?.message || 'Unknown error'}
+            </p>
+            <button 
+              onClick={() => {
+                console.log("Retrying product fetch...");
+                refetch();
+              }}
+              className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </Container>
+    );
+  }
+
+  // Show message if no products available
+  if (!productData || productData.length === 0) {
+    return (
+      <Container className="min-h-screen text-white">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <p className="text-gray-400 mb-4">No products available</p>
+            <button 
+              onClick={() => {
+                console.log("Retrying product fetch...");
+                refetch();
+              }}
+              className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+      </Container>
+    );
+  }
 
   return (
-    <Container className="min-h-screen text-white">
+    <Container className=" text-white">
       <div className="mx-auto">
         {/* Header Controls */}
-        <div className="flex flex-col gap-4 mb-8">
-          {/* Mobile Controls - Filter Left, Sort Right */}
-          <div className="flex justify-between gap-4 sm:hidden">
-            {/* Mobile Filter Toggle Button - Left */}
-            <button
-              onClick={() => setIsMobileFilterOpen(true)}
-              className="filter-toggle-btn flex items-center justify-center space-x-2 bg-[#181818]/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 transition-all duration-300 flex-1"
-            >
-              <Menu className="w-4 h-4" />
-              <span className="text-sm font-medium">Filters</span>
-            </button>
+        <ProductControls
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          isDropdownOpen={isDropdownOpen}
+          setIsDropdownOpen={setIsDropdownOpen}
+          sortOptions={sortOptions}
+          isMobileFilterOpen={isMobileFilterOpen}
+          setIsMobileFilterOpen={setIsMobileFilterOpen}
+          isFilterVisible={isFilterVisible}
+          toggleFilterVisibility={toggleFilterVisibility}
+          isAnimating={isAnimating}
+        />
 
-            {/* Sort Dropdown - Right */}
-            <div className="relative flex-1">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full flex items-center space-x-2 bg-[#181818]/50 backdrop-blur-sm border border-gray-600/50 rounded-xl px-4 py-3 text-white hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 justify-between transition-all duration-300"
-              >
-                <span className="flex items-center space-x-2">
-                  <Filter className="w-4 h-4" />
-                  <span className="text-sm">Sort</span>
-                </span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform ${
-                    isDropdownOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {isDropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 w-full bg-[#181818] border border-gray-700 rounded-lg shadow-lg z-50">
-                  {sortOptions.map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => {
-                        setSortBy(option);
-                        setIsDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg ${
-                        sortBy === option
-                          ? "bg-gray-700 text-yellow-400"
-                          : "text-white"
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Desktop Controls */}
-          <div className="border-y border-gray-700/50 flex items-center gap-10 py-3 hidden sm:flex">
-            <motion.button
-              className="flex items-center gap-2 cursor-pointer hover:text-yellow-400 transition-colors duration-500 bg-transparent border-none focus:outline-none"
-              onClick={toggleFilterVisibility}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              disabled={isAnimating}
-            >
-              <p className="text-white font-bold">Filter</p>
-              <motion.div
-                animate={{ rotate: isFilterVisible ? 0 : 180 }}
-                transition={{ duration: 0.9 }}
-              >
-                <FilterIcon />
-              </motion.div>
-            </motion.button>
-
-            <div className="hidden sm:flex gap-4">
-              <div className="relative">
-                <button
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center space-x-2 border-none px-4 py-3 text-white focus:outline-none focus:border-none min-w-[160px] justify-between transition-all duration-300"
-                >
-                  <span className="flex items-center border-none space-x-2">
-                    <Filter className="w-4 h-4" />
-                    <span className="text-sm">Sort by</span>
-                    <span className="font-medium">{sortBy}</span>
-                  </span>
-                </button>
-
-                {isDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-full bg-[#181818] shadow-lg z-50">
-                    {sortOptions.map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => {
-                          setSortBy(option);
-                          setIsDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-700 first:rounded-t-lg last:rounded-b-lg ${
-                          sortBy === option
-                            ? "bg-gray-700 text-yellow-400"
-                            : "text-white"
-                        }`}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
         {/* Mobile Filter Overlay */}
-     
         {isMobileFilterOpen && (
           <div className="fixed inset-0 z-[9999] lg:hidden">
             <div
@@ -614,7 +322,8 @@ const CoralShopGrid = () => {
             </div>
           </div>
         )}
-        {/* Product Grid with smooth animation */}
+
+        {/* Product Grid */}
         <div className="flex gap-4 relative overflow-hidden">
           {/* Desktop Filtering Sidebar */}
           <motion.div
@@ -626,15 +335,15 @@ const CoralShopGrid = () => {
               marginRight: "1rem",
               scale: 1,
             }}
-            className="lg:block hidden transition-all overflow-hidden" // Hide on mobile/tablets, show on desktop (lg)
+            className="lg:block hidden transition-all overflow-hidden"
             style={{ width: "16.666667%", transformOrigin: "left center" }}
           >
-            <div className="pr-2">
+            <div className="pr-">
               <FilterSection />
             </div>
           </motion.div>
 
-          {/* Products with smooth grid transition */}
+          {/* Products Grid */}
           <div className="flex-1">
             <div
               ref={gridRef}
@@ -642,17 +351,21 @@ const CoralShopGrid = () => {
                 isFilterVisible
                   ? "lg:grid-cols-3 xl:grid-cols-4"
                   : "lg:grid-cols-4 xl:grid-cols-4"
-              } gap-5 transition-all duration-1000 ease-in-out`}
+              } gap-x-3 gap-y-10 transition-all duration-1000 ease-in-out `}
               style={{
                 transition: "all 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
-              {filteredAndSortedProducts.length > 0 ? (
-                filteredAndSortedProducts.map((product, index) => (
+              {products?.length > 0 ? (
+                products?.map((product, index) => (
                   <ProductCard
                     key={product.id}
                     product={product}
                     index={index}
+                    isGridInView={isGridInView}
+                    handleProductClick={handleProductClick}
+                    handleAddToCart={handleAddToCart}
+                    currentUser={currentUser}
                   />
                 ))
               ) : (
@@ -665,14 +378,6 @@ const CoralShopGrid = () => {
             </div>
           </div>
         </div>
-        {/* No Results */}
-        {filteredAndSortedProducts.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">
-              No products found matching your search.
-            </p>
-          </div>
-        )}
       </div>
     </Container>
   );

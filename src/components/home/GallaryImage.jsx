@@ -13,7 +13,7 @@ const GallaryImage = () => {
           src="/assets/gallary.png"
           alt="Gallery"
           height={500}
-          width={1600}
+          width={1100}
           //   layout="responsive"
           className="w-full h-[400px] md:h-[500px] lg:h-[700px] object-cover"
         />

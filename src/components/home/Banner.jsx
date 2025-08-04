@@ -9,6 +9,8 @@ import { useUser } from "../share/UserProvider";
 import AnimatedShopButton from "../share/utils/AnimatedShopButton";
 import { getUserStyles } from "../share/utils/userStyles";
 import BannerButtonAnimation from "../share/utils/BannerButtonAnimation";
+import { useClaimPromoCodeMutation, useGetPromoCodesQuery } from "@/redux/featured/homePage/bannerApi";
+import { toast } from "sonner";
 
 const Banner = () => {
   const { userType } = useUser();
@@ -25,25 +27,29 @@ const Banner = () => {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [copied, setCopied] = useState(false);
   const router = useRouter()
+  const { data: promoCodes } = useGetPromoCodesQuery();
+  const [claimPromoCode] = useClaimPromoCodeMutation();
+  console.log(promoCodes)
+  const discountOffers = promoCodes?.data
 
   // Discount offers data
-  const discountOffers = [
-    {
-      id: 1,
-      title: "10% Off for orders AED600 or above",
-      code: "XMAS600",
-    },
-    {
-      id: 2,
-      title: "15% Off of orders AED1000 or above",
-      code: "XMAS1000",
-    },
-    {
-      id: 3,
-      title: "20% Off of orders AED1300 or above",
-      code: "XMAS1300",
-    },
-  ];
+  // const discountOffers = [
+  //   {
+  //     id: 1,
+  //     title: "10% Off for orders AED600 or above",
+  //     code: "XMAS600",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "15% Off of orders AED1000 or above",
+  //     code: "XMAS1000",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "20% Off of orders AED1300 or above",
+  //     code: "XMAS1300",
+  //   },
+  // ];
 
   useEffect(() => {
     // Set target date to January 10th (you can adjust this)
@@ -84,15 +90,22 @@ const Banner = () => {
   const handleCopyCode = async () => {
     if (selectedOffer) {
       try {
-        // Try modern clipboard API first
+        // First, try to claim the promo code
+        const response = await claimPromoCode({ promoCode: selectedOffer.promoCode }).unwrap();
+
+        // Check if the backend actually allowed the claim
+        if (response?.data?.success === false) {
+          toast.error(response.data.message || "You have already claimed this promo code");
+          return;
+        }
+
+        // If successful, copy the code
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(selectedOffer.code);
-          setCopied(true);
-          setTimeout(() => setCopied(false), 2000);
+          await navigator.clipboard.writeText(selectedOffer.promoCode);
         } else {
-          // Fallback method for older browsers or unsecure contexts
+          // Fallback for older browsers
           const textArea = document.createElement("textarea");
-          textArea.value = selectedOffer.code;
+          textArea.value = selectedOffer.promoCode;
           textArea.style.position = "fixed";
           textArea.style.left = "-999999px";
           textArea.style.top = "-999999px";
@@ -101,20 +114,16 @@ const Banner = () => {
           textArea.select();
           try {
             document.execCommand("copy");
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-          } catch (err) {
-            console.error("Fallback copy failed: ", err);
-            // Show alert as last resort
-            alert(`Copy this code: ${selectedOffer.code}`);
+          } finally {
+            document.body.removeChild(textArea);
           }
-
-          document.body.removeChild(textArea);
         }
+        setCopied(true);
+        toast.success("Promo code claimed and copied successfully!");
+        setTimeout(() => setCopied(false), 2000);
       } catch (err) {
-        console.error("Copy failed: ", err);
-        // Fallback: show alert with code
-        alert(`Copy this code: ${selectedOffer.code}`);
+        const errorMsg = err?.data?.message || "You have already claimed this promo code";
+        toast.error(errorMsg);
       }
     }
   };
@@ -216,12 +225,12 @@ const Banner = () => {
 
           {/* Discount Offers */}
           <div className="space-y-4 w-full max-w-2xl">
-            {discountOffers.map((offer) => (
+            {discountOffers?.map((offer) => (
               <div
-                key={offer.id}
+                key={offer._id}
                 className="flex items-center justify-between pr-10 backdrop-blur-[5px] bg-black/30 border-2 border-white/50 rounded-full px-6 h-[67px] py-4"
               >
-                <span className="text-white font-medium">{offer.title}</span>
+                <span className="text-white font-medium">{offer?.title}</span>
 
                 <AnimatedShopButton
                   onClick={() => handleGetCode(offer)}
@@ -275,9 +284,9 @@ const Banner = () => {
                 {selectedOffer?.title}
               </h3>
 
-              <div className="bg-white/10 border border-white/20 rounded-2xl px-6 py-4">
+              <div className="bg-black/30 border border-white/20 rounded-2xl px-6 py-4">
                 <div className="text-white text-2xl font-bold tracking-wider">
-                  {selectedOffer?.code}
+                  {selectedOffer?.promoCode}
                 </div>
               </div>
 

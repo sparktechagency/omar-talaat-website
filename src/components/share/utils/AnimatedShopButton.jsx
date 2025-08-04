@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { ClientOnlyIcon, createDynamicIcon } from "@/components/ui/client-only-icon";
 
 const AnimatedShopButton = ({
   onClick = () => {},
@@ -24,6 +25,14 @@ const AnimatedShopButton = ({
     xl: "w-44 px-6",
   };
 
+  const iconSize = size === "sm" ? 16 : size === "md" ? 18 : size === "lg" ? 20 : 24;
+
+  // Create dynamic icon component
+  const DynamicIcon = useMemo(() => {
+    if (!CustomIcon) return null;
+    return createDynamicIcon(CustomIcon);
+  }, [CustomIcon]);
+
   return (
     <button
       className={`
@@ -46,14 +55,29 @@ const AnimatedShopButton = ({
       onClick={onClick}
     >
       {/* Conditionally render the icon */}
-      {CustomIcon && (
-        <CustomIcon
-          className={`
-            transition-all duration-500 ease-in-out
-            ${isHovered ? "opacity-0 scale-0" : "opacity-100 scale-100"}
-          `}
-          size={size === "sm" ? 16 : size === "md" ? 18 : size === "lg" ? 20 : 24}
-        />
+      {DynamicIcon && (
+        <ClientOnlyIcon
+          fallback={
+            <div 
+              className={`
+                transition-all duration-500 ease-in-out
+                ${isHovered ? "opacity-0 scale-0" : "opacity-100 scale-100"}
+              `}
+              style={{
+                width: iconSize,
+                height: iconSize,
+              }}
+            />
+          }
+        >
+          <DynamicIcon
+            className={`
+              transition-all duration-500 ease-in-out
+              ${isHovered ? "opacity-0 scale-0" : "opacity-100 scale-100"}
+            `}
+            size={iconSize}
+          />
+        </ClientOnlyIcon>
       )}
 
       {/* Text */}

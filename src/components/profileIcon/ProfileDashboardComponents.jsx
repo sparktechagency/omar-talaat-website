@@ -10,9 +10,12 @@ import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MainLogo } from '../share/svg/Logo';
 import LeaderboardModal from "../navbar/LeaderBoard";
+import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
 
 // Profile Tab Component with Scrolling
 const ProfileTab = () => {
+  const {data}=useGetMyProfileQuery()
+  const profileData = data?.data || {};
   return (
     <div className="space-y-6 max-h-[60vh] overflow-y-auto" style={{
       scrollbarWidth: 'thin',

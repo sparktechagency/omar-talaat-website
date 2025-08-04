@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Minus, Plus, Edit3, Trash2, Calendar, Clock } from "lucide-react";
 import Image from "next/image";
 import Container from "../share/Container";
@@ -9,28 +9,39 @@ import DoaFormModal from "../doaForm/DoaFormModal";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { LeftSideArrow, RightSideArrow } from "../share/svg/Logo";
+import { useSelector, useDispatch } from "react-redux";
+import { 
+  selectCartItems, 
+  selectCartTotal, 
+  selectCartTotalItems,
+  removeFromCart,
+  updateQuantity,
+  increaseQuantity,
+  decreaseQuantity,
+  clearCart
+} from "@/redux/featured/cart/cartSlice";
+import { getImageUrl } from "../share/imageUrl";
+// Import the new function
+import { getCartProducts, updateCartItemQuantity } from "../share/utils/cart";
+import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
 
 const CheckoutPage = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "CS Purple Hornets Zenithids",
-      description:
-        "Extra color, bring the food and everything, We recommend a spelling level of 2 meals. Spicy delivery Res HamsExtra color, bring the food and everything, We recommend a spelling level of 2 meals. Spicy delivery Res Hams ...",
-      price: 99,
-      quantity: 1,
-      image: "/assets/category1.png",
-    },
-    {
-      id: 2,
-      name: "CS Purple Hornets Zenithids",
-      description:
-        "Extra color, bring the food and everything, We recommend a spelling level of 2 meals. Spicy delivery Res Hams...",
-      price: 99,
-      quantity: 1,
-      image: "/assets/category4.png",
-    },
-  ]);
+  const dispatch = useDispatch();
+  const [cartItems, setCartItems] = useState([]);
+  const totalItems = useSelector(selectCartTotalItems);
+  const subtotal = useSelector(selectCartTotal);
+  const {data:user}=useGetMyProfileQuery();
+  const discount = 50;
+  const deliveryCharge = subtotal >= 1000 ? 0 : 10; // Free delivery if subtotal >= 1000
+  const total = subtotal - discount + deliveryCharge;
+
+  // Progress bar calculation
+  const freeDeliveryThreshold = 1000;
+  const progressPercentage = Math.min(
+    (subtotal / freeDeliveryThreshold) * 100,
+    100
+  );
+  const remainingAmount = Math.max(freeDeliveryThreshold - subtotal, 0);
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("8am-9pm");
@@ -43,6 +54,56 @@ const CheckoutPage = () => {
   const currentDate = new Date();
   const [calendarMonth, setCalendarMonth] = useState(currentDate.getMonth());
   const [calendarYear, setCalendarYear] = useState(currentDate.getFullYear());
+
+  const userEmail = user?.data?.email;
+
+  useEffect(() => {
+    const items = getCartProducts(userEmail);
+    setCartItems(items);
+  }, [userEmail]);
+
+
+  // When loading cart items, ensure each item has a quantity property
+useEffect(() => {
+  const items = getCartProducts(userEmail);
+  // Ensure each item has a quantity property
+  const itemsWithQuantity = items.map(item => ({
+    ...item,
+    quantity: item.quantity || 1 // Default to 1 if quantity is not set
+  }));
+  setCartItems(itemsWithQuantity);
+}, [userEmail]);
+
+
+const handleQuantityChange = (productId, change) => {
+  const updatedCart = cartItems.map((item) => {
+    const itemId = item._id || item.id;
+    if (itemId === productId) {
+      const newQuantity = item.quantity + change;
+
+      if (newQuantity < 1) return item;
+
+      if (newQuantity > item.stock) {
+        toast.error(`Only ${item.stock} in stock`);
+        return item;
+      }
+
+      return { ...item, quantity: newQuantity };
+    }
+    return item;
+  });
+
+  setCartItems(updatedCart);
+  localStorage.setItem(`cart-${userEmail}`, JSON.stringify(updatedCart));
+};
+
+const removeItem = (productId) => {
+  const updatedCart = cartItems.filter((item) => (item._id || item.id) !== productId);
+  setCartItems(updatedCart);
+  localStorage.setItem(`cart-${userEmail}`, JSON.stringify(updatedCart));
+  toast.success("Product removed from cart.");
+};
+
 
   const monthNames = [
     "January",
@@ -76,7 +137,7 @@ const CheckoutPage = () => {
   for (let day = 1; day <= daysInMonth; day++) {
     calendarDays.push(day);
   }
-  
+
   // Add empty cells for days after the end of the month to complete the grid
   const totalCells = Math.ceil((firstDayOfMonth + daysInMonth) / 7) * 7;
   const emptyCellsAtEnd = totalCells - (firstDayOfMonth + daysInMonth);
@@ -87,15 +148,15 @@ const CheckoutPage = () => {
   // Description truncation logic with "See More/See Less"
   const DescriptionWithToggle = ({ description }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const truncatedDescription = description.slice(0, 100);
+    const truncatedDescription = description?.slice(0, 100);
     const fullDescription = description;
 
     return (
       <div className="relative ">
-        <p className="text-xs lg:text-sm  mb-2 ">
+        <p className="text-sm lg:text-sm  mb-2 ">
           {isExpanded ? fullDescription : truncatedDescription}
           ...
-          {description.length > 100 && (
+          {description?.length > 100 && (
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className="font-bold  hover:underline"
@@ -107,6 +168,8 @@ const CheckoutPage = () => {
       </div>
     );
   };
+
+  console.log(cartItems);
 
   // Navigation functions
   const goToPreviousMonth = () => {
@@ -129,35 +192,34 @@ const CheckoutPage = () => {
     setSelectedDate(null); // Reset selected date when changing month
   };
 
-  const updateQuantity = (id, change) => {
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + change) }
-          : item
-      )
-    );
-  };
+  // const handleQuantityChange = (id, change) => {
+  //   const item = cartItems.find(item => item.id === id || item._id === id);
+  //   if (item) {
+  //     const newQuantity = Math.max(1, item.quantity + change);
+      
+  //     // Check stock limit
+  //     if (change > 0 && item.stock && newQuantity > item.stock) {
+  //       toast.error(`Only ${item.stock} items available in stock`);
+  //       return;
+  //     }
+      
+  //     // Update quantity in localStorage
+  //     const updated = updateCartItemQuantity(id, newQuantity, userEmail);
+      
+  //     if (updated) {
+  //       // Refresh cart items from localStorage
+  //       const items = getCartProducts(userEmail);
+  //       setCartItems(items);
+  //     }
+  //   }
+  // };
 
-  const removeItem = (id) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
+  // const removeItem = (id) => {
+  //   dispatch(removeFromCart(id));
+  // };
 
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-  const discount = 50;
-  const deliveryCharge = subtotal >= 1000 ? 0 : 10; // Free delivery if subtotal >= 1000
-  const total = subtotal - discount + deliveryCharge;
 
-  // Progress bar calculation
-  const freeDeliveryThreshold = 1000;
-  const progressPercentage = Math.min(
-    (subtotal / freeDeliveryThreshold) * 100,
-    100
-  );
-  const remainingAmount = Math.max(freeDeliveryThreshold - subtotal, 0);
+
 
   return (
     <Container className="  text-white p-4 lg:p-8 mt-10 lg:mt-0   mx-auto">
@@ -193,7 +255,7 @@ const CheckoutPage = () => {
                       {/* Image on the left side */}
                       <div>
                         <Image
-                          src={item.image}
+                          src={getImageUrl(item.images[0])}
                           alt={item.name}
                           height={80}
                           width={80}
@@ -202,7 +264,7 @@ const CheckoutPage = () => {
                       </div>
 
                       {/* Content on the right side */}
-                      <div className="flex-1 flex flex-col gap-3 text-[22px] font-bold">
+                      <div className="flex-1 flex flex-col gap-3 ">
                         <div className="lg:w-[585px] w-full">
                           {/* Title */}
                           <h3 className="font-medium hidden lg:block text-sm lg:text-base mb-1">
@@ -224,7 +286,7 @@ const CheckoutPage = () => {
                         <div className="flex lg:w-[187px] w-full border lg:px-3 px-1 justify-between py-1 rounded-full items-center space-x-">
                           {/* Quantity controls */}
                           <button
-                            onClick={() => updateQuantity(item.id, -1)}
+                            onClick={() => handleQuantityChange(item._id || item.id, -1)}
                             className="w-6 h-6 lg:w-8 lg:h-8 cursor-pointer rounded-full flex items-center justify-center hover: transition-colors"
                           >
                             <Minus size={12} className="lg:w-4 lg:h-4" />
@@ -233,7 +295,7 @@ const CheckoutPage = () => {
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() => updateQuantity(item.id, 1)}
+                           onClick={() => handleQuantityChange(item._id || item.id, 1)}
                             className="w-6 h-6 lg:w-8 lg:h-8 cursor-pointer rounded-full flex items-center justify-center hover: transition-colors"
                           >
                             <Plus size={12} className="lg:w-4 lg:h-4" />
@@ -244,7 +306,7 @@ const CheckoutPage = () => {
                           {/* Price - now shows total for this item */}
                           <div>
                             <span className="font-medium lg:text-3xl">
-                              ${item.price * item.quantity}
+                               ${ (item.price * item.quantity).toFixed(2) }
                             </span>
                           </div>
                         </div>
@@ -297,8 +359,8 @@ const CheckoutPage = () => {
                 <div className="flex gap-2">
                   <p className="text-sm flex h-6">
                     Spend{" "}
-                    <span className=" w-20  ml-2 transition-all duration-300 group-hover:font-bold group-hover:text-[16px] ">
-                      AED ${remainingAmount}
+                    <span className=" w-25  ml-3 transition-all duration-300 group-hover:scale-115 group-hover:font-bold  ">
+                      AED ${remainingAmount.toFixed(2)}
                     </span>{" "}
                     more and get free shipping! (Free shipping is from AED
                     1000).
@@ -526,7 +588,7 @@ const CheckoutPage = () => {
             </div>
 
             <div className="flex justify-center items-center space-y-7 mt-16">
-              <div className={`w-24 h-24 lg:w-36 lg:h-36 `}>
+              <div className={`w-24 h-24 lg:w-36 lg-h-36 `}>
                 <div className={styles.imageWithBubbles}>
                   <Image
                     src="/assets/image 10.png"
@@ -538,7 +600,7 @@ const CheckoutPage = () => {
                 </div>
               </div>
               <div>
-                <h2 className="text-center text-xl md:text-xl lg:text-4xl xl:text-5xl mb-2">
+                <h2 className="text-center text-xl md:text-xl lg:text-5xl xl:text-[56px] lg:font-bold mb-5">
                   You Can Fit Up To 4 More Corals
                 </h2>
                 <p className="text-[14px] text-center">
@@ -550,10 +612,10 @@ const CheckoutPage = () => {
 
             {/* My Information */}
             <div>
-              <h3 className="text-lg font-medium lg:text-xl mb-4">
+              <h3 className="text-lg font-medium text-center lg:text-[40px] lg:font-bold mb-4">
                 My Information
               </h3>
-              <div className="border  rounded-lg p-4 lg:p-6">
+              <div className="border-3  rounded-lg p-4 lg:p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 text-sm lg:text-base text-gray-400">
                   <div>
                     <span className="text-white font-medium">
@@ -598,17 +660,17 @@ const CheckoutPage = () => {
               <div className="flex flex-col lg:flex-row gap-10 justify-center w-full">
                 {/* Comments */}
                 <div className="lg:w-[550px] w-full">
-                  <h3 className="text-lg font-medium lg:text-xl mb-4">
+                  <h3 className="text-lg font-medium lg:text-[40px] lg:font-bold mb-6 text-center">
                     Comments
                   </h3>
-                  <div className="rounded-lg border  p-6 lg:p-8">
+                  <div className="rounded-lg border-3  p-6 lg:p-8">
                     <textarea
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
                       placeholder="Write comment"
-                      className="w-full h-32 lg:h-68 border   rounded-lg p-3 lg:p-4 text-sm lg:text-base text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="w-full h-32 lg:h-67 border   rounded-lg p-3 lg:p-4 text-sm lg:text-base text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
                     />
-                    <button className="mt-12 mb-4 border border-red-500 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-lg text-sm lg:text-[22px] w-full  transition-colors">
+                    <button className="mt-12 mb-4 border flex justify-center items-center  text-white px-4 py-2 lg:px-5 lg:py-3 rounded-lg text-sm lg:text-[22px] w-1/2  mx-auto   transition-colors">
                       Submit With Order
                     </button>
                   </div>
@@ -616,18 +678,15 @@ const CheckoutPage = () => {
 
                 {/* Order Summary */}
                 <div className="lg:w-[550px] w-full">
-                  <h3 className="text-lg font-medium lg:text-xl mb-4">
-                    Order Summary
+                  <h3 className="text-lg font-medium lg:text-[40px] lg:font-bold mb-6 text-center">
+                    Sub Total
                   </h3>
-                  <div className="border  rounded-lg p-4 lg:p-6">
+                  <div className="border-3  rounded-lg p-4 lg:p-6">
                     <div className="space-y-3 text-sm lg:text-base">
                       <div className="flex gap-3 text-[22px] font-bold">
                         <span className="">Quantity:</span>
                         <span className="text-white">
-                          {cartItems.reduce(
-                            (sum, item) => sum + item.quantity,
-                            0
-                          )}
+                          {totalItems}
                         </span>
                       </div>
                       <div className="flex gap-3 text-[22px] font-bold">
@@ -636,7 +695,7 @@ const CheckoutPage = () => {
                       </div>
                       <div className="flex gap-3 text-[22px] font-bold">
                         <span className="">Discount:</span>
-                        <span className="">-AED {discount}</span>
+                        <span className="">AED {discount}</span>
                       </div>
                       <div className="flex gap-3 text-[22px] font-bold">
                         <span className="">Delivery Charge:</span>
@@ -652,23 +711,25 @@ const CheckoutPage = () => {
                             : `AED ${deliveryCharge}`}
                         </span>
                       </div>
-                      <div className="border-t border-gray-700 pt-3">
-                        <div className="flex gap-3 text-[22px] font-bold text-lg lg:text-xl ">
+                      <div className="">
+                        <div className="flex gap-3 text-[22px] font-bold text-lg  ">
                           <span className="text-white">Final Amount:</span>
                           <span className="">AED {total}</span>
                         </div>
                       </div>
                     </div>
-
                     {/* Checkout Button */}
                     <DoaFormModal
                       showAcceptButton={true}
                       triggerComponent={
-                        <button className="w-full mt-9 border-4 border-red-600 text-white py-3 lg:py-[43px] bg-gray-900/30 px-4  rounded-lg font-bold text-lg lg:text-[40px] transition-colors">
-                          Proceed To Checkout
-                        </button>
+                        <div className="w-full mt-9 p-[5px] rounded-lg bg-gradient-to-r from-[#900001] via-[#FF6728] to-[#C20002]">
+                          <button className="w-full h-full bg-black text-white py-3 lg:py-[43px] px-4 rounded-lg font-bold text-lg lg:text-[40px]">
+                            Proceed To Checkout
+                          </button>
+                        </div>
                       }
                     />
+                    
                   </div>
                 </div>
               </div>
@@ -681,3 +742,5 @@ const CheckoutPage = () => {
 };
 
 export default CheckoutPage;
+
+

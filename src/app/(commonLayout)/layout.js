@@ -16,7 +16,6 @@ const CommonLayout = ({ children }) => {
       {pathname === "/" && (
         <div className="60">
           <Banner />
-          {/* <Ficilities /> */}
         </div>
       )}
       {/* Main content */}

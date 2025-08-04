@@ -13,10 +13,15 @@ import {
 import Image from "next/image";
 import { CoinsLogo, Logo } from "../share/svg/Logo";
 import RelatedProducts from "./RelaventProducts";
+import { useGetProductByIdQuery } from "@/redux/featured/shop/shopApi";
+import { useParams } from "next/navigation";
 
 const ProductDetails = () => {
+  const {id} = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const {data:singleProduct} = useGetProductByIdQuery(id);
+  console.log("Single Product:", singleProduct);
 
   const productImages = [
     "https://i.ibb.co/fYZx5zCP/Region-Gallery-Viewer.png",

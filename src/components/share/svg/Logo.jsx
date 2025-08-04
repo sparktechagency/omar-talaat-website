@@ -986,8 +986,8 @@ const RightSideArrow=()=>(
   <path d="M15.1997 10.99L13.2297 9.02005L10.0197 5.81005C9.33969 5.14005 8.17969 5.62005 8.17969 6.58005V12.8101V18.4201C8.17969 19.3801 9.33969 19.8601 10.0197 19.1801L15.1997 14C16.0297 13.18 16.0297 11.82 15.1997 10.99Z" fill="url(#paint0_linear_168_981)"/>
   <defs>
     <linearGradient id="paint0_linear_168_981" x1="15.8222" y1="12.4985" x2="8.17969" y2="12.4985" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#057199"/>
-      <stop offset="1" stop-color="#69CDFF"/>
+      <stop stopcolor="#057199"/>
+      <stop offset="1" stopcolor="#69CDFF"/>
     </linearGradient>
   </defs>
 </svg>

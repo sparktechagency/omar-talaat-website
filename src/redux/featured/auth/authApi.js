@@ -96,24 +96,22 @@ const authSlice = api.injectEndpoints({
         };
       },
     }),
-    getUser: builder.query({
-      query: (data) => {
-        return {
-          method: "GET",
-          url: "/user/profile",
-          body: data,
-        };
-      },
-    }),
+    // getUser: builder.query({
+    //   query: (data) => {
+    //     return {
+    //       method: "GET",
+    //       url: "/user/profile",
+    //       body: data,
+    //     };
+    //   },
+    // }),
 
-    profile: builder.query({
+    getMyProfile: builder.query({
       query: () => ({
         method: "GET",
-        url: "/user/profile",
+        url: "/users/profile",
       }),
-      transformResponse: ({ data }) => {
-        return data;
-      },
+   
       providesTags: ["User"],
     }),
   }),
@@ -127,7 +125,6 @@ export const {
   useResetPasswordMutation,
   useChangePasswordMutation,
   useUpdateProfileMutation,
-  useProfileQuery,
-  useGetUserQuery,
+  useGetMyProfileQuery,
   useLoginMutation,
 } = authSlice;

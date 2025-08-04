@@ -12,6 +12,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { ClientOnlyIcon } from "@/components/ui/client-only-icon";
 import ProfileDashboardComponents from "../profileIcon/ProfileDashboardComponents";
 import {
   CalenderLogo,
@@ -23,12 +24,15 @@ import {
 } from "../share/svg/Logo";
 import CategoryDropdown from "./CategoryDropdown"; // Import the new component
 import LeaderboardModal from "./LeaderBoard";
+import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
 
 // SearchComponent to wrap with Suspense
 function SearchComponent({ onSearchChange }) {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const {data: user} = useGetMyProfileQuery()
+  console.log(user?.data)
   
   // Initialize search query from URL params
   useEffect(() => {
@@ -53,7 +57,11 @@ function SearchComponent({ onSearchChange }) {
           isSearchFocused ? "ring-2 ring-white/50 bg-[#181818]" : ""
         }`}
       >
-        <FaSearch className="text-white/70 mr-3 lg:mr-2" />
+        <ClientOnlyIcon
+          fallback={<div className="text-white/70 mr-3 lg:mr-2" />}
+        >
+          <FaSearch className="text-white/70 mr-3 lg:mr-2" />
+        </ClientOnlyIcon>
         <input
           type="text"
           placeholder="Search Corals"
@@ -91,7 +99,11 @@ function MobileSearchComponent({ onSearchChange, onClose }) {
   return (
     <form onSubmit={handleSearch} className="relative">
       <div className="flex items-center backdrop-blur-sm bg-white/20 border border-white/30 rounded-full px-3 py-2">
-        <FaSearch className="text-white/70 mr-2 text-2xl " />
+        <ClientOnlyIcon
+          fallback={<div className="text-white/70 mr-2 text-2xl" />}
+        >
+          <FaSearch className="text-white/70 mr-2 text-2xl " />
+        </ClientOnlyIcon>
         <input
           type="text"
           placeholder="Search Corals"
@@ -105,7 +117,11 @@ function MobileSearchComponent({ onSearchChange, onClose }) {
           className="text-white/70 px-2"
           onClick={onClose}
         >
-          <AiOutlineClose size={16} />
+          <ClientOnlyIcon
+            fallback={<div style={{ width: 16, height: 16 }} />}
+          >
+            <AiOutlineClose size={16} />
+          </ClientOnlyIcon>
         </button>
       </div>
     </form>
@@ -255,11 +271,15 @@ export default function Navbar() {
                     }`}
                   >
                     Shop
-                    <MdKeyboardArrowDown
-                      className={`ml-1 transition-transform duration-200 ${
-                        isShopHovered ? "rotate-180" : ""
-                      }`}
-                    />
+                    <ClientOnlyIcon
+                      fallback={<div className="ml-1 transition-transform duration-200" />}
+                    >
+                      <MdKeyboardArrowDown
+                        className={`ml-1 transition-transform duration-200 ${
+                          isShopHovered ? "rotate-180" : ""
+                        }`}
+                      />
+                    </ClientOnlyIcon>
                   </Link>
                 </li>
 
@@ -293,7 +313,11 @@ export default function Navbar() {
               className="lg:hidden flex items-center justify-center w-12 h-12 text-white search-toggle"
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
             >
-              <FaSearch className="text-white/90 text-2xl flex items-center justify-center mt-2" />
+              <ClientOnlyIcon
+                fallback={<div className="text-white/90 text-2xl flex items-center justify-center mt-2" />}
+              >
+                <FaSearch className="text-white/90 text-2xl flex items-center justify-center mt-2" />
+              </ClientOnlyIcon>
             </button>
 
             {/* Stats Icons (Hidden on mobile) */}
@@ -498,9 +522,17 @@ export default function Navbar() {
               onClick={() => setMobileMenubarOpen(!mobileMenubarOpen)}
             >
               {mobileMenubarOpen ? (
-                <AiOutlineClose className="text-white drop-shadow-lg text-2xl mt-2 sm:text-2xl " />
+                <ClientOnlyIcon
+                  fallback={<div className="text-white drop-shadow-lg text-2xl mt-2 sm:text-2xl" />}
+                >
+                  <AiOutlineClose className="text-white drop-shadow-lg text-2xl mt-2 sm:text-2xl " />
+                </ClientOnlyIcon>
               ) : (
-                <FiMenu className="text-white drop-shadow-lg text-3xl mt-2 sm:text-2xl " />
+                <ClientOnlyIcon
+                  fallback={<div className="text-white drop-shadow-lg text-3xl mt-2 sm:text-2xl" />}
+                >
+                  <FiMenu className="text-white drop-shadow-lg text-3xl mt-2 sm:text-2xl " />
+                </ClientOnlyIcon>
               )}
             </button>
           </div>
