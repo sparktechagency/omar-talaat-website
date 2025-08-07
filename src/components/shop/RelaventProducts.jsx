@@ -16,6 +16,11 @@ import { toast } from "sonner";
 import { ClientOnlyIcon, createDynamicIcon } from "@/components/ui/client-only-icon";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/featured/cart/cartSlice";
+import { useGetRelatedProductsQuery } from "@/redux/featured/shop/shopApi";
+import { getImageUrl } from "../share/imageUrl";
+import { saveProductToCart } from "../share/utils/cart";
+import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
+import Spinner from "@/app/(commonLayout)/Spinner";
 
 const productsData = [
   {
@@ -51,30 +56,19 @@ const productsData = [
 const ProductCard = ({ product, controls }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const {data, isLoading}=useGetMyProfileQuery()
+  const userEmail = data?.data?.email;
   const dispatch = useDispatch();
-  console.log(product)
-  console.log(controls)
+  // console.log(product)
+  // console.log(controls)
 
-  const handleAddToCart = (e, product) => {
-    e.stopPropagation();
-
-    // Add to cart using Redux
-    dispatch(addToCart({
-      id: product.id,
-      name: product.title,
-      price: parseFloat(product.price),
-      image: product.image,
-      stock: 10, // Default stock value
-      status: product.subtitle,
-      available: true,
-      membership: "normal",
-      description: "Premium coral product with exceptional quality and vibrant colors."
-    }));
-
-    toast.success(`Add to cart successfully`);
+   const handleAddToCart = (e, product) => {
+      e.stopPropagation();
+      saveProductToCart(product, userEmail);
+   
   };
   
-  
+  if (isLoading) return <Spinner />;
 
   return (
     <>
@@ -95,8 +89,8 @@ const ProductCard = ({ product, controls }) => {
               whileHover="hover"
             >
               <Image
-                src={product.image}
-                alt={product.title}
+                src={getImageUrl(product?.image)}
+                alt={product.Name}
                 fill
                 className="object-cover transition-transform duration-500"
               />
@@ -115,7 +109,7 @@ const ProductCard = ({ product, controls }) => {
               transition={{ delay: 0.3, duration: 0.4 }}
             >
               <CardTitle className="text-sm font-medium text-white mb-1 line-clamp-2">
-                {product.title}
+                {product.name}
               </CardTitle>
               <motion.p
                 className="text-xs text-white"
@@ -123,7 +117,7 @@ const ProductCard = ({ product, controls }) => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.4 }}
               >
-                {product.subtitle}
+                {product?.description2 || "Cut To Order"}
               </motion.p>
             </motion.div>
 
@@ -163,7 +157,7 @@ const ProductCard = ({ product, controls }) => {
               variants={cartIconVariants}
               initial="hidden"
               animate={isHovered ? "visible" : "hidden"}
-              onClick={handleAddToCart}
+               onClick={(e) => handleAddToCart(e, product)}
             >
                              <ClientOnlyIcon
                  fallback={
@@ -214,10 +208,16 @@ const ProductCard = ({ product, controls }) => {
   );
 };
 
-const RelatedProducts = () => {
+const RelatedProducts = ({categoryId}) => {
+
+  console.log(categoryId)
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
+  const {data}=useGetRelatedProductsQuery(categoryId)
+  const relatedProducts= data?.data || [];
+  console.log(data)
+  
 
   useEffect(() => {
     if (isInView) {
@@ -252,7 +252,7 @@ const RelatedProducts = () => {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         variants={containerVariants}
       >
-        {productsData.map((product) => (
+        {relatedProducts?.map((product) => (
           <motion.div key={product.id} variants={cardVariants} layout>
             <ProductCard product={product} controls={controls} />
           </motion.div>

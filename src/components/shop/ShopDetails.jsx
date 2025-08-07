@@ -15,13 +15,23 @@ import { CoinsLogo, Logo } from "../share/svg/Logo";
 import RelatedProducts from "./RelaventProducts";
 import { useGetProductByIdQuery } from "@/redux/featured/shop/shopApi";
 import { useParams } from "next/navigation";
+import { getImageUrl } from "../share/imageUrl";
+import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
+import { saveProductToCart } from "../share/utils/cart";
 
 const ProductDetails = () => {
   const {id} = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const {data:singleProduct} = useGetProductByIdQuery(id);
-  console.log("Single Product:", singleProduct);
+  const {data:user}=useGetMyProfileQuery()
+  // console.log("Single Product:", singleProduct);
+
+
+const userEmail=user?.data.email
+  const product=singleProduct?.data
+  const categoryId=product?.categoryId
+  console.log("categoryId", categoryId)
 
   const productImages = [
     "https://i.ibb.co/fYZx5zCP/Region-Gallery-Viewer.png",
@@ -63,6 +73,13 @@ const ProductDetails = () => {
     setQuantity(Math.max(1, quantity + change));
   };
 
+
+     const handleAddToCart = (e, product) => {
+        e.stopPropagation();
+        saveProductToCart(product, userEmail,quantity);
+     
+    };
+
   return (
     <div className="container mx-auto min-h-screen bg-black text-white">
       <div className="mx-auto p-4 lg:p-8">
@@ -72,7 +89,8 @@ const ProductDetails = () => {
             {/* Main Image */}
             <div className="relative   rounded-2xl overflow-hidden border border-purple-500/20">
               <Image
-                src="/assets/category1.png"
+                src={getImageUrl(product?.images[0])}
+                // src="/assets/category1.png"
                 alt="CS Purple Hornets Zoanthids"
                 height={747}
                 width={747}
@@ -114,7 +132,8 @@ const ProductDetails = () => {
                 </div>
               </div> */}
               <h1 className="text-3xl lg:text-4xl font-bold mb-6 text-white ">
-                CS Purple Hornets Zoanthids
+                {/* CS Purple Hornets Zoanthids */}
+                {product?.name}
               </h1>
 
               {/* <div className="flex items-center gap-4 text-sm text-gray-400">
@@ -132,16 +151,17 @@ const ProductDetails = () => {
             {/* Price */}
             <div className="space-y-2 mb-16">
               <div className="text-2xl font-bold text-white mb-9">
-                AED 99.50
+                {/* AED 99.50 */}
+                {product?.price}
               </div>
               <div className="flex items-center gap-8 text-sm text-gray-400">
                 <div className="flex items-center gap-2 ">
                   <Logo />
-                  <p className="font-brush text-3xl">512</p>
+                  <p className="font-brush text-3xl">{product?.csAuraEarn}</p>
                 </div>
                 <div className="flex items-center gap-2 ">
                   <CoinsLogo />
-                  <p className="font-brush text-3xl">235</p>
+                  <p className="font-brush text-3xl">{product?.creditEarn}</p>
                 </div>
               </div>
             </div>
@@ -176,7 +196,9 @@ const ProductDetails = () => {
 
               {/* Action Buttons */}
               <div className="w-2/3 space-y-3 ">
-                <button className="w-full border text-white py-2 text-lg font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                <button
+                onClick={(e) => handleAddToCart(e, product)} 
+                className="w-full border text-white py-2 text-lg font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
                   <ShoppingCart className="w-5 h-5" />
                   Add to cart
                 </button>
@@ -198,10 +220,7 @@ const ProductDetails = () => {
             <div className="space-y-3">
               <h3 className="text-lg font-semibold text-white">Description:</h3>
               <p className="text-gray-300 leading-relaxed">
-                Cut to order. A frag will be cut upon ordering. We recommend a
-                waiting time of 2 weeks before delivery! These stunning Purple
-                Hornets Zoanthids feature vibrant purple polyps with striking
-                patterns that will add incredible color to your reef aquarium.
+                {product?.description}
               </p>
             </div>
 
@@ -211,7 +230,7 @@ const ProductDetails = () => {
 
       
 
-        <RelatedProducts />
+        <RelatedProducts categoryId={categoryId}/>
       </div>
     </div>
   );

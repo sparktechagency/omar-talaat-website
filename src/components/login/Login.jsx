@@ -10,6 +10,7 @@ import { useLoginMutation } from "@/redux/featured/auth/authApi";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/redux/featured/auth/authSlice"; // Import your authSlice actions
 import { useRouter } from "next/navigation";
+import { MainLogo } from "../share/svg/Logo";
 
 export default function LoginUser() {
   const [showPassword, setShowPassword] = useState(false);
@@ -63,15 +64,16 @@ export default function LoginUser() {
 
       {/* Right side form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8">
-        <div className="bg-[#FCFCFC3B] border-2 border-[#A92C2C] backdrop-blur-md rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
+        <div className="border border-white/40 backdrop-blur-md rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
           <div className="flex justify-center mb-4">
-            <Image
+            {/* <Image
               src="/assests/logo.png"
               height={120}
               width={160}
               alt="Logo"
               className="mx-auto"
-            />
+            /> */}
+            <MainLogo className="w-32 h-32 " />
           </div>
 
           <h2 className="font-bold text-center mb-6 text-white text-xl md:text-2xl">

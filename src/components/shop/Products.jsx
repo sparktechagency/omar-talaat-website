@@ -1,85 +1,137 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import Container from "../share/Container";
 import FilterSection from "./FilteringSection";
 import ProductCard from "./ProductCard";
 import ProductControls from "./ProductControls";
-import { addToCart } from "@/redux/featured/cart/cartSlice";
 import { useGetProductsQuery } from "@/redux/featured/shop/shopApi";
 import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
 import { saveProductToCart } from "../share/utils/cart";
 import { saveToRecentViews } from "../share/utils/recentView";
 
-const CoralShopGrid = () => {
+const CoralShopGrid = ({ defaultCategory }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("Featured");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isFilterVisible, setIsFilterVisible] = useState(true);
-  const [isAnimating, setIsAnimating] = useState(false);;
-  
-  // Get user profile for cart identification
+  const [isAnimating, setIsAnimating] = useState(false);
+  // const [queryParams, setQueryParams] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("All");
+
+  const [filters, setFilters] = useState({
+    minPrice: 0,
+    maxPrice: 300,
+    availability: [],
+    productType: [],
+  });
+
+  const [pageSize, setPageSize] = useState(12);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { data: user } = useGetMyProfileQuery();
   const currentUser = user?.data;
-  const userEmail = user?.data?.email;
+  const userEmail = currentUser?.email;
 
-  
-  // Improved data fetching with proper loading states and error handling
-  const { 
-    data: allProduct, 
-    isLoading, 
-    error, 
+  const queryParams = useMemo(() => {
+    const params = [];
+
+    if (filters.productType.length > 0) {
+      params.push({
+        name: "productType",
+        value: filters.productType.join(","),
+      });
+    }
+
+    if (filters.availability.length > 0) {
+      if (filters.availability.includes("inStock")) {
+        params.push({ name: "isStock", value: true });
+      } else if (filters.availability.includes("outOfStock")) {
+        params.push({ name: "isStock", value: false });
+      }
+    }
+
+    params.push({ name: "minPrice", value: filters.minPrice });
+    params.push({ name: "maxPrice", value: filters.maxPrice });
+
+    if (filters.categories) {
+      params.push({ name: "categories", value: filters.categories });
+    }
+
+    params.push({ name: "limit", value: pageSize });
+    params.push({ name: "page", value: currentPage });
+
+    return params;
+  }, [filters, pageSize, currentPage]);
+
+  useEffect(() => {
+    if (defaultCategory && !filters.categories) {
+      setFilters((prev) => ({
+        ...prev,
+        categories: defaultCategory,
+      }));
+    }
+  }, [defaultCategory]);
+
+  const handleFilterChange = (updatedFilters) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...updatedFilters,
+      categories: defaultCategory || prev.categories,
+    }));
+  };
+
+  // useEffect(() => {
+  //   if (defaultCategory) {
+  //     setFilters((prev) => ({
+  //       ...prev,
+  //       categories: defaultCategory,
+  //     }));
+  //   }
+  // }, [defaultCategory]);
+
+  const {
+    data: allProduct,
+    isLoading,
+    error,
     refetch,
-    isFetching 
-  } = useGetProductsQuery(undefined, {
+  } = useGetProductsQuery(queryParams, {
     refetchOnMountOrArgChange: true,
     refetchOnFocus: false,
     refetchOnReconnect: true,
   });
-  
-  const productData = allProduct?.data?.result || [];
-  
-  console.log("Product Data:", productData);
-  console.log("All Product:", allProduct);
-  console.log("Is Loading:", isLoading);
-  console.log("Is Fetching:", isFetching);
-  console.log("Error:", error);
-  console.log("Current User:", currentUser);
-  
+  // console.log("All Products Data:", allProduct);
+
+  const productData = allProduct?.data || [];
+
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // Grid container reference for animation
   const gridRef = useRef(null);
   const filterRef = useRef(null);
   const isGridInView = useInView(gridRef, { once: true, amount: 0.1 });
   const filterAnimation = useAnimation();
+  // console.log(filters)
 
-  // Simple filters
-  const [priceRange, setPriceRange] = useState([0, 400]);
-  const [availabilityFilter, setAvailabilityFilter] = useState("all");
+  const sortOptions = [];
 
-  const sortOptions = [
-    "Featured",
-    "Price: Low to High",
-    "Price: High to Low",
-    "Name A-Z",
-    "Name Z-A",
-  ];
-
-  // Force refetch on component mount
+  // Force refetch
   useEffect(() => {
     if (!isLoading && !productData.length && !error) {
-      console.log("Forcing refetch due to empty data...");
       refetch();
     }
   }, [isLoading, productData.length, error, refetch]);
 
-  // Close mobile filter drawer when clicking outside
+  // Mobile filter close outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -92,25 +144,18 @@ const CoralShopGrid = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobileFilterOpen]);
 
-  // Prevent body scroll when mobile filter is open
+  // Prevent body scroll when filter open
   useEffect(() => {
-    if (isMobileFilterOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
+    document.body.style.overflow = isMobileFilterOpen ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isMobileFilterOpen]);
 
-  // Toggle filter visibility with animation
+  // Filter toggle animation
   const toggleFilterVisibility = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -130,13 +175,10 @@ const CoralShopGrid = () => {
         })
         .then(() => {
           setIsFilterVisible(false);
-          setTimeout(() => {
-            setIsAnimating(false);
-          }, 100);
+          setTimeout(() => setIsAnimating(false), 100);
         });
     } else {
       setIsFilterVisible(true);
-
       setTimeout(() => {
         filterAnimation
           .start({
@@ -151,16 +193,12 @@ const CoralShopGrid = () => {
               scale: { duration: 0.7, delay: 0.1 },
             },
           })
-          .then(() => {
-            setTimeout(() => {
-              setIsAnimating(false);
-            }, 100);
-          });
+          .then(() => setTimeout(() => setIsAnimating(false), 100));
       }, 10);
     }
   };
 
-  // Initialize filter animation on mount
+  // Initial filter animation
   useEffect(() => {
     if (isFilterVisible) {
       filterAnimation.start({
@@ -179,86 +217,64 @@ const CoralShopGrid = () => {
     }
   }, []);
 
-  // Helper function to get user-specific cart key
-  const getUserCartKey = () => {
-    if (currentUser?.email) {
-      return `coral_cart_${currentUser.email}`;
-    } else if (currentUser?._id) {
-      return `coral_cart_${currentUser._id}`;
-    }
-    // Fallback to generic cart if no user
-    return 'coral_cart_guest';
-  };
-
-  // Map API data to the required format for the UI
   const products = React.useMemo(() => {
     if (!productData || !Array.isArray(productData)) return [];
-    
     return productData.map((item) => ({
       _id: item._id,
       name: item.name,
       price: item.price,
-      images: item.images ,
-      // && item.images.length > 0 ? item.images[0] : ''
-      status: item.status === 'active' ? (item.isStock ? 'In Stock' : 'Out of Stock') : item.status,
-      available: item.creditNeeds === 0 && !item.premiumMembership && !item.advanceMembership,
+      images: item.images,
+      status:
+        item.status === "active"
+          ? item.isStock
+            ? "In Stock"
+            : "Out of Stock"
+          : item.status,
+      available:
+        item.creditNeeds === 0 &&
+        !item.premiumMembership &&
+        !item.advanceMembership,
       creditNeeds: item.creditNeeds,
       membership: item.premiumMembership
-        ? 'premium'
+        ? "premium"
         : item.advanceMembership
-        ? 'advanced'
-        : 'normal',
+        ? "advanced"
+        : "normal",
       description: item.description,
       stock: item.stock,
     }));
   }, [productData]);
 
-  const handleProductClick = (product) => {
-     if (userEmail && product) {
-          saveToRecentViews(product, userEmail);
-        }
-    if (product.available) {
-      router.push(`/shop/${product._id}`);
-    }
-  };
+  const handleProductClick = useCallback(
+    (product) => {
+      if (userEmail && product) {
+        saveToRecentViews(product, userEmail);
+      }
+      if (product.available) {
+        router.push(`/shop/${product._id}`);
+      }
+    },
+    [userEmail, router]
+  );
 
-  // Enhanced add to cart function with user-specific storage
-   const handleAddToCart = (e, product) => {
+  const handleAddToCart = useCallback(
+    (e, product) => {
       e.stopPropagation();
       saveProductToCart(product, userEmail);
-   
-  };
+    },
+    [userEmail]
+  );
 
-  // Enhanced loading state with retry option
-  if (isLoading || isFetching) {
-    return (
-      <Container className="min-h-screen text-white">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
-            <p className="text-gray-400">
-              {isLoading ? "Loading products..." : "Refreshing data..."}
-            </p>
-          </div>
-        </div>
-      </Container>
-    );
-  }
-
-  // Enhanced error state with retry functionality
   if (error) {
     return (
       <Container className="min-h-screen text-white">
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <p className="text-red-400 mb-4">
-              Error loading products: {error?.message || 'Unknown error'}
+              Error loading products: {error?.message || "Unknown error"}
             </p>
-            <button 
-              onClick={() => {
-                console.log("Retrying product fetch...");
-                refetch();
-              }}
+            <button
+              onClick={() => refetch()}
               className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors"
             >
               Try Again
@@ -269,32 +285,11 @@ const CoralShopGrid = () => {
     );
   }
 
-  // Show message if no products available
-  if (!productData || productData.length === 0) {
-    return (
-      <Container className="min-h-screen text-white">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <p className="text-gray-400 mb-4">No products available</p>
-            <button 
-              onClick={() => {
-                console.log("Retrying product fetch...");
-                refetch();
-              }}
-              className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors"
-            >
-              Refresh
-            </button>
-          </div>
-        </div>
-      </Container>
-    );
-  }
+  // We'll handle empty product data in the main render instead of returning early
 
   return (
-    <Container className=" text-white">
+    <Container className="text-white">
       <div className="mx-auto">
-        {/* Header Controls */}
         <ProductControls
           sortBy={sortBy}
           setSortBy={setSortBy}
@@ -308,7 +303,6 @@ const CoralShopGrid = () => {
           isAnimating={isAnimating}
         />
 
-        {/* Mobile Filter Overlay */}
         {isMobileFilterOpen && (
           <div className="fixed inset-0 z-[9999] lg:hidden">
             <div
@@ -317,15 +311,16 @@ const CoralShopGrid = () => {
               }`}
             >
               <div className="mt-16">
-                <FilterSection isMobile={true} />
+                <FilterSection
+                  isMobile={true}
+                  onFilterChange={handleFilterChange}
+                />
               </div>
             </div>
           </div>
         )}
 
-        {/* Product Grid */}
         <div className="flex gap-4 relative overflow-hidden">
-          {/* Desktop Filtering Sidebar */}
           <motion.div
             ref={filterRef}
             animate={filterAnimation}
@@ -338,12 +333,9 @@ const CoralShopGrid = () => {
             className="lg:block hidden transition-all overflow-hidden"
             style={{ width: "16.666667%", transformOrigin: "left center" }}
           >
-            <div className="pr-">
-              <FilterSection />
-            </div>
+            <FilterSection onFilterChange={handleFilterChange} />
           </motion.div>
 
-          {/* Products Grid */}
           <div className="flex-1">
             <div
               ref={gridRef}
@@ -351,15 +343,22 @@ const CoralShopGrid = () => {
                 isFilterVisible
                   ? "lg:grid-cols-3 xl:grid-cols-4"
                   : "lg:grid-cols-4 xl:grid-cols-4"
-              } gap-x-3 gap-y-10 transition-all duration-1000 ease-in-out `}
-              style={{
-                transition: "all 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
-              }}
+              } gap-x-3 gap-y-10 transition-all duration-1000 ease-in-out`}
             >
-              {products?.length > 0 ? (
-                products?.map((product, index) => (
+              {!productData || products?.length === 0 ? (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-gray-400 text-lg">No products available</p>
+                  <button
+                    onClick={() => refetch()}
+                    className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-400 transition-colors mt-4"
+                  >
+                    Refresh
+                  </button>
+                </div>
+              ) : (
+                products.map((product, index) => (
                   <ProductCard
-                    key={product.id}
+                    key={product._id}
                     product={product}
                     index={index}
                     isGridInView={isGridInView}
@@ -368,12 +367,6 @@ const CoralShopGrid = () => {
                     currentUser={currentUser}
                   />
                 ))
-              ) : (
-                <div className="col-span-full text-center py-12">
-                  <p className="text-gray-400 text-lg">
-                    No products found matching your search.
-                  </p>
-                </div>
               )}
             </div>
           </div>

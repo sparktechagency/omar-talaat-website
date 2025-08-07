@@ -2,62 +2,66 @@
 import React, { useState } from "react";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
 import Image from "next/image";
+import { useGetUpcomingAuctionsQuery } from "@/redux/featured/auctions/auctionsApi";
 
 const UpcomingAuctions = ({ setActiveTab }) => {
-  const upcomingAuctions = [
-    {
-      id: 1,
-      name: "PLUM TREE ACRO CHUNK",
-      image: "/assets/category1.png",
-      status: "STARTING SOON",
-      available: true,
-      membership: "normal",
-      creditsUsed: 235,
-      creditsWorth: 1000,
-      csAuraWorth: 92,
+const {data,isLoading} = useGetUpcomingAuctionsQuery();
+const upcomingAuctions = data?.data || [];
+
+  // const upcomingAuctions = [
+  //   {
+  //     id: 1,
+  //     name: "PLUM TREE ACRO CHUNK",
+  //     image: "/assets/category1.png",
+  //     status: "STARTING SOON",
+  //     available: true,
+  //     membership: "normal",
+  //     creditsUsed: 235,
+  //     creditsWorth: 1000,
+  //     csAuraWorth: 92,
      
-    },
-    {
-      id: 2,
-      name: "Coral Name",
-      image: "/assets/category12.png",
-      status: "STARTING SOON",
-      available: false,
-      membership: "normal",
-      coins: 235,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Coral Name",
+  //     image: "/assets/category12.png",
+  //     status: "STARTING SOON",
+  //     available: false,
+  //     membership: "normal",
+  //     coins: 235,
     
-    },
-    {
-      id: 3,
-      name: "Coral Name",
-      image: "/assets/category12.png",
-      status: "STARTING SOON",
-      available: false,
-      membership: "advanced",
-      coins: 235,
-      startTime: {
-        days: 0,
-        hours: 8,
-        mins: 45,
-        secs: 10,
-      },
-    },
-    {
-      id: 4,
-      name: "Coral Name",
-      image: "/assets/category13.png",
-      status: "STARTING SOON",
-      available: false,
-      membership: "premium",
-      coins: 235,
-      startTime: {
-        days: 3,
-        hours: 2,
-        mins: 30,
-        secs: 55,
-      },
-    },
-  ];
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Coral Name",
+  //     image: "/assets/category12.png",
+  //     status: "STARTING SOON",
+  //     available: false,
+  //     membership: "advanced",
+  //     coins: 235,
+  //     startTime: {
+  //       days: 0,
+  //       hours: 8,
+  //       mins: 45,
+  //       secs: 10,
+  //     },
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Coral Name",
+  //     image: "/assets/category13.png",
+  //     status: "STARTING SOON",
+  //     available: false,
+  //     membership: "premium",
+  //     coins: 235,
+  //     startTime: {
+  //       days: 3,
+  //       hours: 2,
+  //       mins: 30,
+  //       secs: 55,
+  //     },
+  //   },
+  // ];
 
   const [selectedAuction, setSelectedAuction] = useState(null);
 

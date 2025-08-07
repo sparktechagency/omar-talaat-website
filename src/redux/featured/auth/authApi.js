@@ -114,6 +114,22 @@ const authSlice = api.injectEndpoints({
    
       providesTags: ["User"],
     }),
+    getMyWallet: builder.query({
+      query: () => ({
+        method: "GET",
+        url: "/wallet/get",
+      }),
+   
+      providesTags: ["User"],
+    }),
+    getLeaderboard: builder.query({
+      query: () => ({
+        method: "GET",
+        url: "/wallet/leaderboard",
+      }),
+   
+      providesTags: ["User"],
+    }),
   }),
 });
 
@@ -126,5 +142,7 @@ export const {
   useChangePasswordMutation,
   useUpdateProfileMutation,
   useGetMyProfileQuery,
+  useGetMyWalletQuery,
+  useGetLeaderboardQuery,
   useLoginMutation,
 } = authSlice;

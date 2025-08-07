@@ -18,8 +18,8 @@ const ProductCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  console.log(product);
-  console.log("Image Path:", product.image);
+  // console.log(product);
+  // console.log("Image Path:", product.image);
 
   // Create dynamic shopping bag icon
   const DynamicShoppingBagIcon = useMemo(() => {
@@ -86,7 +86,7 @@ const ProductCard = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="bg-white backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:transform hover:scale-[1.02]">
+      <div className="bg-black backdrop-blur-sm rounded-xl overflow-hidden  transition-all duration-300 hover:transform hover:scale-[1.02]">
         {/* Product Image */}
         <div className="relative aspect-square overflow-hidden">
           {!imageError ? (

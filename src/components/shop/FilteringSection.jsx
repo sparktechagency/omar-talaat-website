@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { Slider } from "@/components/ui/slider"; // আপনার slider component
+import { Slider } from "@/components/ui/slider"; 
 
-const FilterSection = ({ isMobile = false }) => {
-  const [priceRange, setPriceRange] = useState([0, 300]);
+const FilterSection = ({ isMobile = false, onFilterChange }) => {
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(300);
   const [availability, setAvailability] = useState([]);
   const [productType, setProductType] = useState([]);
 
@@ -13,6 +14,16 @@ const FilterSection = ({ isMobile = false }) => {
     price: true,
     availability: true,
   });
+
+
+  useEffect(() => {
+    onFilterChange({
+      minPrice,
+      maxPrice,
+      availability,
+      productType
+    });
+  }, [minPrice, maxPrice, availability, productType]);
 
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
@@ -92,16 +103,16 @@ const FilterSection = ({ isMobile = false }) => {
               onClick={() => handleCheckboxChange("productType", "cutToOrder")}
             >
               <CustomCheckbox checked={productType.includes("cutToOrder")} />
-             <div className="flex items-center justify-between w-full">
-              <p>Cut to Order</p>
-              <p>(4)</p>
+              <div className="flex items-center justify-between w-full">
+                <p>Cut to Order</p>
+                <p>(4)</p>
               </div> 
             </label>
           </div>
         )}
-          </div>
+      </div>
 
-          <hr className="opacity-10"/>
+      <hr className="opacity-10"/>
 
       {/* Price */}
       <div className="mb-8 mt-6">
@@ -120,17 +131,20 @@ const FilterSection = ({ isMobile = false }) => {
           <>
             <div className="flex justify-between items-center gap-2 mt-6 mb-7">
               <span className="px-6 py-3 bg-[#181818] border border-gray-600 rounded-full text-xs text-white">
-                AED {priceRange[0]}
+                AED {minPrice}
               </span>
               <span className="text-gray-400 mt-2">-</span>
               <span className="px-6 py-3 bg-[#181818] border border-gray-600 rounded-full text-xs text-white">
-                AED {priceRange[1]}
+                AED {maxPrice}
               </span>
             </div>
             <div className="px-2">
               <Slider
-                value={priceRange}
-                onValueChange={setPriceRange}
+                value={[minPrice, maxPrice]}
+                onValueChange={(val) => {
+                  setMinPrice(val[0]);
+                  setMaxPrice(val[1]);
+                }}
                 max={300}
                 min={0}
                 step={10}
@@ -139,8 +153,9 @@ const FilterSection = ({ isMobile = false }) => {
             </div>
           </>
         )}
-          </div>
-          <hr className="opacity-10"/>
+      </div>
+
+      <hr className="opacity-10"/>
 
       {/* Availability */}
       <div className="mb-8 mt-6">
@@ -162,25 +177,24 @@ const FilterSection = ({ isMobile = false }) => {
               onClick={() => handleCheckboxChange("availability", "inStock")}
             >
               <CustomCheckbox checked={availability.includes("inStock")} />
-             <div className="flex items-center justify-between w-full">
-              <p> In stock </p>
-              <p>(3)</p>
-             </div>
+              <div className="flex items-center justify-between w-full">
+                <p> In stock </p>
+                <p>(3)</p>
+              </div>
             </label>
             <label
               className="flex items-center text-sm text-white cursor-pointer select-none"
               onClick={() => handleCheckboxChange("availability", "outOfStock")}
             >
               <CustomCheckbox checked={availability.includes("outOfStock")} />
-            <div className="flex items-center justify-between w-full">
-              <p>  Out of stock</p>
-              <p>(1)</p>
-            </div>
+              <div className="flex items-center justify-between w-full">
+                <p>  Out of stock</p>
+                <p>(1)</p>
+              </div>
             </label>
           </div>
         )}
       </div>
-
     </div>
   );
 };

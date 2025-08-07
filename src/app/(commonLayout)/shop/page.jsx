@@ -1,7 +1,16 @@
-import ShopContainer from "@/components/shop/ShopContainer";
+"use client";
 
+import dynamic from "next/dynamic";
+import Spinner from "../Spinner";
 
-const page = () => {
+const LoadingSpinner = () => <Spinner />;
+
+const ShopContainer = dynamic(() => import("@/components/shop/ShopContainer"), {
+  ssr: false,
+  loading: LoadingSpinner, 
+});
+
+const Page = () => {
   return (
     <div>
       <ShopContainer />
@@ -9,4 +18,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

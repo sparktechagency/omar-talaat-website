@@ -6,7 +6,7 @@ const nextConfig = {
       "images.unsplash.com",
       "i.ibb.co.com",
       "i.ibb.co",
-      "10.10.7.37"
+      "10.10.7.62"
     ],
   },
 };

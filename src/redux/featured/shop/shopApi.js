@@ -4,15 +4,18 @@ const shopApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // Get all products
     getProducts: builder.query({
-      query: () => {
-        
+      query: (queryParams) => {
+        let url = `/inventory/get-all`;
 
-        return {
-          method: "GET",
-          url: `/inventory/get-all`,
-        };
+        if (queryParams && queryParams.length > 0) {
+          const queryString = queryParams
+            .map((param) => `${param.name}=${encodeURIComponent(param.value)}`)
+            .join("&");
+          url += `?${queryString}`;
+        }
+
+        return url;
       },
-      providesTags: ["Products"],
     }),
 
     // Get single product by ID
@@ -42,14 +45,14 @@ const shopApi = api.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    // Get all categories
-    getCategories: builder.query({
-      query: () => ({
-        method: "GET",
-        url: "/categories",
-      }),
-      providesTags: ["Categories"],
-    }),
+    // // Get all categories
+    // getCategories: builder.query({
+    //   query: () => ({
+    //     method: "GET",
+    //     url: "/categories",
+    //   }),
+    //   providesTags: ["Categories"],
+    // }),
 
     // Search products
     searchProducts: builder.query({
@@ -62,9 +65,9 @@ const shopApi = api.injectEndpoints({
 
     // Get related products
     getRelatedProducts: builder.query({
-      query: (productId) => ({
+      query: (categoryId) => ({
         method: "GET",
-        url: `/products/${productId}/related`,
+        url: `/inventory/related-product/${categoryId}`,
       }),
       providesTags: ["Products"],
     }),
@@ -77,7 +80,7 @@ const shopApi = api.injectEndpoints({
         body: reviewData,
       }),
       invalidatesTags: (result, error, { productId }) => [
-        { type: "Products", id: productId }
+        { type: "Products", id: productId },
       ],
     }),
 
@@ -88,7 +91,7 @@ const shopApi = api.injectEndpoints({
         url: `/products/${productId}/reviews`,
       }),
       providesTags: (result, error, productId) => [
-        { type: "Reviews", id: productId }
+        { type: "Reviews", id: productId },
       ],
     }),
   }),
@@ -99,7 +102,6 @@ export const {
   useGetProductByIdQuery,
   useGetFeaturedProductsQuery,
   useGetProductsByCategoryQuery,
-  useGetCategoriesQuery,
   useSearchProductsQuery,
   useGetRelatedProductsQuery,
   useAddProductReviewMutation,

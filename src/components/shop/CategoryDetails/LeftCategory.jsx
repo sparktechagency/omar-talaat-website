@@ -1,17 +1,35 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ChevronLeft, ChevronRight, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { CalenderLogo, CoinsLogo, Logo, MainLogo } from "../../share/svg/Logo";
+import { useGetSingleCategoryQuery } from "@/redux/featured/category/categoryApi";
+import { useParams } from "next/navigation";
+import { getImageUrl } from "@/components/share/imageUrl";
 
 const AllCategories = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const {id}= useParams();
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [isVaultUnlocked, setIsVaultUnlocked] = useState(false);
   const [showVaultModal, setShowVaultModal] = useState(false);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const {data: categories, isLoading } = useGetSingleCategoryQuery(id);
+  // const categoryData = categories?.data || [];
+ const categoryData = useMemo(() => categories?.data || [], [categories]);
+const remaningCategories = useMemo(
+  () => categoryData?.allCategory || [],
+  [categoryData]
+);
+
+useEffect(() => {
+  console.log(categoryData);
+  console.log(remaningCategories);
+}, [categoryData, remaningCategories]);
+
+   
 
   // Available images to cycle through
   const availableImages = [
@@ -93,7 +111,7 @@ const AllCategories = () => {
   ];
 
   const visibleCount = 4;
-  const maxIndex = Math.floor(minerals.length / visibleCount + 2);
+  const maxIndex = Math.floor(remaningCategories?.length / visibleCount + 2);
 
   // Auto-play functionality
   useEffect(() => {
@@ -250,14 +268,11 @@ const AllCategories = () => {
     <div className="container w-full mx-auto bg-black lg:my-20 my-10 flex flex-col justify-center">
       {/* Header */}
       <div className="max-w-4xl mx-auto px-4 ">
-        <h2 className="text-center text-3xl font-bold mb-6">Zoanthids</h2>
+        <h2 className="text-center text-3xl font-bold mb-6">{categoryData?.name}</h2>
         <p className="text-center">
-          Discover a stunning collection of Zoanthids from Coral Stash. These
-          colorful and hardy polyps are a favorite among hobbyists, offering a
-          range of colors that thrive in a variety of reef systems. Ideal for
-          beginners and advanced hobbyists alike!
+        {categoryData?.description || "Explore our wide range of corals and marine life."}
         </p>
-        <p className="mt-4 opacity-50 text-center">
+        {/* <p className="mt-4 opacity-50 text-center">
           EXCLUSIVE = Reserved for a special list of customers who have
           completed at least 3 orders or who have spent at least AED2500 in
           total
@@ -266,7 +281,7 @@ const AllCategories = () => {
           EXCLUSIVE = Reserved for a special list of customers who have
           completed at least 3 orders or who have spent at least AED2500 in
           total
-        </p>
+        </p> */}
       </div>
 
       {/* Slider for Small/Medium Devices */}
@@ -291,14 +306,14 @@ const AllCategories = () => {
               className="flex transition-transform duration-500 ease-out gap-6 px-16 lg:py-10 py-6"
               style={{
                 transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
-                width: `${(minerals.length / visibleCount) * 100}%`,
+                width: `${(remaningCategories?.length / visibleCount) * 100}%`,
               }}
             >
-              {minerals.map((mineral, index) => (
+              {remaningCategories?.map((mineral, index) => (
                 <div
                   key={mineral.id}
                   className="flex-shrink-0 relative group cursor-pointer"
-                  style={{ width: `${100 / minerals.length}%` }}
+                  style={{ width: `${100 / remaningCategories?.length}%` }}
                   onClick={() => handleCategoryClick(mineral)}
                 >
                   <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
@@ -348,7 +363,7 @@ const AllCategories = () => {
 
       {/* Grid Layout for Large Devices */}
       <div className="hidden lg:grid lg:grid-cols-11 gap-6 px-4">
-        {minerals.map((mineral) => (
+        {remaningCategories?.map((mineral) => (
           <div
             key={mineral.id}
             className="flex flex-col items-center cursor-pointer group"
@@ -356,7 +371,7 @@ const AllCategories = () => {
           >
             <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
               <img
-                src={mineral.image}
+                src={getImageUrl(mineral.image)}
                 alt={mineral.name}
                 className="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-125"
               />

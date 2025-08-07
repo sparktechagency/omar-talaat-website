@@ -3,8 +3,9 @@
 import { toast } from "sonner";
 
 
-export const saveProductToCart = (product, userEmail) => {
-  if (!userEmail || !product) return;
+export const saveProductToCart = (product, userEmail, quantity = 1) => {
+  console.log("from cart ", quantity)
+  if (!userEmail || !product ) return;
 
   const productId = product._id || product.id;
   if (!productId) return;
@@ -15,13 +16,14 @@ export const saveProductToCart = (product, userEmail) => {
   const isExist = existing.find((item) => (item._id || item.id) === productId);
 
   if (!isExist) {
-    const updated = [{ ...product, quantity: 1 }, ...existing];
+    const updated = [{ ...product, quantity }, ...existing];
     localStorage.setItem(key, JSON.stringify(updated));
     toast.success("Product added to cart successfully!");
   } else {
     toast.info("Product already in cart.");
   }
 };
+
 
 
 

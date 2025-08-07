@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TbShoppingBagPlus } from "react-icons/tb";
 import Image from "next/image";
@@ -12,61 +12,25 @@ import {
   imageVariants,
   cartIconVariants,
 } from "@/components/share/utils/motionVariants";
-import { toast } from "sonner";
 import {
   ClientOnlyIcon,
-  createDynamicIcon,
 } from "@/components/ui/client-only-icon";
 import { useDispatch } from "react-redux";
-import { addToCart } from "@/redux/featured/cart/cartSlice";
 import { getRecentViews } from "../share/utils/recentView";
 import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
 import { getImageUrl } from "../share/imageUrl";
 import { saveProductToCart } from "../share/utils/cart";
 
-const productsData = [
-  {
-    id: 1,
-    title: "CS Purple Hornets Zoanthids",
-    subtitle: "Cut to Order",
-    price: "99",
-    image: "/assets/gallary.png",
-  },
-  {
-    id: 2,
-    title: "CS Purple Hornets Zoanthids",
-    subtitle: "Cut to Order",
-    price: "99",
-    image: "/assets/gallary.png",
-  },
-  {
-    id: 3,
-    title: "CS Purple Hornets Zoanthids",
-    subtitle: "Cut to Order",
-    price: "99",
-    image: "/assets/gallary.png",
-  },
-  {
-    id: 4,
-    title: "CS Purple Hornets Zoanthids",
-    subtitle: "Cut to Order",
-    price: "99",
-    image: "/assets/gallary.png",
-  },
-];
-
-const ProductCard = ({ product, controls }) => {
+const ProductCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const dispatch = useDispatch();
-  const {data: user} = useGetMyProfileQuery();
+  const { data: user } = useGetMyProfileQuery();
   const userEmail = user?.data?.email;
 
   const handleAddToCart = (e, product) => {
-    console.log("clicked");
-      e.stopPropagation();
-      saveProductToCart(product, userEmail);
-   
+    e.stopPropagation();
+    saveProductToCart(product, userEmail);
   };
 
   return (
@@ -74,11 +38,11 @@ const ProductCard = ({ product, controls }) => {
       <motion.div
         variants={cardVariants}
         initial="hidden"
-        animate={controls}
+        animate="visible" // সরাসরি visible
         whileHover={{ y: -2, transition: { duration: 0.3, ease: "easeOut" } }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        className="relative rounded-3xl overflow-hidden" // Ensure rounded-3xl and overflow-hidden are here
+        className="relative rounded-3xl overflow-hidden"
       >
         <div className="w-full h-96 cursor-pointer rounded-3xl shadow-2xl overflow-hidden bg-primary hover:border-gray-300 transition-all duration-300 hover:shadow-xl">
           <CardHeader className="p-0">
@@ -102,8 +66,6 @@ const ProductCard = ({ product, controls }) => {
           </CardHeader>
 
           <CardContent className="p-4 relative bg-[#181818] h-28 rounded-b-3xl">
-            {" "}
-            {/* Add rounded-b-3xl here if not already */}
             <motion.div
               initial={{ opacity: 0, y: 2 }}
               animate={{ opacity: 1, y: 0 }}
@@ -115,15 +77,8 @@ const ProductCard = ({ product, controls }) => {
               <p className="text-xs text-gray-400 line-clamp-1 italic">
                 Cut To Order
               </p>
-              <motion.p
-                className="text-xs text-white"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.4 }}
-              >
-                {/* {product.subtitle} */}
-              </motion.p>
             </motion.div>
+
             {/* Price Area */}
             <div className="absolute bottom-2 left-4 flex items-end rounded-b-3xl gap-1">
               <motion.span
@@ -139,13 +94,10 @@ const ProductCard = ({ product, controls }) => {
                 animate={isHovered ? { x: -36 } : { x: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                {/* Display the main price */}
                 <span className="text-lg font-bold text-white">
-                  {product?.price?.toString().split(".")[0]}{" "}
-                  {/* Main price before decimal */}
+                  {product?.price?.toString().split(".")[0]}
                 </span>
 
-                {/* Only show superscript decimal part if the price has decimals */}
                 {product?.price?.toString().includes(".") && (
                   <motion.span
                     className="text-xs text-white relative bottom-1"
@@ -155,26 +107,23 @@ const ProductCard = ({ product, controls }) => {
                     transition={{ duration: 0.5 }}
                     style={{ transformOrigin: "bottom left" }}
                   >
-                    {product?.price?.toString().split(".")[1]}{" "}
-                    {/* Display the digits after the decimal point as superscript */}
+                    {product?.price?.toString().split(".")[1]}
                   </motion.span>
                 )}
               </motion.div>
             </div>
+
             {/* Cart Button */}
             <motion.button
               className="absolute bottom-3 right-4 w-10 h-10 cursor-pointer hover:scale-110 rounded-full flex items-center justify-center text-black bg-white p-2"
               variants={cartIconVariants}
               initial="hidden"
               animate={isHovered ? "visible" : "hidden"}
-             onClick={(e) => handleAddToCart(e, product)}
+              onClick={(e) => handleAddToCart(e, product)}
             >
               <ClientOnlyIcon
                 fallback={
-                  <div
-                    className="scale-110"
-                    style={{ width: 32, height: 32 }}
-                  />
+                  <div className="scale-110" style={{ width: 32, height: 32 }} />
                 }
               >
                 <TbShoppingBagPlus size={32} className="scale-110" />
@@ -219,14 +168,8 @@ const ProductCard = ({ product, controls }) => {
 };
 
 const RecentAdded = () => {
-  const controls = useAnimation();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
   const { data: user } = useGetMyProfileQuery();
-
-  // Get user email from Redux store (adjust the path according to your auth slice)
   const userEmail = user?.data?.email;
-
   const [recentViews, setRecentViews] = useState([]);
 
   useEffect(() => {
@@ -236,19 +179,11 @@ const RecentAdded = () => {
     }
   }, [userEmail]);
 
-  console.log(recentViews);
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    }
-  }, [isInView, controls]);
-
   return (
     <motion.div
       className="w-full px-4 mb-12 lg:px-0 container mx-auto"
-      ref={ref}
       initial="hidden"
-      animate={controls}
+      animate="visible" // সরাসরি visible
       variants={containerVariants}
     >
       <motion.div
@@ -272,7 +207,7 @@ const RecentAdded = () => {
       >
         {recentViews.map((product) => (
           <motion.div key={product.id} variants={cardVariants} layout>
-            <ProductCard product={product} controls={controls} />
+            <ProductCard product={product} />
           </motion.div>
         ))}
       </motion.div>

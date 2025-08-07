@@ -24,7 +24,8 @@ import {
 } from "../share/svg/Logo";
 import CategoryDropdown from "./CategoryDropdown"; // Import the new component
 import LeaderboardModal from "./LeaderBoard";
-import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
+import { useGetMyProfileQuery, useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
+import Spinner from "@/app/(commonLayout)/Spinner";
 
 // SearchComponent to wrap with Suspense
 function SearchComponent({ onSearchChange }) {
@@ -32,7 +33,8 @@ function SearchComponent({ onSearchChange }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const {data: user} = useGetMyProfileQuery()
-  console.log(user?.data)
+ 
+  // console.log(user?.data)
   
   // Initialize search query from URL params
   useEffect(() => {
@@ -139,6 +141,9 @@ export default function Navbar() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+   const {data}=useGetMyWalletQuery()
+  const wallet=data?.data
+  // console.log(data)
 
   // Refs for dropdown
   const dropdownRef = useRef(null);
@@ -300,7 +305,7 @@ export default function Navbar() {
 
             {/* Search Bar */}
             <div className="relative ml-8">
-              <Suspense fallback={<div className="w-[300px] xl:w-[500px] h-10 bg-[#181818]/50 rounded-full animate-pulse"></div>}>
+              <Suspense fallback={<Spinner />}>
                 <SearchComponent onSearchChange={handleSearchChange} />
               </Suspense>
             </div>
@@ -328,7 +333,7 @@ export default function Navbar() {
                   <CalenderLogo />
                 </div>
                 <span className="text-white text-3xl md:text-4xl font-brush drop-shadow-lg">
-                  7
+                 {wallet?.cmPoints}
                 </span>
               </div>
 
@@ -338,7 +343,7 @@ export default function Navbar() {
                   <Logo />
                 </div>
                 <span className="text-white font-brush text-3xl md:text-4xl drop-shadow-lg">
-                  512
+                  {wallet?.csAura}
                 </span>
               </div>
 
@@ -348,7 +353,7 @@ export default function Navbar() {
                   <CoinsLogo />
                 </div>
                 <span className="text-white font-brush text-3xl md:text-4xl drop-shadow-lg">
-                  235
+                  {wallet?.credits}
                 </span>
               </div>
             </div>
@@ -544,7 +549,7 @@ export default function Navbar() {
             ref={searchRef}
             className="lg:hidden px-3 py-2 backdrop-blur-md bg-black/50 border-t border-b border-white/10"
           >
-            <Suspense fallback={<div className="h-10 bg-white/20 rounded-full animate-pulse"></div>}>
+            <Suspense fallback={<Spinner />}>
               <MobileSearchComponent 
                 onSearchChange={handleSearchChange} 
                 onClose={() => setIsMobileSearchOpen(false)} 

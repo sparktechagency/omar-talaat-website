@@ -2,74 +2,124 @@
 import React, { useState } from "react";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
 import Image from "next/image";
+import { useGetAllAuctionsQuery } from "@/redux/featured/auctions/auctionsApi";
+import { getImageUrl } from "../share/imageUrl";
 
 const AllAuctions = ({ setActiveTab }) => {
-  const auctions = [
-    {
-      id: 1,
-      name: "PLUM TREE ACRO CHUNK",
-      currentBid: 250,
-      image: "/assets/category1.png",
-      status: "Live Auction",
-      timeLeft: "2h 30m",
-      available: true,
-      membership: "normal",
-      type: "live",
-      creditsUsed: 235,
-      creditsWorth: 1000,
-      csAuraWorth: 92,
-      totalBids: 3,
-      highestBidder: "Sabbir Ahmed",
-    },
-    {
-      id: 2,
-      name: "CS Blue Matrix Zoanthids",
-      currentBid: 149.99,
-      image: "/assets/category1.png",
-      status: "Upcoming",
-      timeLeft: "Starts in 1 day",
-      available: false,
-      coins: 235,
-      membership: "normal",
-      type: "upcoming",
-    },
-    {
-      id: 3,
-      name: "CS Rainbow Incinerator",
-      currentBid: 199.5,
-      image: "/assets/category11.png",
-      status: "My Bid",
-      timeLeft: "3h 45m",
-      available: false,
-      membership: "advanced",
-      type: "my_auction",
-      coins: 235,
+  const {data, isLading, isError} = useGetAllAuctionsQuery();
+//  const auctions = data?.data || [];
+  // const auctions = [
+  //   {
+  //     id: 1,
+  //     name: "PLUM TREE ACRO CHUNK",
+  //     currentBid: 250,
+  //     image: "/assets/category1.png",
+  //     status: "Live Auction",
+  //     timeLeft: "2h 30m",
+  //     available: true,
+  //     membership: "normal",
+  //     type: "live",
+  //     creditsUsed: 235,
+  //     creditsWorth: 1000,
+  //     csAuraWorth: 92,
+  //     totalBids: 3,
+  //     highestBidder: "Sabbir Ahmed",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "CS Blue Matrix Zoanthids",
+  //     currentBid: 149.99,
+  //     image: "/assets/category1.png",
+  //     status: "Upcoming",
+  //     timeLeft: "Starts in 1 day",
+  //     available: false,
+  //     coins: 235,
+  //     membership: "normal",
+  //     type: "upcoming",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "CS Rainbow Incinerator",
+  //     currentBid: 199.5,
+  //     image: "/assets/category11.png",
+  //     status: "My Bid",
+  //     timeLeft: "3h 45m",
+  //     available: false,
+  //     membership: "advanced",
+  //     type: "my_auction",
+  //     coins: 235,
+  //     EndTime: {
+  //       days: 0,
+  //       hours: 3,
+  //       mins: 45,
+  //       secs: 20,
+  //     },
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "CS Fire and Ice",
+  //     currentBid: 299.0,
+  //     image: "/assets/category4.png",
+  //     status: "Premium Auction",
+  //     timeLeft: "1h 15m",
+  //     available: false,
+  //     membership: "premium",
+  //     type: "live",
+  //     coins: 235,
+  //     EndTime: {
+  //       days: 0,
+  //       hours: 1,
+  //       mins: 15,
+  //       secs: 30,
+  //     },
+  //   },
+  // ];
+
+  const mapAuctionData = (apiData) => {
+  return apiData?.map((item) => {
+    let membership = "normal";
+    if (item.premiumMembership) {
+      membership = "premium";
+    } else if (item.advanceMembership) {
+      membership = "advanced";
+    }
+
+    const endTime = new Date(item.endDate);
+    const now = new Date();
+    const timeDiff = endTime - now;
+
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+    const mins = Math.floor((timeDiff / (1000 * 60)) % 60);
+    const secs = Math.floor((timeDiff / 1000) % 60);
+
+    return {
+      id: item._id,
+      name: item.name,
+      currentBid: item.price,
+      image: item.image,
+      status: item.status === "active" ? "Live Auction" : "Upcoming",
+      timeLeft: `${days > 0 ? `${days}d ` : ""}${hours}h ${mins}m`,
+      available: item.status === "active",
+      membership: membership,
+      type: item.status === "active" ? "live" : "upcoming",
+      creditsUsed: item.creditNeeds || 0,
+      creditsWorth: item.creditWorth || 0,
+      csAuraWorth: item.csAuraWorth || 0,
+      totalBids: 0,
+      highestBidder: "",
       EndTime: {
-        days: 0,
-        hours: 3,
-        mins: 45,
-        secs: 20,
+        days,
+        hours,
+        mins,
+        secs,
       },
-    },
-    {
-      id: 4,
-      name: "CS Fire and Ice",
-      currentBid: 299.0,
-      image: "/assets/category4.png",
-      status: "Premium Auction",
-      timeLeft: "1h 15m",
-      available: false,
-      membership: "premium",
-      type: "live",
-      coins: 235,
-      EndTime: {
-        days: 0,
-        hours: 1,
-        mins: 15,
-        secs: 30,
-      },
-    },
-  ];
+    };
+  }) || [];
+};
+
+const auctions = mapAuctionData(data?.data);
+
 
   const [selectedAuction, setSelectedAuction] = useState(null);
 
@@ -214,7 +264,7 @@ const AllAuctions = ({ setActiveTab }) => {
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
               <Image
-                src={auction.image}
+                src={getImageUrl(auction.image)}
                 height={300}
                 width={300}
                 alt={auction.name}

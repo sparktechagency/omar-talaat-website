@@ -3,81 +3,85 @@ import React, { useState, useMemo } from "react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { CalenderLogo, CoinsLogo, Logo, Ranking } from "../share/svg/Logo";
+import { useGetLeaderboardQuery } from "@/redux/featured/auth/authApi";
+import { getImageUrl } from "../share/imageUrl";
 
 const LeaderboardModal = ({ isOpen, setIsOpen }) => {
-  const leaderboardData = [
-    {
-      name: "Sabbir Ahmed",
-      avatar: "/assets/profile.png",
-      cmPoints: 10,
-      credits: 200,
-      csAura: 300,
-    },
-    {
-      name: "Rakib Hasan",
-      avatar: "/assets/profile.png",
-      cmPoints: 15,
-      credits: 150,
-      csAura: 250,
-    },
-    {
-      name: "Nusrat Jahan",
-      avatar: "/assets/profile.png",
-      cmPoints: 5,
-      credits: 100,
-      csAura: 280,
-    },
-    {
-      name: "Mehedi Hasan",
-      avatar: "/assets/profile.png",
-      cmPoints: 8,
-      credits: 300,
-      csAura: 300,
-    },
-    {
-      name: "Tanjina Akter",
-      avatar: "/assets/profile.png",
-      cmPoints: 15,
-      credits: 170,
-      csAura: 320,
-    },
-    {
-      name: "Sabbir Ahmed",
-      avatar: "/assets/profile.png",
-      cmPoints: 14,
-      credits: 200,
-      csAura: 200,
-    },
-    {
-      name: "Rakib Hasan",
-      avatar: "/assets/profile.png",
-      cmPoints: 15,
-      credits: 150,
-      csAura: 250,
-    },
-    {
-      name: "Nusrat Jahan",
-      avatar: "/assets/profile.png",
-      cmPoints: 5,
-      credits: 100,
-      csAura: 280,
-    },
-    {
-      name: "Mehedi Hasan",
-      avatar: "/assets/profile.png",
-      cmPoints: 5,
-      credits: 200,
-      csAura: 130,
-    },
-    {
-      name: "Tanjina Akter",
-      avatar: "/assets/profile.png",
-      cmPoints: 12,
-      credits: 180,
-      csAura: 220,
-    },
-  ];
-
+  // const leaderboardData = [
+  //   {
+  //     name: "Sabbir Ahmed",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 10,
+  //     credits: 200,
+  //     csAura: 300,
+  //   },
+  //   {
+  //     name: "Rakib Hasan",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 15,
+  //     credits: 150,
+  //     csAura: 250,
+  //   },
+  //   {
+  //     name: "Nusrat Jahan",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 5,
+  //     credits: 100,
+  //     csAura: 280,
+  //   },
+  //   {
+  //     name: "Mehedi Hasan",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 8,
+  //     credits: 300,
+  //     csAura: 300,
+  //   },
+  //   {
+  //     name: "Tanjina Akter",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 15,
+  //     credits: 170,
+  //     csAura: 320,
+  //   },
+  //   {
+  //     name: "Sabbir Ahmed",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 14,
+  //     credits: 200,
+  //     csAura: 200,
+  //   },
+  //   {
+  //     name: "Rakib Hasan",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 15,
+  //     credits: 150,
+  //     csAura: 250,
+  //   },
+  //   {
+  //     name: "Nusrat Jahan",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 5,
+  //     credits: 100,
+  //     csAura: 280,
+  //   },
+  //   {
+  //     name: "Mehedi Hasan",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 5,
+  //     credits: 200,
+  //     csAura: 130,
+  //   },
+  //   {
+  //     name: "Tanjina Akter",
+  //     avatar: "/assets/profile.png",
+  //     cmPoints: 12,
+  //     credits: 180,
+  //     csAura: 220,
+  //   },
+  // ];
+const {data,isLoading}=useGetLeaderboardQuery()
+const leaderboardData=data?.data || [];
+// console.log("Leaderboard Data:", data?.data);
   const [sortKey, setSortKey] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
@@ -224,14 +228,14 @@ const LeaderboardModal = ({ isOpen, setIsOpen }) => {
                     <div className="col-span-5 flex items-center space-x-1">
                       <div className="w-8 h-8  rounded-full overflow-hidden">
                         <Image
-                          src={user.avatar}
-                          alt={user.name}
+                          src={getImageUrl(user?.image)}
+                          alt={user.username}
                           height={32}
                           width={32}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <span className="font-bold text-[12px]">{user.name}</span>
+                      <span className="font-bold text-[12px]">{user.username}</span>
                     </div>
 
                     {/* CM Points */}

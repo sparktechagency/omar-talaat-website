@@ -19,7 +19,7 @@ export const cardVariants = {
   },
   visible: {
     opacity: 1,
-    y: 0,
+    y: 10,
     scale: 1,
     transition: {
       duration: 0.8, 
@@ -45,7 +45,7 @@ export const imageVariants = {
 export const cartIconVariants = {
   hidden: {
     opacity: 0,
-    y: 15,
+    y: 10,
   },
   visible: {
     opacity: 1,

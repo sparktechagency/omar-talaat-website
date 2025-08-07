@@ -1,14 +1,12 @@
 "use client";
-import React, { useState, useMemo, useRef, useEffect } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TbShoppingBagPlus } from "react-icons/tb";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import {
   ClientOnlyIcon,
-  createDynamicIcon,
 } from "@/components/ui/client-only-icon";
 
 // ✅ Import variants from external file
@@ -18,58 +16,47 @@ import {
   imageVariants,
   cartIconVariants,
 } from "@/components/share/utils/motionVariants";
-import { toast } from "sonner";
 import { useDispatch } from "react-redux";
-import { addToCart } from "@/redux/featured/cart/cartSlice";
 import { useGetRecentAddedQuery } from "@/redux/featured/homePage/recentAddedApi";
 import { getImageUrl } from "../share/imageUrl";
 import { saveToRecentViews } from "../share/utils/recentView";
 import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
 import { saveProductToCart } from "../share/utils/cart";
-// import { saveToRecentViews } from "@/utils/recentView"; // Import the recent views utility
+import Spinner from "@/app/(commonLayout)/Spinner";
 
-
-
-const ProductCard = ({ product, controls }) => {
+const ProductCard = ({ product, isLoading }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const {data:user}=useGetMyProfileQuery()
-  
-  // Get user email from Redux store (adjust the path according to your auth slice)
-  const userEmail = user.data.email;
-  
-  console.log(product);
+  const { data: user } = useGetMyProfileQuery();
+  const userEmail = user?.data?.email;
 
-   const handleAddToCart = (e, product) => {
-     console.log("clicked");
-       e.stopPropagation();
-       saveProductToCart(product, userEmail);
-    
-   };
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    saveProductToCart(product, userEmail);
+  };
 
   const handleCardClick = () => {
-    // Save to recent views
     if (userEmail && product) {
       saveToRecentViews(product, userEmail);
     }
-    
-    // Navigate to product details page
     router.push(`/shop/${product._id}`);
   };
+
+  if (isLoading) return <Spinner />;
 
   return (
     <>
       <motion.div
         variants={cardVariants}
         initial="hidden"
-        animate={controls}
+        animate="visible" // সরাসরি visible
         whileHover={{ y: -2, transition: { duration: 0.3, ease: "easeOut" } }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        className="relative rounded-3xl overflow-hidden cursor-pointer" // Added cursor-pointer
-        onClick={handleCardClick} // Add click handler to the main card
+        className="relative rounded-3xl overflow-hidden cursor-pointer"
+        onClick={handleCardClick}
       >
         <div className="w-full h-96 rounded-3xl shadow-2xl overflow-hidden bg-primary hover:border-gray-300 transition-all duration-300 hover:shadow-xl">
           <CardHeader className="p-0">
@@ -105,7 +92,7 @@ const ProductCard = ({ product, controls }) => {
                 Cut To Order
               </p>
             </motion.div>
-            
+
             {/* Price Area */}
             <div className="absolute bottom-2 left-4 flex items-end rounded-b-3xl gap-1">
               <motion.span
@@ -121,13 +108,10 @@ const ProductCard = ({ product, controls }) => {
                 animate={isHovered ? { x: -36 } : { x: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                {/* Display the main price */}
                 <span className="text-lg font-bold text-white">
-                  {product?.price?.toString().split(".")[0]}{" "}
-                  {/* Main price before decimal */}
+                  {product?.price?.toString().split(".")[0]}
                 </span>
 
-                {/* Only show superscript decimal part if the price has decimals */}
                 {product?.price?.toString().includes(".") && (
                   <motion.span
                     className="text-xs text-white relative bottom-1"
@@ -137,13 +121,12 @@ const ProductCard = ({ product, controls }) => {
                     transition={{ duration: 0.5 }}
                     style={{ transformOrigin: "bottom left" }}
                   >
-                    {product?.price?.toString().split(".")[1]}{" "}
-                    {/* Display the digits after the decimal point as superscript */}
+                    {product?.price?.toString().split(".")[1]}
                   </motion.span>
                 )}
               </motion.div>
             </div>
-            
+
             {/* Cart Button */}
             <motion.button
               className="absolute bottom-3 right-4 w-10 h-10 cursor-pointer hover:scale-110 rounded-full flex items-center justify-center text-black bg-white p-2"
@@ -202,26 +185,14 @@ const ProductCard = ({ product, controls }) => {
 };
 
 const RecentAdded = () => {
-  const controls = useAnimation();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
-  const { data: recentAdded } = useGetRecentAddedQuery();
-  console.log(recentAdded);
+  const { data: recentAdded, isLoading } = useGetRecentAddedQuery();
   const product = recentAdded?.data;
-  console.log(product);
-
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    }
-  }, [isInView, controls]);
 
   return (
     <motion.div
       className="w-full px-4 mb-12 lg:px-0 container mx-auto"
-      ref={ref}
-      initial="hidden"
-     animate={controls}
+      initial="visible"
+      animate="visible"
       variants={containerVariants}
     >
       <motion.div
@@ -245,7 +216,7 @@ const RecentAdded = () => {
       >
         {product?.map((p) => (
           <motion.div key={p._id} variants={cardVariants} layout>
-            <ProductCard product={p} controls={controls} />
+            <ProductCard product={p} isLoading={isLoading} />
           </motion.div>
         ))}
       </motion.div>

@@ -55,12 +55,12 @@ export default function RootLayout({ children }) {
         <UserProvider>
           <Providers>
             <div>
-           <ClientHydration >
+           {/* <ClientHydration > */}
                <div className="">
                 <Toaster richColors position="top-center" />
                 <main>{children}</main>
               </div>
-           </ClientHydration>
+           {/* </ClientHydration> */}
             </div>
           </Providers>
         </UserProvider>
