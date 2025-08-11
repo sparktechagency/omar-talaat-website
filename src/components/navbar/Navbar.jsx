@@ -24,34 +24,39 @@ import {
 } from "../share/svg/Logo";
 import CategoryDropdown from "./CategoryDropdown"; // Import the new component
 import LeaderboardModal from "./LeaderBoard";
-import { useGetMyProfileQuery, useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
+import {
+  useGetMyProfileQuery,
+  useGetMyWalletQuery,
+} from "@/redux/featured/auth/authApi";
 import Spinner from "@/app/(commonLayout)/Spinner";
+import { getUserPlan } from "../share/utils/getUserPlan";
+import { getImageUrl } from "../share/imageUrl";
 
 // SearchComponent to wrap with Suspense
 function SearchComponent({ onSearchChange }) {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const {data: user} = useGetMyProfileQuery()
- 
+  const { data: user } = useGetMyProfileQuery();
+
   // console.log(user?.data)
-  
+
   // Initialize search query from URL params
   useEffect(() => {
     const query = searchParams?.get("search") || "";
     setSearchQuery(query);
   }, [searchParams]);
-  
+
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
     onSearchChange(value);
   };
-  
+
   const handleSearch = (e) => {
     e.preventDefault();
   };
-  
+
   return (
     <form onSubmit={handleSearch} className="relative">
       <div
@@ -82,22 +87,22 @@ function SearchComponent({ onSearchChange }) {
 function MobileSearchComponent({ onSearchChange, onClose }) {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   useEffect(() => {
     const query = searchParams?.get("search") || "";
     setSearchQuery(query);
   }, [searchParams]);
-  
+
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
     onSearchChange(value);
   };
-  
+
   const handleSearch = (e) => {
     e.preventDefault();
   };
-  
+
   return (
     <form onSubmit={handleSearch} className="relative">
       <div className="flex items-center backdrop-blur-sm bg-white/20 border border-white/30 rounded-full px-3 py-2">
@@ -114,14 +119,8 @@ function MobileSearchComponent({ onSearchChange, onClose }) {
           autoFocus
           className="bg-transparent text-white placeholder-white/60 outline-none flex-1 text-sm"
         />
-        <button
-          type="button"
-          className="text-white/70 px-2"
-          onClick={onClose}
-        >
-          <ClientOnlyIcon
-            fallback={<div style={{ width: 16, height: 16 }} />}
-          >
+        <button type="button" className="text-white/70 px-2" onClick={onClose}>
+          <ClientOnlyIcon fallback={<div style={{ width: 16, height: 16 }} />}>
             <AiOutlineClose size={16} />
           </ClientOnlyIcon>
         </button>
@@ -141,9 +140,12 @@ export default function Navbar() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-   const {data}=useGetMyWalletQuery()
-  const wallet=data?.data
-  // console.log(data)
+  const { data: wallet } = useGetMyWalletQuery();
+  const walletData = wallet?.data;
+  const { plan, classes, svgColor } = getUserPlan(walletData);
+  const {data: user} = useGetMyProfileQuery();
+  const userData = user?.data;
+
 
   // Refs for dropdown
   const dropdownRef = useRef(null);
@@ -236,7 +238,7 @@ export default function Navbar() {
               className="flex items-center space-x-2 text-lg font-bold text-white drop-shadow-lg"
             >
               <MainLogo
-                color={`#fff`}
+                color={svgColor}
                 width={50}
                 height={55}
                 className="sm:w-[60px] sm:h-[65px] md:w-[65px] md:h-[70px]"
@@ -254,8 +256,8 @@ export default function Navbar() {
                     href="/"
                     className={`relative pb-1 transition-all duration-300 ease-in-out text-white drop-shadow-md ${
                       pathname === "/"
-                        ? "border-b-2 border-white/80"
-                        : "hover:border-b-2 hover:border-white/60"
+                        ? `border-b-2 ${classes.border2} `
+                        : `hover:border-b-2 hover:${classes.border2}`
                     }`}
                   >
                     Home
@@ -271,13 +273,15 @@ export default function Navbar() {
                     href="/shop"
                     className={`relative pb-1 transition-all duration-300 ease-in-out text-white drop-shadow-md flex items-center ${
                       pathname === "/shop"
-                        ? "border-b-2 border-white/80"
-                        : "hover:border-b-2 hover:border-white/60"
+                        ? `border-b-2 ${classes.border2} `
+                        : `hover:border-b-2 hover:${classes.border2}`
                     }`}
                   >
                     Shop
                     <ClientOnlyIcon
-                      fallback={<div className="ml-1 transition-transform duration-200" />}
+                      fallback={
+                        <div className="ml-1 transition-transform duration-200" />
+                      }
                     >
                       <MdKeyboardArrowDown
                         className={`ml-1 transition-transform duration-200 ${
@@ -293,8 +297,8 @@ export default function Navbar() {
                     href="/auctions"
                     className={`relative pb-1 transition-all duration-300 ease-in-out text-white drop-shadow-md ${
                       pathname === "/auctions"
-                        ? "border-b-2 border-white/80"
-                        : "hover:border-b-2 hover:border-white/60"
+                        ? `border-b-2 ${classes.border2} `
+                        : `hover:border-b-2 hover:${classes.border2}`
                     }`}
                   >
                     Auctions
@@ -319,7 +323,9 @@ export default function Navbar() {
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
             >
               <ClientOnlyIcon
-                fallback={<div className="text-white/90 text-2xl flex items-center justify-center mt-2" />}
+                fallback={
+                  <div className="text-white/90 text-2xl flex items-center justify-center mt-2" />
+                }
               >
                 <FaSearch className="text-white/90 text-2xl flex items-center justify-center mt-2" />
               </ClientOnlyIcon>
@@ -333,7 +339,7 @@ export default function Navbar() {
                   <CalenderLogo />
                 </div>
                 <span className="text-white text-3xl md:text-4xl font-brush drop-shadow-lg">
-                 {wallet?.cmPoints}
+                  {walletData?.cmPoints}
                 </span>
               </div>
 
@@ -342,8 +348,8 @@ export default function Navbar() {
                 <div className="hover:scale-125 transition-transform">
                   <Logo />
                 </div>
-                <span className="text-white font-brush text-3xl md:text-4xl drop-shadow-lg">
-                  {wallet?.csAura}
+                <span className="text-[#A2A2A2] font-brush text-3xl md:text-4xl drop-shadow-lg">
+                  {walletData?.csAura}
                 </span>
               </div>
 
@@ -352,8 +358,8 @@ export default function Navbar() {
                 <div className="hover:scale-125 transition-transform">
                   <CoinsLogo />
                 </div>
-                <span className="text-white font-brush text-3xl md:text-4xl drop-shadow-lg">
-                  {wallet?.credits}
+                <span className="text-[#DB9D17] font-brush text-3xl md:text-4xl drop-shadow-lg">
+                  {walletData?.credits}
                 </span>
               </div>
             </div>
@@ -412,10 +418,25 @@ export default function Navbar() {
               {/* Profile Dropdown */}
               <div className="relative profile-menu">
                 <button
-                  className="text-xl flex items-center cursor-pointer justify-center w-[32px] h-[32px] sm:w-[45px] sm:h-[45px] md:w-[55px] md:h-[55px] text-white hover:scale-110 hover:text-white/80 transition-all duration-300"
+                  className="text-xl flex items-center cursor-pointer justify-center w-[32px] h-[32px] sm:w-[45px] sm:h-[45px] md:w-[55px] md:h-[55px] text-white hover:scale-115 hover:text-white/80 transition-all duration-300"
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                 >
-                  <MyProfile className=" md:w-full md:h-full" />
+                  <div
+                    className={` border-2 rounded-full ${classes.border}`}
+                  >
+                    <div className={`${classes.inner} rounded-full  text-xs text-white`}>
+                     <Image
+                      loading="lazy"
+                      src={getImageUrl(userData?.image) || "/assets/image 10.png"}
+
+
+                      height={55}
+                      width={55}
+                      className="drop-shadow-lg rounded-full p-1 hover:scale-125 transition-transform"
+                      alt="Cart Icon"
+                    />
+                    </div>
+                  </div>
                 </button>
                 {isProfileOpen && (
                   <div
@@ -432,6 +453,17 @@ export default function Navbar() {
                           className="block w-full cursor-pointer text-left px-4 py-2 hover:bg-white/10 transition-colors duration-200"
                         >
                           Profile Dashboard
+                        </button>
+                      </li>
+
+                      <li>
+                        <button
+                          onClick={() => {
+                            router.push("/order-history");
+                          }}
+                          className="block w-full cursor-pointer text-left px-4 py-2 hover:bg-white/10 transition-colors duration-200"
+                        >
+                          Order History
                         </button>
                       </li>
 
@@ -528,13 +560,17 @@ export default function Navbar() {
             >
               {mobileMenubarOpen ? (
                 <ClientOnlyIcon
-                  fallback={<div className="text-white drop-shadow-lg text-2xl mt-2 sm:text-2xl" />}
+                  fallback={
+                    <div className="text-white drop-shadow-lg text-2xl mt-2 sm:text-2xl" />
+                  }
                 >
                   <AiOutlineClose className="text-white drop-shadow-lg text-2xl mt-2 sm:text-2xl " />
                 </ClientOnlyIcon>
               ) : (
                 <ClientOnlyIcon
-                  fallback={<div className="text-white drop-shadow-lg text-3xl mt-2 sm:text-2xl" />}
+                  fallback={
+                    <div className="text-white drop-shadow-lg text-3xl mt-2 sm:text-2xl" />
+                  }
                 >
                   <FiMenu className="text-white drop-shadow-lg text-3xl mt-2 sm:text-2xl " />
                 </ClientOnlyIcon>
@@ -550,9 +586,9 @@ export default function Navbar() {
             className="lg:hidden px-3 py-2 backdrop-blur-md bg-black/50 border-t border-b border-white/10"
           >
             <Suspense fallback={<Spinner />}>
-              <MobileSearchComponent 
-                onSearchChange={handleSearchChange} 
-                onClose={() => setIsMobileSearchOpen(false)} 
+              <MobileSearchComponent
+                onSearchChange={handleSearchChange}
+                onClose={() => setIsMobileSearchOpen(false)}
               />
             </Suspense>
           </div>

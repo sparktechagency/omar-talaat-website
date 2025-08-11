@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Star,
   Minus,
@@ -18,6 +18,7 @@ import { useParams } from "next/navigation";
 import { getImageUrl } from "../share/imageUrl";
 import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
 import { saveProductToCart } from "../share/utils/cart";
+import { saveToRecentViews } from "../share/utils/recentView";
 
 const ProductDetails = () => {
   const {id} = useParams();
@@ -31,7 +32,7 @@ const ProductDetails = () => {
 const userEmail=user?.data.email
   const product=singleProduct?.data
   const categoryId=product?.categoryId
-  console.log("categoryId", categoryId)
+  // console.log("categoryId", categoryId)
 
   const productImages = [
     "https://i.ibb.co/fYZx5zCP/Region-Gallery-Viewer.png",
@@ -73,6 +74,11 @@ const userEmail=user?.data.email
     setQuantity(Math.max(1, quantity + change));
   };
 
+  useEffect(() => {
+    if (product && userEmail) {
+      saveToRecentViews(product, userEmail);
+    }
+  }, [product, userEmail]);
 
      const handleAddToCart = (e, product) => {
         e.stopPropagation();

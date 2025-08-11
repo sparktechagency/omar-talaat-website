@@ -1,12 +1,49 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Container from "../share/Container";
 import AllAuctions from "./AllAuctions";
 import UpcomingAuctions from "./UpcomingAuctions";
 import MyAuctions from "./MyAuctions";
+import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
+import { useRouter } from "next/navigation";
+import { useUnlockProductOfCreditMutation } from "@/redux/featured/shop/shopApi";
 
 const AuctionsContainer = () => {
   const [activeTab, setActiveTab] = useState("all");
+  const router=useRouter()
+  const [unlockProductOfCredit, { isLoading: unlocking },refetch] = useUnlockProductOfCreditMutation();
+
+const {data:userData, isLoading}=useGetMyProfileQuery();
+const currentUser=userData?.data
+console.log(currentUser)
+
+
+
+   const handleUnlockWithCredits = useCallback(
+    async (auction) => {
+      console.log(auction, "auction")
+
+      try {
+        if (!currentUser) {
+          router.push("/login");
+          return;
+        }
+
+        const data = { itemId: auction._id, credit: auction.creditNeeds };
+
+        console.log(data, "data")
+        const res = await unlockProductOfCredit(data).unwrap();
+        if (res.success) {
+          toast.success("Auction unlocked successfully");
+        }else{
+          toast.error("Auction unlock failed");
+        }
+        await refetch();;
+      } catch (err) {
+      }
+    },
+    [currentUser, router, unlockProductOfCredit, refetch]
+  );
 
   const tabs = [
     { id: "all", label: "All Auctions" },
@@ -17,9 +54,11 @@ const AuctionsContainer = () => {
   const renderActiveComponent = () => {
     switch (activeTab) {
       case "all":
-        return <AllAuctions setActiveTab={setActiveTab} />;
+        return <AllAuctions setActiveTab={setActiveTab} currentUser={currentUser} onUnlockWithCredits={handleUnlockWithCredits} isLoading={unlocking}/>;
       case "upcoming":
-        return <UpcomingAuctions setActiveTab={setActiveTab} />;
+        return <UpcomingAuctions setActiveTab={setActiveTab} currentUser={currentUser} onUnlockWithCredits={handleUnlockWithCredits} isLoading={unlocking} />;
+
+
       case "my_auction":
         return <MyAuctions />;
       default:

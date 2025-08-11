@@ -13,6 +13,8 @@ const ProductCard = ({
   isGridInView, 
   handleProductClick, 
   handleAddToCart,
+  onUnlockWithCredits,
+  unlocking,
   currentUser 
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -30,7 +32,8 @@ const ProductCard = ({
     !product.available &&
     (product.membership === "advanced" || product.membership === "premium");
   const showCoinsOverlay =
-    !product.available && product.membership === "normal" && product.creditNeeds;
+    (!product.available && product.membership === "normal" && product.creditNeeds) ||
+    (product.available && product.creditNeeds > 0);
 
   const handleImageError = () => {
     setImageError(true);
@@ -56,7 +59,7 @@ const ProductCard = ({
   };
 
   const getCoinsDisplay = (product) => {
-    if (showCoinsOverlay) {
+    if (product.creditNeeds > 0) {
       return (
         <div className="flex gap-2 border-2 border-amber-200 py-1 px-6 rounded-full">
           <CoinsLogo />
@@ -91,7 +94,7 @@ const ProductCard = ({
         <div className="relative aspect-square overflow-hidden">
           {!imageError ? (
             <Image
-              src={getImageUrl(product.images[0])}
+              src={getImageUrl(Array.isArray(product.images) ? product.images[0] : undefined)}
               alt={product.name}
               height={300}
               width={300}
@@ -138,10 +141,26 @@ const ProductCard = ({
             </div>
           )}
 
-          {/* Coins Overlay - For normal membership products with coins */}
+          {/* Coins Overlay - For products with credit requirements */}
           {showCoinsOverlay && (
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
-              <div className="mb-4">{getCoinsDisplay(product)}</div>
+              <h4 className="font-bold mb-2 text-sm">Credits Required</h4>
+              <p className="text-[12px] opacity-90 mb-4 leading-relaxed">
+                Click on credits to unlock this product
+              </p>
+              <button 
+                disabled={unlocking}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onUnlockWithCredits?.(product);
+                }} 
+                className="mb-4 hover:scale-105 transition-transform"
+              >
+                {getCoinsDisplay(product)}
+              </button>
+              <p className="text-[12px] opacity-90 mt-2">
+                {unlocking ? "Unlocking..." : "Click to unlock"}
+              </p>
             </div>
           )}
         </div>
@@ -196,7 +215,7 @@ const ProductCard = ({
             )}
           </div>
 
-          {product.available ? (
+          {product.available && product.creditNeeds === 0 ? (
             <motion.button
               className="absolute bottom-2 right-3 w-10 h-10 cursor-pointer hover:scale-110 rounded-full flex items-center justify-center text-black bg-white p-2"
               initial={{ opacity: 0, scale: 0 }}

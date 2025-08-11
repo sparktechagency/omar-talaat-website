@@ -24,8 +24,8 @@ const TheVaultContainer = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed  bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-black  rounded-2xl p-8 max-w-md w-full relative">
+        <div className="min-h-screen bg-black flex items-center justify-center p-4">
+            <div className="bg-black h-[550px] rounded-2xl p-8 max-w-md w-full relative">
                 {/* Close button */}
                 <button
                     onClick={onClose}
@@ -36,11 +36,11 @@ const TheVaultContainer = ({ isOpen, onClose }) => {
 
                 {/* Modal content */}
                 {!isVaultUnlocked ? (
-                    <div className="text-center">
+                    <div className="text-center mx-auto">
                         <div className="mb-6">
-                            <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center">
+                            {/* <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center">
                                 <Lock className="w-10 h-10 text-white" />
-                            </div>
+                            </div> */}
                             <h2 className="text-3xl font-bold text-white mb-2">The Vault</h2>
                         </div>
 
@@ -85,7 +85,7 @@ const TheVaultContainer = ({ isOpen, onClose }) => {
                                         setPassword(e.target.value);
                                         setPasswordError(""); // Clear error when typing
                                     }}
-                                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/40 pr-12"
+                                    className="w-full  border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/40 pr-12"
                                     placeholder="Enter password"
                                     autoComplete="off"
                                     onKeyDown={(e) => {

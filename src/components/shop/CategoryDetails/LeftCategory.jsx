@@ -1,21 +1,18 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { ChevronLeft, ChevronRight, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import { CalenderLogo, CoinsLogo, Logo, MainLogo } from "../../share/svg/Logo";
 import { useGetSingleCategoryQuery } from "@/redux/featured/category/categoryApi";
 import { useParams } from "next/navigation";
 import { getImageUrl } from "@/components/share/imageUrl";
+import { useRouter } from "next/navigation";
 
 const AllCategories = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const {id}= useParams();
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [isVaultUnlocked, setIsVaultUnlocked] = useState(false);
-  const [showVaultModal, setShowVaultModal] = useState(false);
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState("");
+  const router = useRouter();
   const {data: categories, isLoading } = useGetSingleCategoryQuery(id);
   // const categoryData = categories?.data || [];
  const categoryData = useMemo(() => categories?.data || [], [categories]);
@@ -136,133 +133,16 @@ useEffect(() => {
     setCurrentIndex(Math.min(index, maxIndex));
   };
 
-  const handleCategoryClick = (mineral) => {
-    if (mineral.isLocked && !isVaultUnlocked) {
-      setShowVaultModal(true);
-      // Reset password state when opening modal
-      setPassword("");
-      setPasswordError("");
+  const handleCategoryClick = (category) => {
+    const isVault = category?.name?.toLowerCase() === "the vault" || category?.slug === "the-vault";
+    if (isVault) {
+      router.push("/the-vault");
       return;
     }
-    
-    // Normal category navigation
-    // router.push(`/category/${mineral.id}`);
-    console.log(`Navigating to category: ${mineral.name}`);
+    router.push(`/category/${category?._id || category?.id}`);
   };
 
-  const handlePasswordSubmit = () => {
-    // For demo purposes, any password will unlock the vault
-    if (password.trim() !== "") {
-      setIsVaultUnlocked(true);
-      setShowVaultModal(false);
-      setPassword("");
-      setPasswordError("");
-    } else {
-      setPasswordError("Please enter a password.");
-    }
-  };
-
-  const closeModal = () => {
-    setShowVaultModal(false);
-    setPassword("");
-    setPasswordError("");
-  };
-
-  const VaultModal = () => (
-    <div className="fixed inset-0 bg-black/70  flex items-center justify-center z-50 p-4">
-      <div className="bg-black border border-white/20 rounded-2xl p-8 max-w-md w-full relative">
-        {/* Close button */}
-        <button
-          onClick={closeModal}
-          className="absolute top-4 left-4 text-white/70 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-
-        {/* Modal content */}
-        <div className="text-center">
-          <div className="mb-6">
-            <div className="w-20 h-20 mx-auto mb-4  rounded-full flex items-center justify-center">
-              <Lock className="w-10 h-10 text-white" />
-            </div>
-            <h2 className="text-3xl font-bold text-white mb-2">The Vault</h2>
-          </div>
-
-          <div className="mb-6">
-            <p className="text-white/80 mb-4">Minimum Requirements To Ask For Permission:</p>
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center">
-                <MainLogo className="bg-premium  " color="#DB9D17" />
-               
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8   flex items-center justify-center">
-                <CalenderLogo />
-                </div>
-                <span className="text-[40px] font-bold font-brush">5</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center">
-                <Logo />
-               
-                </div>
-                <span className="text-[40px] font-bold font-brush">1000</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8  flex items-center justify-center">
-                <CoinsLogo />
-                </div>
-                <span className="text-yellow-500 text-[40px] font-brush font-bold">1000</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-white/70 text-start text-sm mb-2">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError(""); // Clear error when typing
-                }}
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white/40 pr-12"
-                placeholder="Enter password"
-                autoComplete="off"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handlePasswordSubmit();
-                  }
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform  -translate-y-1/2 text-white/50 hover:text-white/70"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-            {passwordError && (
-              <p className="text-red-400 text-sm mt-2">{passwordError}</p>
-            )}
-          </div>
-
-          <button
-            onClick={handlePasswordSubmit}
-            className="w-full border border-white/40  p-2 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
-          >
-            Unlock The Vault
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  // Removed Vault modal and password flow
 
   return (
     <div className="container w-full mx-auto bg-black lg:my-20 my-10 flex flex-col justify-center">
@@ -322,7 +202,7 @@ useEffect(() => {
                       alt={mineral.name}
                       className="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-125"
                     />
-                    {mineral.isLocked && !isVaultUnlocked && (
+                    {mineral.isLock && (
                       <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
                         <Lock className="w-8 h-8 text-yellow-400" />
                       </div>
@@ -375,7 +255,7 @@ useEffect(() => {
                 alt={mineral.name}
                 className="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-125"
               />
-              {mineral.isLocked && !isVaultUnlocked && (
+              {mineral.isLock && (
                 <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
                   <Lock className="w-8 h-8 text-yellow-400" />
                 </div>
@@ -387,9 +267,6 @@ useEffect(() => {
           </div>
         ))}
       </div>
-
-      {/* Vault Modal */}
-      {showVaultModal && <VaultModal />}
     </div>
   );
 };

@@ -11,11 +11,18 @@ import { getUserStyles } from "../share/utils/userStyles";
 import BannerButtonAnimation from "../share/utils/BannerButtonAnimation";
 import { useClaimPromoCodeMutation, useGetPromoCodesQuery } from "@/redux/featured/homePage/bannerApi";
 import { toast } from "sonner";
+import { useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
+import { getUserPlan } from "../share/utils/getUserPlan";
 
 const Banner = () => {
   const { userType } = useUser();
   const { bg, text, border, logo, buttonBg, buttonText } =
     getUserStyles(userType);
+  const { data: wallet } = useGetMyWalletQuery();
+  const walletData=wallet?.data 
+  const { plan, classes,svgColor  }=getUserPlan(walletData)
+  console.log(plan, "plan")
+  console.log(classes, "classes")
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -31,6 +38,7 @@ const Banner = () => {
   const [claimPromoCode] = useClaimPromoCodeMutation();
   console.log(promoCodes)
   const discountOffers = promoCodes?.data
+  console.log(discountOffers, "discountOffers")
 
   // Discount offers data
   // const discountOffers = [
@@ -153,10 +161,10 @@ const Banner = () => {
 
           <div className="mb:2 lg:mb-8">
             <MainLogo
-              className="w-32 h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-8"
-              color={`${logo}`}
+              className={`w-32   h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-8 `}
+              color={svgColor}
             />
-            <h1 className="text-[40px] md:text-6xl font-bold font-brush text-white mb-2 lg:mb-6">
+            <h1 className={`text-[40px] md:text-6xl font-bold font-brush ${classes.text}  mb-2 lg:mb-6`}>
               Coral Stash
             </h1>
           </div>
@@ -176,7 +184,7 @@ const Banner = () => {
               onClick={handleShopClick}
               size="md"
               text="Shop Now"
-              className="mb-6 lg:mb-16 shadow-xl hover:shadow-2xl"
+              className={`mb-6 ${classes.bg} ${classes.text2} cursor-pointer   lg:mb-16 shadow-xl hover:shadow-2xl`}
             />
           </div>
 

@@ -10,38 +10,46 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { LeftSideArrow, RightSideArrow } from "../share/svg/Logo";
 import { useSelector, useDispatch } from "react-redux";
-import { 
-  selectCartItems, 
-  selectCartTotal, 
+import {
+  selectCartItems,
+  selectCartTotal,
   selectCartTotalItems,
   removeFromCart,
   updateQuantity,
   increaseQuantity,
   decreaseQuantity,
-  clearCart
+  clearCart,
 } from "@/redux/featured/cart/cartSlice";
 import { getImageUrl } from "../share/imageUrl";
 // Import the new function
 import { getCartProducts, updateCartItemQuantity } from "../share/utils/cart";
-import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
+import {
+  useGetMyProfileQuery,
+  useGetMyWalletQuery,
+} from "@/redux/featured/auth/authApi";
+import { getUserPlan } from "../share/utils/getUserPlan";
+import { toast } from "sonner";
 
 const CheckoutPage = () => {
   const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState([]);
   const totalItems = useSelector(selectCartTotalItems);
-  const subtotal = useSelector(selectCartTotal);
-  const {data:user}=useGetMyProfileQuery();
+  const [cartSubtotal, setCartSubtotal] = useState(0);
+  const { data: user } = useGetMyProfileQuery();
   const discount = 50;
-  const deliveryCharge = subtotal >= 1000 ? 0 : 10; // Free delivery if subtotal >= 1000
-  const total = subtotal - discount + deliveryCharge;
+  const deliveryCharge = cartSubtotal >= 1000 ? 0 : 10; // Free delivery if subtotal >= 1000
+  const total = cartSubtotal - discount + deliveryCharge;
+  const { data: wallet } = useGetMyWalletQuery();
+  const walletData = wallet?.data;
+  const { plan, classes, svgColor, iconColor } = getUserPlan(walletData);
 
   // Progress bar calculation
   const freeDeliveryThreshold = 1000;
   const progressPercentage = Math.min(
-    (subtotal / freeDeliveryThreshold) * 100,
+    (cartSubtotal / freeDeliveryThreshold) * 100,
     100
   );
-  const remainingAmount = Math.max(freeDeliveryThreshold - subtotal, 0);
+  const remainingAmount = Math.max(freeDeliveryThreshold - cartSubtotal, 0);
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("8am-9pm");
@@ -62,48 +70,70 @@ const CheckoutPage = () => {
     setCartItems(items);
   }, [userEmail]);
 
+  // When loading cart items, ensure each item has a quantity property and calculate subtotal
+  useEffect(() => {
+    const items = getCartProducts(userEmail);
+    // Ensure each item has a quantity property
+    const itemsWithQuantity = items.map((item) => ({
+      ...item,
+      quantity: item.quantity || 1, // Default to 1 if quantity is not set
+    }));
 
-  // When loading cart items, ensure each item has a quantity property
-useEffect(() => {
-  const items = getCartProducts(userEmail);
-  // Ensure each item has a quantity property
-  const itemsWithQuantity = items.map(item => ({
-    ...item,
-    quantity: item.quantity || 1 // Default to 1 if quantity is not set
-  }));
-  setCartItems(itemsWithQuantity);
-}, [userEmail]);
+    // Calculate subtotal from cart items
+    const newSubtotal = itemsWithQuantity.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
 
+    setCartItems(itemsWithQuantity);
+    setCartSubtotal(newSubtotal);
+  }, [userEmail]);
 
-const handleQuantityChange = (productId, change) => {
-  const updatedCart = cartItems.map((item) => {
-    const itemId = item._id || item.id;
-    if (itemId === productId) {
-      const newQuantity = item.quantity + change;
+  const handleQuantityChange = (productId, change) => {
+    const updatedCart = cartItems.map((item) => {
+      const itemId = item._id || item.id;
+      if (itemId === productId) {
+        const newQuantity = item.quantity + change;
 
-      if (newQuantity < 1) return item;
+        if (newQuantity < 1) return item;
 
-      if (newQuantity > item.stock) {
-        toast.error(`Only ${item.stock} in stock`);
-        return item;
+        if (newQuantity > item.stock) {
+          toast.error(`Only ${item.stock} in stock`);
+          return item;
+        }
+
+        return { ...item, quantity: newQuantity };
       }
+      return item;
+    });
 
-      return { ...item, quantity: newQuantity };
-    }
-    return item;
-  });
+    // Calculate new subtotal after quantity change
+    const newSubtotal = updatedCart.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
 
-  setCartItems(updatedCart);
-  localStorage.setItem(`cart-${userEmail}`, JSON.stringify(updatedCart));
-};
+    setCartItems(updatedCart);
+    setCartSubtotal(newSubtotal);
+    localStorage.setItem(`cart-${userEmail}`, JSON.stringify(updatedCart));
+  };
 
-const removeItem = (productId) => {
-  const updatedCart = cartItems.filter((item) => (item._id || item.id) !== productId);
-  setCartItems(updatedCart);
-  localStorage.setItem(`cart-${userEmail}`, JSON.stringify(updatedCart));
-  toast.success("Product removed from cart.");
-};
+  const removeItem = (productId) => {
+    const updatedCart = cartItems.filter(
+      (item) => (item._id || item.id) !== productId
+    );
 
+    // Calculate new subtotal after removing item
+    const newSubtotal = updatedCart.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    setCartItems(updatedCart);
+    setCartSubtotal(newSubtotal);
+    localStorage.setItem(`cart-${userEmail}`, JSON.stringify(updatedCart));
+    toast.success("Product removed from cart.");
+  };
 
   const monthNames = [
     "January",
@@ -196,16 +226,16 @@ const removeItem = (productId) => {
   //   const item = cartItems.find(item => item.id === id || item._id === id);
   //   if (item) {
   //     const newQuantity = Math.max(1, item.quantity + change);
-      
+
   //     // Check stock limit
   //     if (change > 0 && item.stock && newQuantity > item.stock) {
   //       toast.error(`Only ${item.stock} items available in stock`);
   //       return;
   //     }
-      
+
   //     // Update quantity in localStorage
   //     const updated = updateCartItemQuantity(id, newQuantity, userEmail);
-      
+
   //     if (updated) {
   //       // Refresh cart items from localStorage
   //       const items = getCartProducts(userEmail);
@@ -217,9 +247,6 @@ const removeItem = (productId) => {
   // const removeItem = (id) => {
   //   dispatch(removeFromCart(id));
   // };
-
-
-
 
   return (
     <Container className="  text-white p-4 lg:p-8 mt-10 lg:mt-0   mx-auto">
@@ -282,41 +309,55 @@ const removeItem = (productId) => {
                         </div>
                       </div>
 
-                      <div className="  flex lg:gap-40 gap-4 items-center justify-between mt-2">
-                        <div className="flex lg:w-[187px] w-full border lg:px-3 px-1 justify-between py-1 rounded-full items-center space-x-">
+                      <div
+                        className={`  flex lg:gap-40 gap-4 items-center justify-between mt-2`}
+                      >
+                        <div
+                          className={` ${classes.border} flex lg:w-[187px] w-full border h-12  justify-between rounded-full items-center space-x-`}
+                        >
                           {/* Quantity controls */}
-                          <button
-                            onClick={() => handleQuantityChange(item._id || item.id, -1)}
-                            className="w-6 h-6 lg:w-8 lg:h-8 cursor-pointer rounded-full flex items-center justify-center hover: transition-colors"
+                          <div
+                            className={`${classes.inner} rounded-full flex items-center justify-center`}
                           >
-                            <Minus size={12} className="lg:w-4 lg:h-4" />
-                          </button>
-                          <span className="text-sm lg:text-base min-w-[20px] text-center">
-                            {item.quantity}
-                          </span>
-                          <button
-                           onClick={() => handleQuantityChange(item._id || item.id, 1)}
-                            className="w-6 h-6 lg:w-8 lg:h-8 cursor-pointer rounded-full flex items-center justify-center hover: transition-colors"
-                          >
-                            <Plus size={12} className="lg:w-4 lg:h-4" />
-                          </button>
+                            <button
+                              onClick={() =>
+                                handleQuantityChange(item._id || item.id, -1)
+                              }
+                              className="w-6 h-6 lg:w-8 lg:h-8 cursor-pointer rounded-full flex items-center justify-center hover: transition-colors"
+                            >
+                              <Minus size={12} className="lg:w-4 lg:h-4" />
+                            </button>
+                            <span className="text-sm lg:text-base min-w-[20px] text-center">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() =>
+                                handleQuantityChange(item._id || item.id, 1)
+                              }
+                              className="w-6 h-6 lg:w-8 lg:h-8 cursor-pointer rounded-full flex items-center justify-center hover: transition-colors"
+                            >
+                              <Plus size={12} className="lg:w-4 lg:h-4" />
+                            </button>
+                          </div>
                         </div>
 
                         <div className="flex items-center space-x-2 lg:space-x-3">
                           {/* Price - now shows total for this item */}
                           <div>
                             <span className="font-medium lg:text-3xl">
-                               ${ (item.price * item.quantity).toFixed(2) }
+                              ${(item.price * item.quantity).toFixed(2)}
                             </span>
                           </div>
                         </div>
 
                         {/* Edit button */}
                         <div className="flex items-center space-x-2 lg:space-x-3">
-                          <button className="cursor-pointer transition-colors">
+                          <button
+                            className={`cursor-pointer transition-colors ${iconColor}`}
+                          >
                             <MdOutlineModeEdit
                               size={24}
-                              className="lg:w-7 lg:h-7"
+                              className={`lg:w-7 lg:h-7 `}
                             />
                           </button>
 
@@ -344,14 +385,16 @@ const removeItem = (productId) => {
                 {/* Optional heading and progress value */}
               </div>
 
-              <div className="w-full border rounded-full h-[30px] mb-2">
+              <div
+                className={`w-full ${classes.border} rounded-full h-[30px] m-2`}
+              >
                 <div
-                  className="bg-white h-[28px] rounded-full transition-all duration-500"
+                  className={`${classes.bg} h-[28px] rounded-full transition-all duration-500`}
                   style={{ width: `${progressPercentage}%` }}
                 ></div>
               </div>
 
-              {subtotal >= freeDeliveryThreshold ? (
+              {cartSubtotal >= freeDeliveryThreshold ? (
                 <p className="text-white text-sm font-medium">
                   🎉 Congratulations! You've qualified for free delivery!
                 </p>
@@ -375,15 +418,27 @@ const removeItem = (productId) => {
                 {/* Promo Code */}
                 <div className="mb-10">
                   <div className="flex space-x-6 lg:w-3/5 w-full">
-                    <input
-                      type="text"
-                      placeholder="Enter promo code"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                      className="flex-1  rounded-full  border px-3 py-1 lg:px-4 lg:py-2 text-sm lg:text-base  placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    <button className="border  text-white px-4 py-1 lg:px-6 lg:py-2 rounded-lg font-medium transition-colors">
-                      Apply Promo Code
+                    <div className={`flex-1 rounded-full ${classes.border}  `}>
+                      <div
+                        className={`${classes.inner} rounded-full flex items-center pl-8`}
+                      >
+                        <input
+                          type="text"
+                          placeholder="Enter promo code"
+                          value={promoCode}
+                          onChange={(e) => setPromoCode(e.target.value)}
+                          className={`w-full bg-transparent text-sm lg:text-base placeholder-gray-500 focus:outline-none`}
+                        />
+                      </div>
+                    </div>
+                    <button
+                      className={`${classes.border} rounded-2xl font-medium transition-colors`}
+                    >
+                      <div
+                        className={`${classes.inner} rounded-2xl px-4 py-1 lg:px-6 lg:py-2`}
+                      >
+                        Apply Promo Code
+                      </div>
                     </button>
                   </div>
                 </div>
@@ -394,59 +449,77 @@ const removeItem = (productId) => {
                 <div className="space-y-4">
                   <div className="space-y-5 mb-8">
                     {/* Radio Buttons */}
-                    <label className="flex items-center space-x-3 border  rounded-2xl p-3 lg:p-5 cursor-pointer  transition-colors">
-                      <input
-                        type="radio"
-                        name="delivery"
-                        value="Standard Delivery"
-                        checked={deliveryType === "Standard Delivery"}
-                        onChange={(e) => setDeliveryType(e.target.value)}
-                        className="text-orange-500 w-4 h-4 lg:w-5 lg:h-5"
-                      />
-                      <span className="text-sm lg:text-base">
-                        Standard Delivery{" "}
-                        {subtotal >= freeDeliveryThreshold
-                          ? "(FREE)"
-                          : `(AED ${deliveryCharge})`}
-                      </span>
-                    </label>
-
-                    <label className="flex items-center space-x-3 border  rounded-2xl p-3 lg:p-5 cursor-pointer  transition-colors">
-                      <input
-                        type="radio"
-                        name="delivery"
-                        value="Free Delivery"
-                        checked={deliveryType === "Free Delivery"}
-                        onChange={(e) => setDeliveryType(e.target.value)}
-                        className="text-orange-500 w-4 h-4 lg:w-5 lg:h-5"
-                        disabled={subtotal < freeDeliveryThreshold}
-                      />
-                      <span
-                        className={`text-sm lg:text-base ${
-                          subtotal < freeDeliveryThreshold
-                            ? "text-gray-500"
-                            : ""
-                        }`}
+                    <label
+                      className={`flex items-start justify-start   ${classes.border} rounded-2xl h-12 lg:h-16 cursor-pointer transition-colors`}
+                    >
+                      <div
+                        className={`${classes.inner} rounded-2xl flex items-center gap-2 pl-10`}
                       >
-                        Free Delivery{" "}
-                        {subtotal < freeDeliveryThreshold
-                          ? "(Minimum AED 1000 required)"
-                          : "(Qualified!)"}
-                      </span>
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="Standard Delivery"
+                          checked={deliveryType === "Standard Delivery"}
+                          onChange={(e) => setDeliveryType(e.target.value)}
+                          className={` ${classes.inner} text-orange-500 w-4 h-4 lg:w-5 lg:h-5`}
+                        />
+                        <span className="text-sm lg:text-base">
+                          Standard Delivery{" "}
+                          {cartSubtotal >= freeDeliveryThreshold
+                            ? "(FREE)"
+                            : `(AED ${deliveryCharge})`}
+                        </span>
+                      </div>
                     </label>
 
-                    <label className="flex items-center space-x-3 border  rounded-lg p-3 lg:p-4 cursor-pointer  transition-colors">
-                      <input
-                        type="radio"
-                        name="delivery"
-                        value="Add To Previous Order"
-                        checked={deliveryType === "Add To Previous Order"}
-                        onChange={(e) => setDeliveryType(e.target.value)}
-                        className="text-orange-500 w-4 h-4 lg:w-5 lg:h-5"
-                      />
-                      <span className="text-sm lg:text-base">
-                        Add To Previous Order
-                      </span>
+                    <label
+                      className={`flex items-center space-x-3 ${classes.border} rounded-2xl h-12 lg:h-16 cursor-pointer transition-colors`}
+                    >
+                      <div
+                        className={`${classes.inner} rounded-2xl flex items-center gap-2 pl-10`}
+                      >
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="Free Delivery"
+                          checked={deliveryType === "Free Delivery"}
+                          onChange={(e) => setDeliveryType(e.target.value)}
+                          className="text-orange-500 w-4 h-4 lg:w-5 lg:h-5"
+                          disabled={cartSubtotal < freeDeliveryThreshold}
+                        />
+                        <span
+                          className={`text-sm lg:text-base ${
+                            cartSubtotal < freeDeliveryThreshold
+                              ? "text-gray-500"
+                              : ""
+                          }`}
+                        >
+                          Free Delivery{" "}
+                          {cartSubtotal < freeDeliveryThreshold
+                            ? "(Minimum AED 1000 required)"
+                            : "(Qualified!)"}
+                        </span>
+                      </div>
+                    </label>
+
+                    <label
+                      className={`flex items-center ${classes.border} rounded-2xl h-12 lg:h-16 cursor-pointer transition-colors`}
+                    >
+                      <div
+                        className={`${classes.inner} rounded-2xl flex items-center gap-2 pl-10`}
+                      >
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="Add To Previous Order"
+                          checked={deliveryType === "Add To Previous Order"}
+                          onChange={(e) => setDeliveryType(e.target.value)}
+                          className="text-orange-500 w-4 h-4 lg:w-5 lg:h-5"
+                        />
+                        <span className="text-sm lg:text-base">
+                          Add To Previous Order
+                        </span>
+                      </div>
                     </label>
 
                     {/* Order Number Input */}
@@ -458,14 +531,22 @@ const removeItem = (productId) => {
                         Enter Previous Order Number:
                       </label>
                       <div className=" flex items-center gap-6 lg:w-2/3 w-full">
-                        <input
-                          type="text"
-                          id="orderNumber"
-                          value={orderNumber}
-                          onChange={(e) => setOrderNumber(e.target.value)}
-                          className="w-full mt-[10px] border  text-white rounded-lg p-2 lg:p-2 text-sm lg:text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                          placeholder="Enter your previous order number"
-                        />
+                        <div
+                          className={`w-full mt-[10px] ${classes.border} rounded-2xl h-10 lg:h-12`}
+                        >
+                          <div
+                            className={`${classes.inner} rounded-2xl flex items-center pl-8 `}
+                          >
+                            <input
+                              type="text"
+                              id="orderNumber"
+                              value={orderNumber}
+                              onChange={(e) => setOrderNumber(e.target.value)}
+                              className={`w-full bg-transparent text-sm lg:text-base placeholder-gray-500 focus:outline-none`}
+                              placeholder="Enter your previous order number"
+                            />
+                          </div>
+                        </div>
 
                         <Button className="h-[42px] px-10 mt-[10px]">
                           Submit
@@ -529,9 +610,9 @@ const removeItem = (productId) => {
                         className={`h-8 w-8 lg:h-12 lg:w-12 text-xs lg:text-sm rounded border-2 font-bold transition-colors flex items-center justify-center ${
                           day
                             ? day === selectedDate
-                              ? "bg-white text-black border-white"
-                              : "text-white border-white hover:bg-white hover:text-black"
-                            : "border-white  cursor-default"
+                              ? `${classes.bg} text-black border-white`
+                              : `text-white ${classes.border2} hover:${classes.bg} hover:text-black`
+                            : `${classes.border2} cursor-default`
                         }`}
                         disabled={!day}
                       >
@@ -548,36 +629,36 @@ const removeItem = (productId) => {
                     <div className="flex items-center justify-between gap-6">
                       <button
                         onClick={() => setSelectedTime("8am-9pm")}
-                        className={`relative px-3 py-2 lg:px-4 lg:py-3 w-1/2 rounded-lg text-sm lg:text-base transition-colors border ${
+                        className={`relative px-3 py-2 lg:px-4 lg:py-3 w-1/2  text-sm lg:text-base transition-colors ${
+                          classes.border2
+                        } ${
                           selectedTime === "8am-9pm"
-                            ? " text-white"
+                            ? "text-white"
                             : "text-white hover:"
                         }`}
                       >
                         <span
-                          className={`absolute top-1/2 left-2 transform -translate-y-1/2 ${
-                            selectedTime === "8am-9pm"
-                              ? "bg-white"
-                              : "border-2 border-white"
-                          } rounded-full w-5 h-5`}
+                          className={`absolute top-1/2 left-2 transform -translate-y-1/2  w-5 h-5 border-2 ${
+                            classes.border2
+                          } ${selectedTime === "8am-9pm" ? classes.bg : ""}`}
                         ></span>
                         8am-9pm
                       </button>
 
                       <button
                         onClick={() => setSelectedTime("9am-10pm")}
-                        className={`relative px-3 py-2 lg:px-4 w-1/2 lg:py-3 rounded-lg text-sm lg:text-base transition-colors border ${
+                        className={`relative px-3 py-2 lg:px-4 w-1/2 lg:py-3  text-sm lg:text-base transition-colors ${
+                          classes.border2
+                        } ${
                           selectedTime === "9am-10pm"
-                            ? " text-white"
+                            ? "text-white"
                             : "text-white hover:"
                         }`}
                       >
                         <span
-                          className={`absolute top-1/2 left-2 transform -translate-y-1/2 ${
-                            selectedTime === "9am-10pm"
-                              ? "bg-white"
-                              : "border-2 border-white"
-                          } rounded-full w-5 h-5`}
+                          className={`absolute top-1/2 left-2 transform -translate-y-1/2  w-5 h-5 border-2 ${
+                            classes.border2
+                          } ${selectedTime === "9am-10pm" ? classes.bg : ""}`}
                         ></span>
                         9am-10pm
                       </button>
@@ -615,8 +696,9 @@ const removeItem = (productId) => {
               <h3 className="text-lg font-medium text-center lg:text-[40px] lg:font-bold mb-4">
                 My Information
               </h3>
-              <div className="border-3  rounded-lg p-4 lg:p-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 text-sm lg:text-base text-gray-400">
+              <div className={`${classes.border} rounded-2xl `}>
+                <div className={`${classes.inner} rounded-2xl p-4`}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 text-sm lg:text-base text-gray-400">
                   <div>
                     <span className="text-white font-medium">
                       Delivery Address:
@@ -653,6 +735,7 @@ const removeItem = (productId) => {
                     {orderNumber ? orderNumber : "No previous order selected"}
                   </div>
                 </div>
+                </div>
               </div>
             </div>
 
@@ -663,16 +746,22 @@ const removeItem = (productId) => {
                   <h3 className="text-lg font-medium lg:text-[40px] lg:font-bold mb-6 text-center">
                     Comments
                   </h3>
-                  <div className="rounded-lg border-3  p-6 lg:p-8">
-                    <textarea
+                  <div className={`rounded-lg ${classes.border} rounded-xl`}>
+                   <div className={`${classes.inner} rounded-xl h-5 lg:p-9 `}>
+                     <div className="">
+                      <textarea
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
                       placeholder="Write comment"
-                      className="w-full h-32 lg:h-67 border   rounded-lg p-3 lg:p-4 text-sm lg:text-base text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className={`w-full h-32 lg:h-67 border rounded-lg p-3 lg:p-4 text-sm lg:text-base text-white placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500`}
                     />
-                    <button className="mt-12 mb-4 border flex justify-center items-center  text-white px-4 py-2 lg:px-5 lg:py-3 rounded-lg text-sm lg:text-[22px] w-1/2  mx-auto   transition-colors">
-                      Submit With Order
+                     </div>
+                    <button
+                      className={`mt-12  border flex justify-center items-center text-white px-4 py-2 lg:px-5 lg:py-3 rounded-lg text-sm lg:text-[22px] w-1/2 mx-auto transition-colors`}
+                    >
+                     Submit With Order
                     </button>
+                   </div>
                   </div>
                 </div>
 
@@ -681,17 +770,16 @@ const removeItem = (productId) => {
                   <h3 className="text-lg font-medium lg:text-[40px] lg:font-bold mb-6 text-center">
                     Sub Total
                   </h3>
-                  <div className="border-3  rounded-lg p-4 lg:p-6">
-                    <div className="space-y-3 text-sm lg:text-base">
+                  <div className={`${classes.border} rounded-lg `}>
+                    <div className={`${classes.inner} p-4 lg:p-6 rounded-lg`}>
+                      <div className="space-y-3 text-sm lg:text-base">
                       <div className="flex gap-3 text-[22px] font-bold">
                         <span className="">Quantity:</span>
-                        <span className="text-white">
-                          {totalItems}
-                        </span>
+                        <span className="text-white">{totalItems}</span>
                       </div>
                       <div className="flex gap-3 text-[22px] font-bold">
                         <span className="">Amount:</span>
-                        <span className="text-white">AED {subtotal}</span>
+                        {/* <span className="text-white">AED {subtotal}</span> */}
                       </div>
                       <div className="flex gap-3 text-[22px] font-bold">
                         <span className="">Discount:</span>
@@ -729,7 +817,7 @@ const removeItem = (productId) => {
                         </div>
                       }
                     />
-                    
+                    </div>
                   </div>
                 </div>
               </div>
@@ -742,5 +830,3 @@ const removeItem = (productId) => {
 };
 
 export default CheckoutPage;
-
-

@@ -1,11 +1,11 @@
-"use client"; // যদি app router হয়
+"use client"; 
 
 import { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [userType, setUserType] = useState("normal"); // 'silver' / 'premium'
+  const [userType, setUserType] = useState("normal"); 
 
   return (
     <UserContext.Provider value={{ userType, setUserType }}>

@@ -38,9 +38,9 @@ const ProductCard = ({ product, isLoading }) => {
   };
 
   const handleCardClick = () => {
-    if (userEmail && product) {
-      saveToRecentViews(product, userEmail);
-    }
+    // if (userEmail && product) {
+    //   saveToRecentViews(product, userEmail);
+    // }
     router.push(`/shop/${product._id}`);
   };
 
@@ -51,7 +51,7 @@ const ProductCard = ({ product, isLoading }) => {
       <motion.div
         variants={cardVariants}
         initial="hidden"
-        animate="visible" // সরাসরি visible
+        animate="visible" 
         whileHover={{ y: -2, transition: { duration: 0.3, ease: "easeOut" } }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}

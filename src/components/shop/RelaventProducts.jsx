@@ -89,8 +89,8 @@ const ProductCard = ({ product, controls }) => {
               whileHover="hover"
             >
               <Image
-                src={getImageUrl(product?.image)}
-                alt={product.Name}
+                src={getImageUrl(Array.isArray(product?.images) ? product.images[0] : product?.image)}
+                alt={product?.name || "related product"}
                 fill
                 className="object-cover transition-transform duration-500"
               />
@@ -253,7 +253,7 @@ const RelatedProducts = ({categoryId}) => {
         variants={containerVariants}
       >
         {relatedProducts?.map((product) => (
-          <motion.div key={product.id} variants={cardVariants} layout>
+          <motion.div key={product._id || product.id} variants={cardVariants} layout>
             <ProductCard product={product} controls={controls} />
           </motion.div>
         ))}

@@ -91,10 +91,11 @@ const authSlice = api.injectEndpoints({
       query: (data) => {
         return {
           method: "PATCH",
-          url: "/user",
+          url: "/users/profile",
           body: data,
         };
       },
+      invalidatesTags: ["User"],
     }),
     // getUser: builder.query({
     //   query: (data) => {
@@ -120,7 +121,8 @@ const authSlice = api.injectEndpoints({
         url: "/wallet/get",
       }),
    
-      providesTags: ["User"],
+      providesTags: ["Wallet"],
+
     }),
     getLeaderboard: builder.query({
       query: () => ({
@@ -128,7 +130,8 @@ const authSlice = api.injectEndpoints({
         url: "/wallet/leaderboard",
       }),
    
-      providesTags: ["User"],
+      providesTags: ["Leaderboard"],
+
     }),
   }),
 });

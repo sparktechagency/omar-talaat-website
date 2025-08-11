@@ -1,118 +1,59 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import Image from "next/image";
+import { useGetCategoriesQuery } from "@/redux/featured/category/categoryApi";
+import { getImageUrl } from "../share/imageUrl";
+import Spinner from "@/app/(commonLayout)/Spinner";
 
 const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
   const router = useRouter();
   const dropdownRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-
-  const availableImages = [
-    "/assets/category1.png",
-    "/assets/category11.png",
-    "/assets/category12.png",
-    "/assets/category4.png",
-  ];
-
-  const categories = [
-    {
-      id: 1,
-      name: "All Coral",
-      image: availableImages[0],
-      description: "Browse all available coral types",
-    },
-    {
-      id: 2,
-      name: "Zoanthids",
-      image: availableImages[1],
-      description: "Colorful colonial marine organisms",
-    },
-    {
-      id: 3,
-      name: "SPS",
-      image: availableImages[1],
-      description: "Small Polyp Stony corals with intricate structures",
-    },
-    {
-      id: 4,
-      name: "LPS",
-      image: availableImages[2],
-      description: "Large Polyp Stony corals with flowing tentacles",
-    },
-    {
-      id: 5,
-      name: "Acropora",
-      image: availableImages[0],
-      description: "Fast-growing branching SPS corals",
-    },
-    {
-      id: 6,
-      name: "Montipora",
-      image: availableImages[1],
-      description: "Plating and encrusting SPS corals",
-    },
-    {
-      id: 7,
-      name: "Soft Corals",
-      image: availableImages[2],
-      description: "Flexible corals that sway with the current",
-    },
-    {
-      id: 8,
-      name: "Anemones",
-      image: availableImages[3],
-      description: "Sea anemones and related species",
-    },
-    {
-      id: 9,
-      name: "WYSIWYG",
-      image: availableImages[0],
-      description: "What You See Is What You Get specimens",
-    },
-    {
-      id: 10,
-      name: "Zoanth",
-      image: availableImages[1],
-      description: "Premium zoanthid collections",
-    },
-    {
-      id: 11,
-      name: "The Vault",
-      image: availableImages[2],
-      description: "Rare and exclusive coral specimens",
-    },
-  ];
+  
+  // Get categories from API
+  const { data: categories, isLoading, isError } = useGetCategoriesQuery();
+  
+  // Get category data from API
+  const categoryData = useMemo(() => categories?.data || [], [categories]);
 
   const visibleCount = 4; // Limit the visible count to 4 slides
-  const maxIndex = Math.floor(categories.length / visibleCount + 2); // Adjust maxIndex based on visible slides
+  const maxIndex = useMemo(() => 
+    categoryData.length > 0 ? Math.floor(categoryData.length / visibleCount + 2) : 0, 
+    [categoryData.length]
+  );
 
   // Auto-play functionality
   useEffect(() => {
-    if (!isAutoPlay || !isShopHovered) return;
+    if (!isAutoPlay || !isShopHovered || categoryData.length === 0) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlay, maxIndex, isShopHovered]);
+  }, [isAutoPlay, maxIndex, isShopHovered, categoryData.length]);
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-  };
+  }, [maxIndex]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
-  };
+  }, [maxIndex]);
 
-  const goToSlide = (index) => {
+  const goToSlide = useCallback((index) => {
     setCurrentIndex(Math.min(index, maxIndex));
-  };
+  }, [maxIndex]);
 
-  const handleCategoryClick = (categoryId) => {
-    router.push(`/category/${categoryId}`);
+  const handleCategoryClick = (category) => {
+    if (category?.isLock) {
+      router.push(`/the-vault`);
+      setIsShopHovered(false);
+      return;
+    }
+    router.push(`/category/${category._id}`);
     setIsShopHovered(false);
   };
 
@@ -131,14 +72,69 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isShopHovered]);
+  }, [isShopHovered, setIsShopHovered]);
+
+  const dotsArray = useMemo(() => 
+    maxIndex > 0 ? [...Array(maxIndex + 1)] : [], 
+    [maxIndex]
+  );
 
   if (!isShopHovered) return null;
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div
+        ref={dropdownRef}
+        className="absolute w-full bg-black/95 border-white/20 shadow-2xl z-50"
+        style={{
+          top: "90px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          position: "fixed",
+          transition: "opacity 0.3s ease-out",
+        }}
+        onMouseEnter={() => setIsShopHovered(true)}
+        onMouseLeave={() => {}}
+      >
+        <div className="container mx-auto px-4 lg:py-8 py-6">
+          <div className="flex justify-center items-center">
+            <Spinner />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error or no data state
+  if (isError || categoryData.length === 0) {
+    return (
+      <div
+        ref={dropdownRef}
+        className="absolute w-full bg-black/95 border-white/20 shadow-2xl z-50"
+        style={{
+          top: "90px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          position: "fixed",
+          transition: "opacity 0.3s ease-out",
+        }}
+        onMouseEnter={() => setIsShopHovered(true)}
+        onMouseLeave={() => {}}
+      >
+        <div className="container mx-auto px-4 lg:py-8 py-6">
+          <div className="flex justify-center items-center">
+            <div className="text-white text-lg">No categories available</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
       ref={dropdownRef}
-      className="absolute  w-full bg-black/95 border-white/20 shadow-2xl z-50"
+      className="absolute w-full bg-black/95 border-white/20 shadow-2xl z-50"
       style={{
         top: "90px",
         left: "50%",
@@ -146,7 +142,6 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
         position: "fixed",
         transition: "opacity 0.3s ease-out",
       }}
-      // Add mouse enter/leave handlers to prevent closing when hovering over the dropdown
       onMouseEnter={() => setIsShopHovered(true)}
       onMouseLeave={() => {}}
     >
@@ -178,25 +173,30 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
                   transform: `translateX(-${
                     currentIndex * (100 / visibleCount)
                   }%)`,
-                  width: `${(categories.length / visibleCount) * 100}%`,
+                  width: `${(categoryData.length / visibleCount) * 100}%`,
                 }}
               >
-                {categories.map((category, index) => (
+                {categoryData.map((category) => (
                   <div
-                    key={category.id}
+                    key={category._id}
                     className="flex-shrink-0 relative group cursor-pointer"
-                    style={{ width: `${100 / categories.length}%` }}
-                    onClick={() => handleCategoryClick(category.id)}
+                    style={{ width: `${100 / categoryData.length}%` }}
+                    onClick={() => handleCategoryClick(category)}
                   >
                     {/* Category Card */}
                     <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
                       <Image
-                        src={category.image}
+                        src={getImageUrl(category.image)}
                         alt={category.name}
                         height={130}
                         width={130}
                         className="absolute inset-0 object-cover transition-all duration-300 group-hover:scale-125"
                       />
+                      {category?.isLock && (
+                        <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                          <Lock className="w-8 h-8 text-yellow-400" />
+                        </div>
+                      )}
                     </div>
 
                     {/* Title */}
@@ -213,7 +213,7 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
           <div className="flex items-center justify-center lg:mt-8 mt-4 gap-6">
             {/* Dots Indicator */}
             <div className="flex gap-2">
-              {[...Array(maxIndex + 1)].map((_, index) => (
+              {dotsArray.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
@@ -238,21 +238,26 @@ const CategoryDropdown = ({ isShopHovered, setIsShopHovered }) => {
 
         {/* Grid Layout for Large Devices */}
         <div className="hidden lg:grid lg:grid-cols-11 gap-6 px-4">
-          {categories.map((category) => (
+          {categoryData.map((category) => (
             <div
-              key={category.id}
+              key={category._id}
               className="flex flex-col items-center cursor-pointer group"
-              onClick={() => handleCategoryClick(category.id)}
+              onClick={() => handleCategoryClick(category)}
             >
               {/* Category Card */}
               <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
                 <Image
-                  src={category.image}
+                  src={getImageUrl(category.image)}
                   alt={category.name}
                   height={130}
                   width={130}
                   className="absolute inset-0 object-cover transition-all duration-300 group-hover:scale-125"
                 />
+                {category?.isLock && (
+                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                    <Lock className="w-8 h-8 text-yellow-400" />
+                  </div>
+                )}
               </div>
 
               {/* Title */}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import Image from "next/image";
 import { useGetCategoriesQuery } from "@/redux/featured/category/categoryApi";
 import { getImageUrl } from "../share/imageUrl";
@@ -71,10 +71,13 @@ const AllCategories = () => {
     );
   }
 
-  // ✅ Navigate to category details page
+  // Navigate to vault or category details based on category
   const handleCategoryClick = (category) => {
-    router.push(`/category/${category._id}`); 
-    // যদি slug ব্যবহার করেন: router.push(`/category/${category.slug}`);
+    if (category?.isLock) {
+      router.push(`/the-vault`);
+      return;
+    }
+    router.push(`/category/${category._id}`);
   };
 
   return (
@@ -126,6 +129,11 @@ const AllCategories = () => {
                       width={130}
                       className="absolute inset-0 object-cover transition-all duration-300 group-hover:scale-125"
                     />
+                    {category?.isLock && (
+                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                        <Lock className="w-8 h-8 text-yellow-400" />
+                      </div>
+                    )}
                   </div>
                   <h3 className="text-white font-semibold text-xs truncate mt-2 text-center">
                     {category.name}
@@ -176,6 +184,11 @@ const AllCategories = () => {
                 width={130}
                 className="absolute h-[130px] w-[130px] inset-0 object-cover transition-all duration-300 group-hover:scale-125"
               />
+              {category?.isLock && (
+                <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                  <Lock className="w-8 h-8 text-yellow-400" />
+                </div>
+              )}
             </div>
             <h3 className="text-white font-semibold text-sm truncate mt-2 text-center">
               {category.name}

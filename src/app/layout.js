@@ -12,6 +12,7 @@ import Footer from "@/components/footer/Footer";
 import { Toaster } from "sonner";
 import { UserProvider } from "@/components/share/UserProvider";
 import ClientHydration from "@/components/ClientHydration";
+import WalletInitializer from "@/components/share/utils/MyWallet";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,6 +55,7 @@ export default function RootLayout({ children }) {
       >
         <UserProvider>
           <Providers>
+            <WalletInitializer />
             <div>
            {/* <ClientHydration > */}
                <div className="">

@@ -3,6 +3,8 @@ import React from "react";
 import { Filter, ChevronDown, Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import { FilterIcon } from "../share/svg/Logo";
+import { useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
+import { getUserPlan } from "../share/utils/getUserPlan";
 
 const ProductControls = ({
   sortBy,
@@ -16,6 +18,9 @@ const ProductControls = ({
   toggleFilterVisibility,
   isAnimating,
 }) => {
+  const { data: wallet } = useGetMyWalletQuery();
+  const walletData = wallet?.data;
+  const { plan, classes, svgColor } = getUserPlan(walletData);
   return (
     <div className="flex flex-col gap-4 mb-8">
       {/* Mobile Controls - Filter Left, Sort Right */}
@@ -78,12 +83,12 @@ const ProductControls = ({
           whileTap={{ scale: 0.95 }}
           disabled={isAnimating}
         >
-          <p className="text-white font-bold">Filter</p>
+          <p className={`${classes.text} font-bold`}>Filter</p>
           <motion.div
             animate={{ rotate: isFilterVisible ? 0 : 180 }}
             transition={{ duration: 0.9 }}
           >
-            <FilterIcon />
+            <FilterIcon color={svgColor}/>
           </motion.div>
         </motion.button>
 
@@ -94,9 +99,9 @@ const ProductControls = ({
               className="flex items-center space-x-2 border-none px-4 py-3 text-white focus:outline-none focus:border-none min-w-[160px] justify-between transition-all duration-300"
             >
               <span className="flex items-center border-none space-x-2">
-                <Filter className="w-4 h-4" />
-                <span className="text-sm">Sort by</span>
-                <span className="font-medium">{sortBy}</span>
+                {/* <Filter  className={`${classes.text} `}/> */}
+                <span className={`${classes.text} text-sm`}>Sort by</span>
+                <span className={`${classes.text} text-sm`}>{sortBy}</span>
               </span>
             </button>
 

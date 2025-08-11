@@ -9,7 +9,7 @@ const store = configureStore({
         auth: authReducer,
         cart: cartReducer,
     },
-    middleware: (getDefaultMiddleware) =>getDefaultMiddleware().concat(api.middleware), // Add the middleware
+    middleware: (getDefaultMiddleware) =>getDefaultMiddleware().concat(api.middleware), 
 });
 
-export default store; // Export the store
+export default store; 

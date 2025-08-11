@@ -94,6 +94,16 @@ const shopApi = api.injectEndpoints({
         { type: "Reviews", id: productId },
       ],
     }),
+    unlockProductOfCredit: builder.mutation({
+      query: (data) => ({
+        method: "POST",
+        url: `/inventory/products/unlock`,
+        body: data,
+      }),
+      invalidatesTags: ["Wallet"],
+
+
+    }),
   }),
 });
 
@@ -106,4 +116,5 @@ export const {
   useGetRelatedProductsQuery,
   useAddProductReviewMutation,
   useGetProductReviewsQuery,
+  useUnlockProductOfCreditMutation,
 } = shopApi;

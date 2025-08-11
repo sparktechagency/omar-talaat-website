@@ -13,10 +13,12 @@ import Container from "../share/Container";
 import FilterSection from "./FilteringSection";
 import ProductCard from "./ProductCard";
 import ProductControls from "./ProductControls";
-import { useGetProductsQuery } from "@/redux/featured/shop/shopApi";
-import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
+import { useGetProductsQuery, useUnlockProductOfCreditMutation } from "@/redux/featured/shop/shopApi";
+import { useGetMyProfileQuery, useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
 import { saveProductToCart } from "../share/utils/cart";
 import { saveToRecentViews } from "../share/utils/recentView";
+import { getUserPlan } from "../share/utils/getUserPlan";
+import { toast } from "sonner";
 
 const CoralShopGrid = ({ defaultCategory }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,8 +27,11 @@ const CoralShopGrid = ({ defaultCategory }) => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
-  // const [queryParams, setQueryParams] = useState([]);
+  const [unlockProductOfCredit, { isLoading: unlocking }] = useUnlockProductOfCreditMutation();
   const [statusFilter, setStatusFilter] = useState("All");
+  const { data: wallet } = useGetMyWalletQuery();
+  const walletData = wallet?.data;
+  const { plan, classes, svgColor } = getUserPlan(walletData);
 
   const [filters, setFilters] = useState({
     minPrice: 0,
@@ -90,14 +95,6 @@ const CoralShopGrid = ({ defaultCategory }) => {
     }));
   };
 
-  // useEffect(() => {
-  //   if (defaultCategory) {
-  //     setFilters((prev) => ({
-  //       ...prev,
-  //       categories: defaultCategory,
-  //     }));
-  //   }
-  // }, [defaultCategory]);
 
   const {
     data: allProduct,
@@ -112,6 +109,7 @@ const CoralShopGrid = ({ defaultCategory }) => {
   // console.log("All Products Data:", allProduct);
 
   const productData = allProduct?.data || [];
+  
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -219,38 +217,43 @@ const CoralShopGrid = ({ defaultCategory }) => {
 
   const products = React.useMemo(() => {
     if (!productData || !Array.isArray(productData)) return [];
-    return productData.map((item) => ({
-      _id: item._id,
-      name: item.name,
-      price: item.price,
-      images: item.images,
-      status:
-        item.status === "active"
-          ? item.isStock
-            ? "In Stock"
-            : "Out of Stock"
-          : item.status,
-      available:
-        item.creditNeeds === 0 &&
-        !item.premiumMembership &&
-        !item.advanceMembership,
-      creditNeeds: item.creditNeeds,
-      membership: item.premiumMembership
-        ? "premium"
-        : item.advanceMembership
-        ? "advanced"
-        : "normal",
-      description: item.description,
-      stock: item.stock,
-    }));
+    return productData.map((item) => {
+      let lockType = null;
+      if (!item.isAvailable) {
+        if (item.premiumMembership) lockType = "premium";
+        else if (item.advanceMembership) lockType = "advanced";
+        else lockType = "normal";
+      } else if (item.isAvailable && item.creditNeeds > 0) {
+        lockType = "credit";
+      }
+      return {
+        _id: item._id,
+        name: item.name,
+        price: item.price,
+        images: item.images,
+        status:
+          item.status === "active"
+            ? item.isStock
+              ? "In Stock"
+              : "Out of Stock"
+            : item.status,
+        available: item.isAvailable,
+        creditNeeds: item.creditNeeds,
+        membership: item.premiumMembership
+          ? "premium"
+          : item.advanceMembership
+          ? "advanced"
+          : "normal",
+        description: item.description,
+        stock: item.stock,
+        lockType, // <-- new property
+      };
+    });
   }, [productData]);
 
   const handleProductClick = useCallback(
     (product) => {
-      if (userEmail && product) {
-        saveToRecentViews(product, userEmail);
-      }
-      if (product.available) {
+      if (product.available && product.creditNeeds === 0) {
         router.push(`/shop/${product._id}`);
       }
     },
@@ -263,6 +266,39 @@ const CoralShopGrid = ({ defaultCategory }) => {
       saveProductToCart(product, userEmail);
     },
     [userEmail]
+  );
+
+  const handleUnlockWithCredits = useCallback(
+    async (product) => {
+      console.log(product, "product")
+      try {
+        // Require login
+        if (!currentUser) {
+          router.push("/login");
+          return;
+        }
+
+        const data = { itemId: product._id, credit: product.creditNeeds };
+        console.log(data, "data")
+        const res = await unlockProductOfCredit(data).unwrap();
+        if (res.success) {
+          toast.success("Product unlocked successfully");
+        }else{
+          toast.error("Product unlock failed");
+        }
+
+
+        console.log(res, "res")
+
+        // On success, refetch products and navigate to product details
+        await refetch();
+        // router.push(`/shop/${product._id}`);
+      } catch (err) {
+        // Silently fail for now; optionally integrate a toast here
+        // console.error("Failed to unlock product:", err);
+      }
+    },
+    [currentUser, router, unlockProductOfCredit, refetch]
   );
 
   if (error) {
@@ -364,6 +400,8 @@ const CoralShopGrid = ({ defaultCategory }) => {
                     isGridInView={isGridInView}
                     handleProductClick={handleProductClick}
                     handleAddToCart={handleAddToCart}
+                    onUnlockWithCredits={handleUnlockWithCredits}
+                    unlocking={unlocking}
                     currentUser={currentUser}
                   />
                 ))

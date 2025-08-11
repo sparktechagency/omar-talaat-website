@@ -1,130 +1,75 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
 import Image from "next/image";
 import { useGetAllAuctionsQuery } from "@/redux/featured/auctions/auctionsApi";
 import { getImageUrl } from "../share/imageUrl";
+import { toast } from "sonner";
+import { motion } from "framer-motion"; // ✅ Animation import
 
-const AllAuctions = ({ setActiveTab }) => {
-  const {data, isLading, isError} = useGetAllAuctionsQuery();
-//  const auctions = data?.data || [];
-  // const auctions = [
-  //   {
-  //     id: 1,
-  //     name: "PLUM TREE ACRO CHUNK",
-  //     currentBid: 250,
-  //     image: "/assets/category1.png",
-  //     status: "Live Auction",
-  //     timeLeft: "2h 30m",
-  //     available: true,
-  //     membership: "normal",
-  //     type: "live",
-  //     creditsUsed: 235,
-  //     creditsWorth: 1000,
-  //     csAuraWorth: 92,
-  //     totalBids: 3,
-  //     highestBidder: "Sabbir Ahmed",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "CS Blue Matrix Zoanthids",
-  //     currentBid: 149.99,
-  //     image: "/assets/category1.png",
-  //     status: "Upcoming",
-  //     timeLeft: "Starts in 1 day",
-  //     available: false,
-  //     coins: 235,
-  //     membership: "normal",
-  //     type: "upcoming",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "CS Rainbow Incinerator",
-  //     currentBid: 199.5,
-  //     image: "/assets/category11.png",
-  //     status: "My Bid",
-  //     timeLeft: "3h 45m",
-  //     available: false,
-  //     membership: "advanced",
-  //     type: "my_auction",
-  //     coins: 235,
-  //     EndTime: {
-  //       days: 0,
-  //       hours: 3,
-  //       mins: 45,
-  //       secs: 20,
-  //     },
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "CS Fire and Ice",
-  //     currentBid: 299.0,
-  //     image: "/assets/category4.png",
-  //     status: "Premium Auction",
-  //     timeLeft: "1h 15m",
-  //     available: false,
-  //     membership: "premium",
-  //     type: "live",
-  //     coins: 235,
-  //     EndTime: {
-  //       days: 0,
-  //       hours: 1,
-  //       mins: 15,
-  //       secs: 30,
-  //     },
-  //   },
-  // ];
+const AllAuctions = ({
+  setActiveTab,
+  onUnlockWithCredits,
+  unlocking,
+  currentUser,
+}) => {
+  const { data, isLoading, isError } = useGetAllAuctionsQuery();
 
   const mapAuctionData = (apiData) => {
-  return apiData?.map((item) => {
-    let membership = "normal";
-    if (item.premiumMembership) {
-      membership = "premium";
-    } else if (item.advanceMembership) {
-      membership = "advanced";
-    }
+    return (
+      apiData?.map((item) => {
+        let membership = "normal";
+        if (item.premiumMembership) {
+          membership = "premium";
+        } else if (item.advanceMembership) {
+          membership = "advanced";
+        }
 
-    const endTime = new Date(item.endDate);
-    const now = new Date();
-    const timeDiff = endTime - now;
+        const endTime = new Date(item.endDate);
+        const now = new Date();
+        const timeDiff = endTime - now;
 
-    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
-    const mins = Math.floor((timeDiff / (1000 * 60)) % 60);
-    const secs = Math.floor((timeDiff / 1000) % 60);
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+        const mins = Math.floor((timeDiff / (1000 * 60)) % 60);
+        const secs = Math.floor((timeDiff / 1000) % 60);
 
-    return {
-      id: item._id,
-      name: item.name,
-      currentBid: item.price,
-      image: item.image,
-      status: item.status === "active" ? "Live Auction" : "Upcoming",
-      timeLeft: `${days > 0 ? `${days}d ` : ""}${hours}h ${mins}m`,
-      available: item.status === "active",
-      membership: membership,
-      type: item.status === "active" ? "live" : "upcoming",
-      creditsUsed: item.creditNeeds || 0,
-      creditsWorth: item.creditWorth || 0,
-      csAuraWorth: item.csAuraWorth || 0,
-      totalBids: 0,
-      highestBidder: "",
-      EndTime: {
-        days,
-        hours,
-        mins,
-        secs,
-      },
-    };
-  }) || [];
-};
+        let lockType = null;
+        if (!item.isAvailable) {
+          if (item.premiumMembership) lockType = "premium";
+          else if (item.advanceMembership) lockType = "advanced";
+          else lockType = "normal";
+        } else if (item.isAvailable && item.creditNeeds > 0) {
+          lockType = "credit";
+        }
 
-const auctions = mapAuctionData(data?.data);
+        return {
+          id: item._id,
+          name: item.name,
+          currentBid: item.price,
+          image: item.image,
+          status: item.status === "active" ? "Live Auction" : "Upcoming",
+          timeLeft: `${days > 0 ? `${days}d ` : ""}${hours}h ${mins}m`,
+          available: item.isAvailable,
+          membership,
+          type: item.status === "active" ? "live" : "upcoming",
+          creditNeeds: item.creditNeeds || 0,
+          creditsWorth: item.creditWorth || 0,
+          csAuraWorth: item.csAuraWorth || 0,
+          totalBids: 0,
+          highestBidder: "",
+          lockType,
+          EndTime: { days, hours, mins, secs },
+        };
+      }) || []
+    );
+  };
 
-
+  const auctions = mapAuctionData(data?.data);
   const [selectedAuction, setSelectedAuction] = useState(null);
 
   const handleAuctionClick = (auction) => {
-    if (auction.available) {
+    if (auction.available && auction.creditNeeds === 0) {
       setSelectedAuction(auction);
     }
   };
@@ -136,33 +81,46 @@ const auctions = mapAuctionData(data?.data);
   };
 
   const AuctionCard = ({ auction }) => {
+    const [imageError, setImageError] = useState(false);
+
     const showMembershipOverlay =
       !auction.available &&
       (auction.membership === "advanced" || auction.membership === "premium");
-    const showCoinsOverlay =
-      !auction.available && auction.membership === "normal" && auction.coins;
-    const [imageError, setImageError] = useState(false);
 
-    const handleImageError = () => {
-      setImageError(true);
-    };
+    const showCoinsOverlay =
+      (!auction.available &&
+        auction.membership === "normal" &&
+        auction.creditNeeds) ||
+      (auction.available && auction.creditNeeds > 0);
+
+    const handleImageError = () => setImageError(true);
 
     const getMembershipIcon = (membership) => {
       if (membership === "advanced") {
-        return <MainLogo className="w-16 h-16 mx-auto mb-4" color="#69CDFF" />;
+        return (
+          <MainLogo
+            className="w-32 h-36 lg:w-[100px] lg:h-[122px] mx-auto mb-6"
+            color="#057199"
+          />
+        );
       } else if (membership === "premium") {
-        return <MainLogo className="w-12 h-12 mx-auto mb-4" color="#DB9D17" />;
+        return (
+          <MainLogo
+            className="w-32 h-36 lg:w-[100px] lg:h-[122px] mx-auto mb-6"
+            color="#FEF488"
+          />
+        );
       }
       return null;
     };
 
     const getCoinsDisplay = (auction) => {
-      if (showCoinsOverlay) {
+      if (auction.creditNeeds > 0) {
         return (
-          <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-2 px-8 rounded-full">
-            <CoinsLogo className="w-6 h-6" />
-            <span className="text-white font-bold text-lg">
-              {auction.coins}
+          <div className="flex gap-2 border-2 border-amber-200 py-1 px-6 rounded-full">
+            <CoinsLogo />
+            <span className="text-white font-semibold text-4xl font-brush">
+              {auction.creditNeeds}
             </span>
           </div>
         );
@@ -171,59 +129,26 @@ const auctions = mapAuctionData(data?.data);
     };
 
     const getTimerDisplay = (auction) => {
-      if (auction.startTime) {
-        return (
-          <div className="absolute bottom-0 left-0 right-0 p-3 rounded-b-2xl">
-            <div className="text-center flex items-center px-6 justify-between">
-              <div className="text-white text-xs mb-1">Starts In:</div>
-              <div>
-                <div className="flex justify-center gap-1 text-white text-sm font-mono">
-                  <span className=" px-2 py-1 rounded">
-                    {String(auction.startTime.days).padStart(2, "0")}
-                  </span>
-                  <span className="text-gray-400">:</span>
-                  <span className=" px-2 py-1 rounded">
-                    {String(auction.startTime.hours).padStart(2, "0")}
-                  </span>
-                  <span className="text-gray-400">:</span>
-                  <span className=" px-2 py-1 rounded">
-                    {String(auction.startTime.mins).padStart(2, "0")}
-                  </span>
-                  <span className="text-gray-400">:</span>
-                  <span className=" px-2 py-1 rounded">
-                    {String(auction.startTime.secs).padStart(2, "0")}
-                  </span>
-                </div>
-                <div className="flex justify-center gap-4 text-xs text-gray-300 mt-1">
-                  <span>Days</span>
-                  <span>Hours</span>
-                  <span>Mins</span>
-                  <span>Secs</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      } else if (auction.EndTime) {
+      if (auction.EndTime) {
         return (
           <div className="absolute bottom-0 left-0 right-0 p-3 rounded-b-2xl">
             <div className="text-center flex items-center px-6 justify-between">
               <div className="text-white text-xs mb-1 ">Ends In:</div>
               <div>
                 <div className="flex justify-center gap-1 text-white font-black font-mono">
-                  <span className=" px-2 py-1 rounded">
+                  <span className="px-2 py-1 rounded">
                     {String(auction.EndTime.days).padStart(2, "0")}
                   </span>
                   <span className="text-gray-400 font-black">:</span>
-                  <span className=" px-2 py-1 rounded">
+                  <span className="px-2 py-1 rounded">
                     {String(auction.EndTime.hours).padStart(2, "0")}
                   </span>
                   <span className="text-gray-400 font-black">:</span>
-                  <span className=" px-2 py-1 rounded">
+                  <span className="px-2 py-1 rounded">
                     {String(auction.EndTime.mins).padStart(2, "0")}
                   </span>
                   <span className="text-gray-400 font-black">:</span>
-                  <span className=" px-2 py-1 rounded">
+                  <span className="px-2 py-1 rounded">
                     {String(auction.EndTime.secs).padStart(2, "0")}
                   </span>
                 </div>
@@ -241,26 +166,37 @@ const auctions = mapAuctionData(data?.data);
       return null;
     };
 
-    // Define border style based on membership with neon infinity effect
     const getBorderStyle = () => {
-      if (auction.membership === "premium") {
-        return "border-[3px] border-[#DB9D17] neon-border-premium"; // Premium with neon effect
-      } else if (auction.membership === "advanced") {
-        return "border-[3px] border-[#69CDFF] neon-border-advanced"; // Advanced with neon effect
-      }
-      return "border border-gray-700/50 hover:border-gray-600/50"; // Default border
+ if (auction.membership === "premium") {
+  return "border-trace"; // premium effect
+} else if (auction.membership === "advanced") {
+  return "border-trace"; 
+}
+
+
+      return "border border-gray-700/50 hover:border-gray-600/50";
     };
 
     return (
-      <div
+      <motion.div
         className={`relative group auction-card ${
-          auction.available ? "cursor-pointer" : "cursor-default"
+          auction.available && auction.creditNeeds === 0
+            ? "cursor-pointer"
+            : "cursor-default"
         }`}
         onClick={() => handleAuctionClick(auction)}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.97 }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
       >
-        <div className={`backdrop-blur-sm rounded-2xl overflow-hidden ${getBorderStyle()} transition-all duration-300 hover:transform hover:scale-[1.02]`}>
-          {/* Auction Image */}
-          <p className="text-white  text-sm  mt-2 ml-2 text-start">{auction.name}</p>
+        <div
+          className={`backdrop-blur-sm rounded-2xl overflow-hidden ${getBorderStyle()} transition-all duration-300`}
+        >
+          <p className="text-white text-sm mt-2 ml-2 text-start">
+            {auction.name}
+          </p>
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
               <Image
@@ -269,10 +205,10 @@ const auctions = mapAuctionData(data?.data);
                 width={300}
                 alt={auction.name}
                 onError={handleImageError}
-                className="w-full h-full object-cover transition-transform duration-500"
+                className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-800 to-yellow-600 flex items-center justify-center relative">
+              <div className="w-full h-full bg-[#181818] flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-black/20"></div>
                 <div className="text-white text-center p-4 relative z-10">
                   <div className="text-6xl mb-2">🪸</div>
@@ -281,20 +217,50 @@ const auctions = mapAuctionData(data?.data);
               </div>
             )}
 
-            {/* Membership Badge */}
             {auction.membership && auction.membership !== "normal" && (
-              <div className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full ${
-                auction.membership === "premium" 
-                  ? "bg-[#DB9D17]/80 text-black" 
-                  : "bg-[#69CDFF]/80 text-white"
-              }`}>
+              <div
+                className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded-full ${
+                  auction.membership === "premium"
+                    ? "bg-[#FEF488]/80 text-black"
+                    : "bg-[#057199]/80 text-white"
+                }`}
+              >
                 {auction.membership === "premium" ? "Premium" : "Advanced"}
               </div>
             )}
 
-            {/* View Auction Button for Available Auctions */}
-            {auction.available && (
-              <div className="absolute inset-0 flex items-center justify-center">
+            {showMembershipOverlay && (
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
+                {getMembershipIcon(auction.membership)}
+                <h4 className="font-bold mb-2 text-sm">
+                  {auction.membership === "advanced" ? "Advanced" : "Premium"}{" "}
+                  Membership Required
+                </h4>
+                <p className="text-[12px] opacity-90 mb-4 leading-relaxed">
+                  You have to upgrade your membership status to view this
+                  auction
+                </p>
+                {auction.creditNeeds > 0 && getCoinsDisplay(auction)}
+              </div>
+            )}
+
+            {showCoinsOverlay && (
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
+                <button
+                  disabled={unlocking}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onUnlockWithCredits?.(auction);
+                  }}
+                  className="mb-4 hover:scale-105 transition-transform"
+                >
+                  {getCoinsDisplay(auction)}
+                </button>
+              </div>
+            )}
+
+            {auction.available && auction.creditNeeds === 0 && (
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <button
                   className="bg-white text-black px-5 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                   onClick={(e) => {
@@ -307,52 +273,57 @@ const auctions = mapAuctionData(data?.data);
               </div>
             )}
 
-            {/* Membership Lock Overlay */}
-            {showMembershipOverlay && (
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
-                <div className="mb-4">
-                  {getMembershipIcon(auction.membership)}
-                </div>
-                <h4 className="font-bold mb-2 text-sm">
-                  {auction.membership === "advanced" ? "Advanced" : "Premium"}{" "}
-                  Membership Required
-                </h4>
-                <p className="text-xs opacity-90 mb-4 leading-relaxed">
-                  You have to upgrade your membership status to view this
-                  product
-                </p>
-                {auction.coins && (
-                  <div className="flex items-center gap-2 bg-amber-600/20 border border-amber-400 py-1 px-3 rounded-full">
-                    <CoinsLogo className="w-5 h-5" />
-                    <span className="text-white font-bold text-sm">
-                      {auction.coins}
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Coins Overlay */}
-            {showCoinsOverlay && (
-              <div className="absolute inset-0 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
-                <div className="mb-4">{getCoinsDisplay(auction)}</div>
-              </div>
-            )}
-
-            {/* Timer Display - Always at bottom */}
             {getTimerDisplay(auction)}
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className="animate-pulse">
+            <div className="bg-gray-800 rounded-2xl h-80"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-400 text-lg">Error loading auctions</p>
+      </div>
+    );
+  }
+
+  if (!auctions || auctions.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-400 text-lg">No auctions available</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <motion.div
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      initial="hidden"
+      animate="show"
+      variants={{
+        hidden: {},
+        show: {
+          transition: { staggerChildren: 0.1 },
+        },
+      }}
+    >
       {auctions.map((auction) => (
         <AuctionCard key={auction.id} auction={auction} />
       ))}
-    </div>
+    </motion.div>
   );
 };
 

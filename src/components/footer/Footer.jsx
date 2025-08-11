@@ -7,8 +7,13 @@ import { GoArrowRight } from "react-icons/go";
 import { ClientOnlyIcon } from "@/components/ui/client-only-icon";
 import styles from "./footer.module.css"; // Import your CSS module
 import DoaFormModal from "../doaForm/DoaFormModal";
+import { useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
+import { getUserPlan } from "../share/utils/getUserPlan";
 
 export default function Footer() {
+  const { data: wallet } = useGetMyWalletQuery();
+  const walletData=wallet?.data 
+  const { plan, classes,svgColor  }=getUserPlan(walletData)
   return (
     <div className="px-4 lg:px-0 bg-[#181818] text-white">
       {/* Main Footer Content */}
@@ -18,7 +23,7 @@ export default function Footer() {
           <div className="lg:col-span-6 text-center">
             <div className=" mb-6 ">
               <div className="flex justify-center">
-                <FooterLogo className="text-center" />
+                <FooterLogo className="text-center" color={svgColor}/>
               </div>
               <div className="">
                 <h3 className="text-[20px] font-bold  my-3">
