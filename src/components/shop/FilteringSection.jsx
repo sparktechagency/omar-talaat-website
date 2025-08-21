@@ -7,7 +7,7 @@ import { getUserPlan } from "../share/utils/getUserPlan";
 
 const FilterSection = ({ isMobile = false, onFilterChange }) => {
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(300);
+  const [maxPrice, setMaxPrice] = useState(1000);
   const [availability, setAvailability] = useState([]);
   const [productType, setProductType] = useState([]);
   const { data: wallet } = useGetMyWalletQuery();
@@ -188,7 +188,7 @@ const FilterSection = ({ isMobile = false, onFilterChange }) => {
                   setMinPrice(val[0]);
                   setMaxPrice(val[1]);
                 }}
-                max={300}
+                max={1000}
                 min={0}
                 step={10}
                 className="w-full"

@@ -72,6 +72,18 @@ const ProductCard = ({
     return null;
   };
 
+  // Determine border color based on product type
+  const getBorderClass = () => {
+    if (product.membership === "premium") {
+      return "border border-[#FEF488]"; // Premium border color (gold)
+    } else if (product.membership === "advanced") {
+      return "border border-[#057199]"; // Advanced border color (blue)
+    } else if (product.membership === "normal" && product.creditNeeds > 0) {
+      return "border border-white"; // Normal with credit needs (white border)
+    }
+    return ""; // No border for normal products with no credit needs
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -89,7 +101,7 @@ const ProductCard = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="bg-black backdrop-blur-sm rounded-xl overflow-hidden  transition-all duration-300 hover:transform hover:scale-[1.02]">
+      <div className={`bg-black backdrop-blur-sm rounded-xl overflow-hidden transition-all duration-300 hover:transform hover:scale-[1.02] ${getBorderClass()}`}>
         {/* Product Image */}
         <div className="relative aspect-square overflow-hidden">
           {!imageError ? (
@@ -144,10 +156,10 @@ const ProductCard = ({
           {/* Coins Overlay - For products with credit requirements */}
           {showCoinsOverlay && (
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
-              <h4 className="font-bold mb-2 text-sm">Credits Required</h4>
-              <p className="text-[12px] opacity-90 mb-4 leading-relaxed">
+              {/* <h4 className="font-bold mb-2 text-sm">Credits Required</h4> */}
+              {/* <p className="text-[12px] opacity-90 mb-4 leading-relaxed">
                 Click on credits to unlock this product
-              </p>
+              </p> */}
               <button 
                 disabled={unlocking}
                 onClick={(e) => {
@@ -158,9 +170,9 @@ const ProductCard = ({
               >
                 {getCoinsDisplay(product)}
               </button>
-              <p className="text-[12px] opacity-90 mt-2">
+              {/* <p className="text-[12px] opacity-90 mt-2">
                 {unlocking ? "Unlocking..." : "Click to unlock"}
-              </p>
+              </p> */}
             </div>
           )}
         </div>

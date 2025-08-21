@@ -43,12 +43,12 @@ const CoralShopGrid = ({ defaultCategory }) => {
 
   const [filters, setFilters] = useState({
     minPrice: 0,
-    maxPrice: 300,
+    maxPrice: 3000,
     availability: [],
     productType: [],
   });
 
-  const [pageSize, setPageSize] = useState(4);
+  const [pageSize, setPageSize] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data: user } = useGetMyProfileQuery();

@@ -192,7 +192,7 @@ const CountdownProgressTracker = ({
 
   // Remove scroll functionality since we always show eligible + next 3
   const scrolledVisibleSteps = progressSteps;
-;
+
   const handleRedeem = async (rewardId, categoryName) => {
     // const confirmRedeem = window.confirm(
     //   `Are you sure you want to redeem this ${categoryName}?`
@@ -208,7 +208,7 @@ const CountdownProgressTracker = ({
       toast.error("Redeem failed. Please try again.");
       console.error("Redeem Error:", error);
     }
-  }
+  };
 
   console.log(
     "Current Index:",
@@ -427,63 +427,87 @@ const CountdownProgressTracker = ({
               <div className="w-full mb-20">
                 <div className="relative">
                   {/* Connection borders between cards */}
-                  <div className="absolute top-1/2 right-2/4 w-1/2 h-[4px] bg-gradient-to-r from-[#69CDFF] to-[#DB9D17] transform -translate-y-1/2 hidden md:block"></div>
+                  <div className="absolute top-1/2 right-2/4 w-1/3 h-[4px] bg-gradient-to-r from-[#69CDFF] to-[#DB9D17] transform -translate-y-1/2 hidden md:block"></div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl relative">
-                    {currentEligibleStep.rewards.map((reward, index) => (
-                      <div
-                        key={reward._id}
-                        className="relative border-4 border-[#69CDFF] rounded-lg p-6 bg-black text-center"
-                      >
-                        {/* Vertical border inside first card */}
-                        {index === 0 && (
-                          <div className="absolute left-1/2 top-[-67px] w-[4px] h-16 bg-gradient-to-b from-[#69CDFF] to-[#DB9D17] transform -translate-x-1/2"></div>
-                        )}
+                    {currentEligibleStep.rewards.map((reward, index) => {
+                      // Define dynamic border styles based on card position
+                      let borderStyle = "";
+                      let cardContent = "";
+                      
+                      if (index === 0) {
+                        // First card - white border with transparent background
+                        borderStyle = "border-4 border-white bg-transparent";
+                        cardContent = "bg-black p-6";
+                      } else if (index === 1) {
+                        // Second card - blue gradient border
+                        borderStyle = "border-4 border-transparent bg-gradient-to-r from-[#057199] to-[#69CDFF]";
+                        cardContent = "bg-black rounded-lg p-6";
+                      } else if (index === 2) {
+                        // Third card - red gradient border
+                        borderStyle = "border-4 border-transparent bg-gradient-to-r from-[#900001] via-[#ff6728] to-[#c20002]";
+                        cardContent = "bg-black rounded-lg p-6 ";
+                      }
 
-                        <h3 className="text-white mb-2">
-                          {currentEligibleStep?.category || "credit"}
-                        </h3>
-                        <div className="text-white">
-                          <p className="text-2xl font-bold text-cyan-400 mb-2">
-                            {reward.rewardAmount}{" "}
-                            {currentEligibleStep?.category}
-                          </p>
-                          {/* <p className="text-gray-400 mb-3">
-                            Min Purchase: ${reward.minPurchaseRequired}
-                          </p> */}
-                          {memberShipType === reward.userType &&
-                            !currentEligibleStep.isClaimed && (
-                              <button
-                                onClick={() =>
-                                  handleRedeem(
-                                    currentEligibleStep.id,
-                                    currentEligibleStep.category
-                                  )
-                                }
-                                disabled={
-                                  rewardClimbLoading || reward.isClaimed
-                                }
-                                className="text-white border cursor-pointer font-bold py-2 px-4 rounded-md hover:opacity-90 transition-opacity"
-                              >
-                                {rewardClimbLoading
-                                  ? "Processing..."
-                                  : "Redeem"}
-                              </button>
-                            )}
+                      return (
+                        <div key={reward._id} className="relative h-full">
+                          <div className={`relative rounded-lg h-full flex flex-col ${borderStyle}`}>
+                            {/* Inner content container */}
+                            <div className={`${cardContent} text-center h-full flex flex-col justify-between`}>
+                              {/* Vertical border inside first card */}
+                              {index === 0 && (
+                                <div className="absolute left-1/2 top-[-67px] w-[4px] h-16 bg-gradient-to-b from-[#69CDFF] to-[#DB9D17] transform -translate-x-1/2"></div>
+                              )}
 
-                          {/* If the reward is claimed, show a message or alternative button */}
-                          {memberShipType === reward.userType &&
-                            currentEligibleStep.isClaimed && (
-                              <button
-                                disabled
-                                className="text-gray-500 border font-bold py-2 px-4 rounded-md opacity-60 cursor-not-allowed"
-                              >
-                                Claimed
-                              </button>
-                            )}
+                              <h3 className="text-white mb-2">
+                                {currentEligibleStep?.category || "credit"}
+                              </h3>
+                              <div className="text-white flex-grow flex flex-col justify-center">
+                                <p className="text-2xl font-bold text-cyan-400 mb-2">
+                                  {reward.rewardAmount}{" "}
+                                  {currentEligibleStep?.category}
+                                </p>
+                                {/* <p className="text-gray-400 mb-3">
+                                  Min Purchase: ${reward.minPurchaseRequired}
+                                </p> */}
+                              </div>
+                              <div className="mt-auto">
+                                {memberShipType === reward.userType &&
+                                  !currentEligibleStep.isClaimed && (
+                                    <button
+                                      onClick={() =>
+                                        handleRedeem(
+                                          currentEligibleStep.id,
+                                          currentEligibleStep.category
+                                        )
+                                      }
+                                      disabled={
+                                        rewardClimbLoading || reward.isClaimed
+                                      }
+                                      className="text-white border cursor-pointer font-bold py-2 px-4 rounded-md hover:opacity-90 transition-opacity"
+                                    >
+                                      {rewardClimbLoading
+                                        ? "Processing..."
+                                        : "Redeem"}
+                                    </button>
+                                  )}
+
+                                {/* If the reward is claimed, show a message or alternative button */}
+                                {memberShipType === reward.userType &&
+                                  currentEligibleStep.isClaimed && (
+                                    <button
+                                      disabled
+                                      className="text-gray-500 border font-bold py-2 px-4 rounded-md opacity-60 cursor-not-allowed"
+                                    >
+                                      Claimed
+                                    </button>
+                                  )}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>

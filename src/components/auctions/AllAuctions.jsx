@@ -242,11 +242,11 @@ const AllAuctions = ({
             {showMembershipOverlay && (
               <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
                 {getMembershipIcon(auction.membership)}
-                <h4 className="font-bold mb-2 text-sm">
+                <h4 className="font-bold  text-sm">
                   {auction.membership === "advanced" ? "Advanced" : "Premium"}{" "}
                   Membership Required
                 </h4>
-                <p className="text-[12px] opacity-90 mb-4 leading-relaxed">
+                <p className="text-[12px] opacity-90  leading-relaxed">
                   You have to upgrade your membership status to view this
                   auction
                 </p>
