@@ -7,9 +7,10 @@ import Image from "next/image";
 import { CoinsLogo, Logo } from "../share/svg/Logo";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useGetMyAuctionsQuery } from "@/redux/featured/auctions/auctionsApi";
 import { getImageUrl } from "../share/imageUrl";
 import { useSearchParams } from "next/navigation";
+import { useGetMyAuctionsQuery, useCreateBidAuctionMutation } from "@/redux/featured/auctions/auctionsApi";
+import { toast } from "sonner";
 
 const AuctionInterface = () => {
   const searchParams = useSearchParams();
@@ -21,7 +22,7 @@ const AuctionInterface = () => {
     setSearchTerm(urlSearchTerm);
   }, [searchParams]);
 
-  const {data, isLoading }=useGetMyAuctionsQuery(searchTerm)
+  const {data, isLoading }=useGetMyAuctionsQuery()
   console.log(data)
 
   const timerRef = useRef(null);
@@ -116,6 +117,9 @@ const AuctionInterface = () => {
   const [bidAmount, setBidAmount] = useState("");
   const [currentAuctionId, setCurrentAuctionId] = useState(null);
   const [pendingBids, setPendingBids] = useState({});
+  
+  // Create bid mutation
+  const [createBidAuction, { isLoading: isPlacingBid }] = useCreateBidAuctionMutation();
 
 
   const updateTimer = (timeLeft) => {
@@ -282,31 +286,61 @@ useEffect(() => {
   };
 
   // Handle bid submission
-  const handlePlaceBid = () => {
+  const handlePlaceBid = async () => {
     if (!bidAmount || isNaN(Number(bidAmount))) return;
     
-    // Update bid info
-    const newBidInfo = { ...bidInfo };
-    const currentBidInfo = newBidInfo[currentAuctionId] || {
-      totalBids: 0,
-      myLatestBid: "No bids yet",
-      currentLeadingBid: "No bids yet",
-      currentHighestBidder: "No bidder yet"
-    };
-    
-    newBidInfo[currentAuctionId] = {
-      ...currentBidInfo,
-      myLatestBid: `AED ${bidAmount}`,
-      currentLeadingBid: `AED ${bidAmount}`,
-      totalBids: (currentBidInfo.totalBids || 0) + 1
-    };
-    setBidInfo(newBidInfo);
-    
-    // Mark this auction as having a pending bid
-    setPendingBids({
-      ...pendingBids,
-      [currentAuctionId]: true
-    });
+    try {
+      // Prepare data for API call
+      const data = { 
+        itemId: currentAuctionId,
+        amount: Number(bidAmount)
+      };
+      
+      // Mark this auction as having a pending bid
+      setPendingBids({
+        ...pendingBids,
+        [currentAuctionId]: true
+      });
+      
+      // Make API call to place bid
+      const response = await createBidAuction({
+        id: currentAuctionId,
+        data: data
+      }).unwrap();
+      
+      if (response.success) {
+        toast.success("Bid placed successfully!");
+        
+        // Update bid info locally
+        const newBidInfo = { ...bidInfo };
+        const currentBidInfo = newBidInfo[currentAuctionId] || {
+          totalBids: 0,
+          myLatestBid: "No bids yet",
+          currentLeadingBid: "No bids yet",
+          currentHighestBidder: "No bidder yet"
+        };
+        
+        newBidInfo[currentAuctionId] = {
+          ...currentBidInfo,
+          myLatestBid: `AED ${bidAmount}`,
+          currentLeadingBid: `AED ${bidAmount}`,
+          totalBids: (currentBidInfo.totalBids || 0) + 1
+        };
+        setBidInfo(newBidInfo);
+      } else {
+        toast.error("Failed to place bid");
+        // Remove pending status
+        const newPendingBids = { ...pendingBids };
+        delete newPendingBids[currentAuctionId];
+        setPendingBids(newPendingBids);
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to place bid");
+      // Remove pending status
+      const newPendingBids = { ...pendingBids };
+      delete newPendingBids[currentAuctionId];
+      setPendingBids(newPendingBids);
+    }
     
     // Close modal
     setIsModalOpen(false);

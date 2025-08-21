@@ -140,6 +140,8 @@ export default function Navbar() {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { data: wallet } = useGetMyWalletQuery();
   const walletData = wallet?.data;
+  console.log(walletData)
+
   const { plan, classes, svgColor } = getUserPlan(walletData);
   const {data: user} = useGetMyProfileQuery();
   const userData = user?.data;

@@ -6,43 +6,42 @@ import UpcomingAuctions from "./UpcomingAuctions";
 import MyAuctions from "./MyAuctions";
 import { useGetMyProfileQuery } from "@/redux/featured/auth/authApi";
 import { useRouter } from "next/navigation";
-import { useUnlockProductOfCreditMutation } from "@/redux/featured/shop/shopApi";
+import { useUnlockAuctionMutation } from "@/redux/featured/auctions/auctionsApi";
+import { toast } from "sonner";
 
 const AuctionsContainer = () => {
   const [activeTab, setActiveTab] = useState("all");
-  const router=useRouter()
-  const [unlockProductOfCredit, { isLoading: unlocking },refetch] = useUnlockProductOfCreditMutation();
+  const router = useRouter();
+  const [unlockAuction, { isLoading: unlocking }] = useUnlockAuctionMutation();
 
-const {data:userData, isLoading}=useGetMyProfileQuery();
-const currentUser=userData?.data
-console.log(currentUser)
+  const {data:userData, isLoading} = useGetMyProfileQuery();
+  const currentUser = userData?.data;
 
-
-
-   const handleUnlockWithCredits = useCallback(
+  const handleUnlockWithCredits = useCallback(
     async (auction) => {
-      console.log(auction, "auction")
-
       try {
         if (!currentUser) {
           router.push("/login");
           return;
         }
 
-        const data = { itemId: auction._id, credit: auction.creditNeeds };
-
-        console.log(data, "data")
-        const res = await unlockProductOfCredit(data).unwrap();
+        const data = { itemId: auction.id, credit: auction.creditNeeds };
+        
+        const res = await unlockAuction({ 
+          id: auction.id, 
+          data: data 
+        }).unwrap();
+        
         if (res.success) {
           toast.success("Auction unlocked successfully");
-        }else{
+        } else {
           toast.error("Auction unlock failed");
         }
-        await refetch();;
       } catch (err) {
+        toast.error(err?.data?.message || "Failed to unlock auction");
       }
     },
-    [currentUser, router, unlockProductOfCredit, refetch]
+    [currentUser, router, unlockAuction]
   );
 
   const tabs = [

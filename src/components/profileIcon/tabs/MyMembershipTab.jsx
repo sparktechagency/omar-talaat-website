@@ -41,17 +41,21 @@ export default function MyMembershipTab() {
         <div className="text-center text-gray-300 py-10">Loading packages...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {subscriptionPackages.map((pkg, idx) => (
+          {subscriptionPackages.map((pkg, idx) => {
+            // Determine if this is a premium package based on title
+            const isPremium = pkg?.title?.toLowerCase().includes('premium');
+            
+            return (
             <Card
               key={pkg?._id || idx}
               className={`bg-transparent rounded-2xl overflow-hidden h-full border-2 ${
-                idx % 2 === 0 ? "border-cyan-400" : "border-yellow-400"
+                isPremium ? "border-cyan-400" : "border-yellow-400"
               }`}
             >
               <CardContent className="lg:p-8 p-4 text-center h-full flex flex-col">
                 <h4
                   className={`lg:text-2xl text-xl font-bold lg:mb-4 mb-2 ${
-                    idx % 2 === 0 ? "text-cyan-400" : "text-yellow-400"
+                    isPremium ? "text-cyan-400" : "text-yellow-400"
                   }`}
                 >
                   {pkg?.title || "Membership"}
@@ -59,7 +63,7 @@ export default function MyMembershipTab() {
 
                 <MainLogo
                   className="w-12 h-12 lg:w-20 lg:h-20 mx-auto lg:mb-6 mb-2"
-                  color={idx % 2 === 0 ? "#22d3ee" : "#facc15"}
+                  color={isPremium ? "#22d3ee" : "#facc15"}
                 />
 
                 <p className="text-gray-300 lg:mb-6 mb-3 text-sm leading-relaxed flex-grow">
@@ -96,7 +100,7 @@ export default function MyMembershipTab() {
                 </div>
               </CardContent>
             </Card>
-          ))}
+          )})}
         </div>
       )}
     </div>
