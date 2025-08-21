@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,8 +7,25 @@ import Image from "next/image";
 import { CoinsLogo, Logo } from "../share/svg/Logo";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useGetMyAuctionsQuery } from "@/redux/featured/auctions/auctionsApi";
+import { getImageUrl } from "../share/imageUrl";
+import { useSearchParams } from "next/navigation";
 
 const AuctionInterface = () => {
+  const searchParams = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Get search term from URL params
+  useEffect(() => {
+    const urlSearchTerm = searchParams.get("searchTerm") || "";
+    setSearchTerm(urlSearchTerm);
+  }, [searchParams]);
+
+  const {data, isLoading }=useGetMyAuctionsQuery(searchTerm)
+  console.log(data)
+
+  const timerRef = useRef(null);
+
   // Auction data state
   const [auctionData, setAuctionData] = useState([
     {
@@ -48,9 +65,31 @@ const AuctionInterface = () => {
       image: "/assets/category1.png",
     },
   ]);
-
   // Bid information state
-  const [bidInfo, setBidInfo] = useState({
+  const [bidInfo, setBidInfo] = useState({});  
+  
+  // Initialize bid info from API data
+  useEffect(() => {
+    if (data?.data && data.data.length > 0) {
+      const newBidInfo = {};
+      
+      data.data.forEach(auction => {
+        const bidData = auction.bidInfoForEachAuction;
+        
+        newBidInfo[auction._id] = {
+          totalBids: bidData?.totalBid || 0,
+          myLatestBid: bidData?.myLastBid ? `AED ${bidData.myLastBid.amount}` : "No bids yet",
+          currentLeadingBid: bidData?.amount ? `AED ${bidData.amount}` : "No bids yet",
+          currentHighestBidder: bidData?.userId?.userName || "No bidder yet"
+        };
+      });
+      
+      setBidInfo(newBidInfo);
+    }
+  }, [data]);
+  
+  // Legacy bid info structure for compatibility
+  const legacyBidInfo = {
     1: {
       totalBids: 3,
       myLatestBid: "AED 250",
@@ -69,7 +108,8 @@ const AuctionInterface = () => {
       currentLeadingBid: "AED 750",
       currentHighestBidder: "Ahmed Ali",
     },
-  });
+  }
+
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,43 +117,124 @@ const AuctionInterface = () => {
   const [currentAuctionId, setCurrentAuctionId] = useState(null);
   const [pendingBids, setPendingBids] = useState({});
 
-  // Update timers for all auctions
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setAuctionData((prevData) =>
-        prevData.map((auction) => ({
-          ...auction,
-          timeLeft: updateTimer(auction.timeLeft),
-        }))
-      );
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   const updateTimer = (timeLeft) => {
-    if (timeLeft.seconds > 0) {
-      return { ...timeLeft, seconds: timeLeft.seconds - 1 };
-    } else if (timeLeft.minutes > 0) {
-      return { ...timeLeft, minutes: timeLeft.minutes - 1, seconds: 59 };
-    } else if (timeLeft.hours > 0) {
+  if (timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0) {
+    return timeLeft; 
+  }
+
+  if (timeLeft.seconds > 0) {
+    return { ...timeLeft, seconds: timeLeft.seconds - 1 };
+  } else if (timeLeft.minutes > 0) {
+    return { ...timeLeft, minutes: timeLeft.minutes - 1, seconds: 59 };
+  } else if (timeLeft.hours > 0) {
+    return { ...timeLeft, hours: timeLeft.hours - 1, minutes: 59, seconds: 59 };
+  } else if (timeLeft.days > 0) {
+    return { ...timeLeft, days: timeLeft.days - 1, hours: 23, minutes: 59, seconds: 59 };
+  }
+  return timeLeft;
+};
+
+
+  // Update auction data from API
+useEffect(() => {
+  if (data?.data && data.data.length > 0) {
+    const formattedData = data.data.map(auction => {
+      // Calculate time left
+      const endDate = new Date(auction.endDate);
+      const now = new Date();
+      const diffTime = Math.max(0, endDate - now);
+      const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+      
+      // Determine auction type
+      let type = "normal";
+      if (auction.premiumMembership) type = "premium";
+      else if (auction.advanceMembership) type = "advance";
+      
+      // Determine if auction has started
+      const startDate = new Date(auction.startDate);
+      const isStarted = now >= startDate;
+      
+      // Determine status
+      let status = "STARTING SOON";
+      if (isStarted) status = "LIVE";
+      
       return {
-        ...timeLeft,
-        hours: timeLeft.hours - 1,
-        minutes: 59,
-        seconds: 59,
+        id: auction._id,
+        title: auction.name,
+        status: status,
+        type: type,
+        creditsUsed: auction.creditNeeds || 0,
+        creditsWorth: auction.creditWorth || 0,
+        csAuraWorth: auction.csAuraWorth || 0,
+        isStarted: isStarted,
+        timeLeft: { days, hours, minutes, seconds },
+        image: auction.image,
       };
-    } else if (timeLeft.days > 0) {
-      return {
-        ...timeLeft,
-        days: timeLeft.days - 1,
-        hours: 23,
-        minutes: 59,
-        seconds: 59,
-      };
+    });
+    
+    setAuctionData(formattedData);
+  }
+}, [data]);
+
+// Update timers for all auctions
+useEffect(() => {
+  // Clear existing timer if any
+  if (timerRef.current) {
+    clearInterval(timerRef.current);
+  }
+
+  if (auctionData.length === 0) return;
+  
+  timerRef.current = setInterval(() => {
+    setAuctionData((prevData) => {
+      let allEnded = true;
+      const updated = prevData.map((auction) => {
+        const updatedTime = updateTimer(auction.timeLeft);
+        if (updatedTime !== auction.timeLeft) allEnded = false;
+        return { ...auction, timeLeft: updatedTime };
+      });
+      if (allEnded) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      return updated;
+    });
+  }, 1000);
+
+  return () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-    return timeLeft;
   };
+}, []); // Empty dependency array
+
+// Start timer when auctionData changes
+useEffect(() => {
+  if (auctionData.length > 0 && !timerRef.current) {
+    timerRef.current = setInterval(() => {
+      setAuctionData((prevData) => {
+        let allEnded = true;
+        const updated = prevData.map((auction) => {
+          const updatedTime = updateTimer(auction.timeLeft);
+          if (updatedTime !== auction.timeLeft) allEnded = false;
+          return { ...auction, timeLeft: updatedTime };
+        });
+        if (allEnded) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+        return updated;
+      });
+    }, 1000);
+  }
+}, [auctionData.length]);
+
+
 
   // Get card styling based on auction type
   const getCardStyles = (type) => {
@@ -166,10 +287,18 @@ const AuctionInterface = () => {
     
     // Update bid info
     const newBidInfo = { ...bidInfo };
+    const currentBidInfo = newBidInfo[currentAuctionId] || {
+      totalBids: 0,
+      myLatestBid: "No bids yet",
+      currentLeadingBid: "No bids yet",
+      currentHighestBidder: "No bidder yet"
+    };
+    
     newBidInfo[currentAuctionId] = {
-      ...newBidInfo[currentAuctionId],
+      ...currentBidInfo,
       myLatestBid: `AED ${bidAmount}`,
-      totalBids: newBidInfo[currentAuctionId].totalBids + 1
+      currentLeadingBid: `AED ${bidAmount}`,
+      totalBids: (currentBidInfo.totalBids || 0) + 1
     };
     setBidInfo(newBidInfo);
     
@@ -185,7 +314,7 @@ const AuctionInterface = () => {
 
   const AuctionCard = ({ auction }) => {
     const styles = getCardStyles(auction.type);
-    const bidData = bidInfo[auction.id];
+    const bidData = bidInfo[auction.id] || legacyBidInfo[auction.id];
     const isPending = pendingBids[auction.id];
 
     return (
@@ -196,7 +325,8 @@ const AuctionInterface = () => {
             <div className="w-full lg:w-[300px] xl:w-[390px] flex-shrink-0">
               <div className="relative w-full h-[250px] sm:h-[300px] lg:h-[350px]">
                 <Image
-                  src={auction?.image}
+                // src={auction?.image}
+                  src={getImageUrl(auction?.image)}
                   alt={auction?.title}
                   fill
                   className={`object-cover rounded-xl ${styles.gradientBorder}`}
@@ -385,9 +515,15 @@ const AuctionInterface = () => {
     <div className="min-h-screen bg-black">
       {/* Main Content */}
       <div className="container mx-auto px-3 sm:px-4 md:px-6 py-6 space-y-6">
-        {auctionData?.map((auction) => (
-          <AuctionCard key={auction?.id} auction={auction} />
-        ))}
+        {isLoading ? (
+          <div className="text-white text-center py-10">Loading auctions...</div>
+        ) : auctionData?.length > 0 ? (
+          auctionData.map((auction) => (
+            <AuctionCard key={auction?.id} auction={auction} />
+          ))
+        ) : (
+          <div className="text-white text-center py-10">No auctions available</div>
+        )}
       </div>
 
       {/* Bid Modal */}

@@ -39,11 +39,9 @@ function SearchComponent({ onSearchChange }) {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { data: user } = useGetMyProfileQuery();
 
-  // console.log(user?.data)
-
   // Initialize search query from URL params
   useEffect(() => {
-    const query = searchParams?.get("search") || "";
+    const query = searchParams?.get("searchTerm") || "";
     setSearchQuery(query);
   }, [searchParams]);
 
@@ -89,7 +87,7 @@ function MobileSearchComponent({ onSearchChange, onClose }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const query = searchParams?.get("search") || "";
+    const query = searchParams?.get("searchTerm") || "";
     setSearchQuery(query);
   }, [searchParams]);
 
@@ -146,7 +144,6 @@ export default function Navbar() {
   const {data: user} = useGetMyProfileQuery();
   const userData = user?.data;
 
-
   // Refs for dropdown
   const dropdownRef = useRef(null);
   const profileDropdownRef = useRef(null);
@@ -164,15 +161,15 @@ export default function Navbar() {
       debounceTimer.current = setTimeout(() => {
         const params = new URLSearchParams(window.location.search);
         if (query.trim()) {
-          params.set("search", query.trim());
+          params.set("searchTerm", query.trim());
         } else {
-          params.delete("search");
+          params.delete("searchTerm");
         }
         const queryString = params.toString();
         router.push(`${pathname}${queryString ? `?${queryString}` : ""}`, {
           scroll: false,
         });
-      }, 300); // 300ms delay
+      }, 300);
     },
     [pathname, router]
   );
@@ -218,7 +215,7 @@ export default function Navbar() {
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
-    updateSearchUrl(value); // Real-time URL update
+    updateSearchUrl(value);
   };
 
   // Close mobile menu when route changes
@@ -229,7 +226,16 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed w-full z-50 top-0 left-0 backdrop-blur-[5px] bg-black/30 shadow-2xl">
+      {/* Full screen overlay when shop is hovered */}
+      {isShopHovered && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
+      )}
+
+      <nav className={`fixed w-full z-50 top-0 left-0 transition-all duration-300 ${
+        isShopHovered 
+          ? 'backdrop-blur-[5px] bg-black shadow-2xl' 
+          : 'backdrop-blur-[5px] bg-black/30 shadow-2xl'
+      }`}>
         <div className="container mx-auto flex gap-12 justify-between items-center h-16 sm:h-20 md:h-24 px-3 sm:px-4 lg:px-0">
           {/* Left: Logo */}
           <div>
@@ -364,17 +370,6 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* Coin Icon with tooltip - Show only on small mobile */}
-            {/* <div className="relative group xs:hidden">
-              <button className="flex items-center justify-center w-8 h-8">
-                <div className="hover:scale-125 transition-transform">
-                  <CoinsLogo width={24} height={24} />
-                </div>
-              </button>
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 backdrop-blur-sm bg-black/60 border border-white/20 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                235 Coins
-              </div>
-            </div> */}
             <div className="flex items-center space-x-1 xs:space-x-2 sm:space-x-3 md:space-x-5">
               {/* Coin Icon with tooltip - Show only on small to medium mobile */}
               <div className="relative group hidden xs:block md:hidden lg:hidden">
@@ -428,8 +423,6 @@ export default function Navbar() {
                      <Image
                       loading="lazy"
                       src={getImageUrl(userData?.image) || "/assets/image 10.png"}
-
-
                       height={55}
                       width={55}
                       className="drop-shadow-lg rounded-full p-1 hover:scale-125 transition-transform"
@@ -441,7 +434,7 @@ export default function Navbar() {
                 {isProfileOpen && (
                   <div
                     ref={profileDropdownRef}
-                    className="absolute right-0 top-full mt-2 sm:mt-3 md:mt-5 w-48 sm:w-56 md:w-60 backdrop-blur-2xl bg-black/70 border border-white/20 text-white shadow-xl rounded-lg overflow-hidden z-[9999]"
+                    className="absolute right-0 top-full mt-2 sm:mt-3 md:mt-5 w-48 sm:w-56 md:w-60 backdrop-blur-2xl bg-black/30 border border-white/20 text-white shadow-xl rounded-lg overflow-hidden z-[9999]"
                   >
                     <ul className="py-2">
                       <li>
@@ -477,61 +470,7 @@ export default function Navbar() {
                           My Cart
                         </Link>
                       </li>
-                      {/* <li>
-                        <button
-                          className="block w-full text-left cursor-pointer px-4 py-2 hover:bg-white/10 transition-colors duration-200"
-                          onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                        >
-                          <div className="flex justify-between items-center">
-                            Settings
-                            <MdKeyboardArrowDown
-                              className={`transform transition-transform ${
-                                isSettingsOpen ? "rotate-180" : ""
-                              }`}
-                            />
-                          </div>
-                        </button>
-                        {isSettingsOpen && (
-                          <ul className="pl-4 bg-white/5 border-t border-white/10">
-                            <li>
-                              <Link
-                                href="/contact"
-                                className="block px-4 py-2 cursor-pointer hover:bg-white/10 transition-colors duration-200"
-                                onClick={() => setIsProfileOpen(false)}
-                              >
-                                Contact us
-                              </Link>
-                            </li>
-                            <li>
-                            <Link
-                              href="/terms"
-                              className="block px-4 py-2 cursor-pointer hover:bg-white/10 transition-colors duration-200"
-                              onClick={() => setIsProfileOpen(false)}
-                            >
-                              Terms & Conditions
-                            </Link>
-                          </li>
-                            <li>
-                            <Link
-                              href="/change-password"
-                              className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
-                              onClick={() => setIsProfileOpen(false)}
-                            >
-                              Change Password
-                            </Link>
-                          </li>
-                            <li>
-                            <Link
-                              href="/policy"
-                              className="block px-4 py-2 hover:bg-white/10 transition-colors duration-200"
-                              onClick={() => setIsProfileOpen(false)}
-                            >
-                              Privacy Policy
-                            </Link>
-                          </li>
-                          </ul>
-                        )}
-                      </li> */}
+
                       <li>
                         <Link
                           href="/login"
@@ -635,7 +574,6 @@ export default function Navbar() {
               {/* Coral Icon with number */}
               <div className="flex items-center space-x-2">
                 <div className="hover:scale-110 transition-transform">
-                  {/* <Logo width={30} height={30} /> */}
                   <Image
                     src="/assets/vector.png"
                     alt="Coins"
@@ -651,7 +589,6 @@ export default function Navbar() {
               {/* Coin Icon with number */}
               <div className="flex items-center space-x-2">
                 <div className="hover:scale-110 transition-transform">
-                  {/* <CoinsLogo width={30} height={30} /> */}
                   <Image
                     src="/assets/frame.png"
                     alt="Coins"

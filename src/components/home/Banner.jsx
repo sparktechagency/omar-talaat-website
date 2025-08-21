@@ -144,10 +144,10 @@ const Banner = () => {
 
   return (
     <>
-      <div className={`h-auto z-20 pt-32 lg:pt-60 ${bg}  overflow-hidden`}>
-        <div className="absolute inset-0 ">
+      <div className={`h-[800px] lg:h-[1200px] z-20 pt-32 lg:pt-60 ${bg} overflow-hidden relative`}>
+        <div className="absolute inset-0">
           <div
-            className="absolute inset-0 bg-cover bg-center mt-0 lg:mt-24 h-screen lg:h-[1100px]"
+            className="absolute inset-0 bg-cover bg-center mt-0 lg:mt-24"
             style={{
               backgroundImage: `url('/assets/banner3.png')`,
             }}

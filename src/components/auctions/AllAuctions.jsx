@@ -1,11 +1,12 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect, useMemo } from "react";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
 import Image from "next/image";
 import { useGetAllAuctionsQuery } from "@/redux/featured/auctions/auctionsApi";
 import { getImageUrl } from "../share/imageUrl";
 import { toast } from "sonner";
 import { motion } from "framer-motion"; // ✅ Animation import
+import { useSearchParams } from "next/navigation";
 
 const AllAuctions = ({
   setActiveTab,
@@ -13,7 +14,16 @@ const AllAuctions = ({
   unlocking,
   currentUser,
 }) => {
-  const { data, isLoading, isError } = useGetAllAuctionsQuery();
+  const searchParams = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Get search term from URL params
+  useEffect(() => {
+    const urlSearchTerm = searchParams.get("searchTerm") || "";
+    setSearchTerm(urlSearchTerm);
+  }, [searchParams]);
+
+  const { data, isLoading, isError } = useGetAllAuctionsQuery(searchTerm);
 
   const mapAuctionData = (apiData) => {
     return (
@@ -99,14 +109,14 @@ const AllAuctions = ({
       if (membership === "advanced") {
         return (
           <MainLogo
-            className="w-32 h-36 lg:w-[100px] lg:h-[122px] mx-auto mb-6"
+            className="w-24 h-24 lg:w-[80px] lg:h-[100px] mx-auto mb-6"
             color="#057199"
           />
         );
       } else if (membership === "premium") {
         return (
           <MainLogo
-            className="w-32 h-36 lg:w-[100px] lg:h-[122px] mx-auto mb-6"
+            className="w-24 h-24 lg:w-[80px] lg:h-[100px] mx-auto mb-6"
             color="#FEF488"
           />
         );

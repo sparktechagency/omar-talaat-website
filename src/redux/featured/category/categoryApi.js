@@ -16,7 +16,35 @@ const categoryApi = api.injectEndpoints({
       }),
       providesTags: (result, error, id) => [{ type: "Categories", id }],
     }),
+    forAccessRequest: builder.mutation({
+      query: (otp) => ({
+        method: "POST",
+        url: `/vault/request-vault-access`,
+        body: {
+          otp
+        },
+        invalidatesTags: ["Categories"],
+      }),
+      providesTags: (result, error, id) => [{ type: "Categories", id }],
+    }),
+    unlockTheVault: builder.mutation({
+      query: (otp) => ({
+        method: "POST",
+        url: `/vault/verify-vault-otp`,
+        body: {
+          otp
+        },
+        invalidatesTags: ["Wallet", "Categories"],
+
+
+      }),
+      providesTags: (result, error, id) => [{ type: "Categories", id }],
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, useGetSingleCategoryQuery } = categoryApi;
+export const { useGetCategoriesQuery, useGetSingleCategoryQuery,
+  useUnlockTheVaultMutation, useForAccessRequestMutation
+
+
+ } = categoryApi;

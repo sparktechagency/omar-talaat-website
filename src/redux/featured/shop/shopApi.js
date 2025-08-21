@@ -45,14 +45,6 @@ const shopApi = api.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    // // Get all categories
-    // getCategories: builder.query({
-    //   query: () => ({
-    //     method: "GET",
-    //     url: "/categories",
-    //   }),
-    //   providesTags: ["Categories"],
-    // }),
 
     // Search products
     searchProducts: builder.query({

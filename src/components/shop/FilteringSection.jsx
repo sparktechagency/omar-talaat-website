@@ -109,7 +109,7 @@ const FilterSection = ({ isMobile = false, onFilterChange }) => {
               className={`${classes.text} flex items-center text-sm cursor-pointer select-none mt-6`}
               onClick={() => handleCheckboxChange("productType", "cutToOrder")}
             >
-              {/* ডাইনামিক CustomCheckbox */}
+             
               <span
                 className={`mr-3 w-5 h-5 flex items-center justify-center border-2 ${classes.border2} rounded ${classes.bg}`}
               >
@@ -159,9 +159,10 @@ const FilterSection = ({ isMobile = false, onFilterChange }) => {
         {openSections.price && (
           <>
             <div className="flex justify-between items-center gap-2 mt-6 mb-7">
-              <span className={`${classes.border}`}>
+              <span className={`${classes.border} border h-12 w-24 rounded-2xl`}>
+
                 <span
-                  className={`${classes.inner} px-6 py-3 text-xs ${
+                  className={`${classes.inner} rounded-2xl flex items-center  px-3 py-3 text-xs ${
                     classes.text2 || classes.text
                   }`}
                 >
@@ -169,9 +170,10 @@ const FilterSection = ({ isMobile = false, onFilterChange }) => {
                 </span>
               </span>
               <span className={`${classes.text} mt-2`}>-</span>
-              <span className={`${classes.border}`}>
+              <span className={`${classes.border} border h-12 w-24 rounded-2xl`}>
+
                 <span
-                  className={`${classes.inner} px-6 py-3 text-xs ${
+                  className={`${classes.inner} rounded-2xl flex items-center  px-3 py-3 text-xs ${
                     classes.text2 || classes.text
                   }`}
                 >

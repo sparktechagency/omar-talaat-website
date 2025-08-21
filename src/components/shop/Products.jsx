@@ -7,27 +7,35 @@ import React, {
   useCallback,
 } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import Container from "../share/Container";
 import FilterSection from "./FilteringSection";
 import ProductCard from "./ProductCard";
 import ProductControls from "./ProductControls";
-import { useGetProductsQuery, useUnlockProductOfCreditMutation } from "@/redux/featured/shop/shopApi";
-import { useGetMyProfileQuery, useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
+import {
+  useGetProductsQuery,
+  useUnlockProductOfCreditMutation,
+} from "@/redux/featured/shop/shopApi";
+import {
+  useGetMyProfileQuery,
+  useGetMyWalletQuery,
+} from "@/redux/featured/auth/authApi";
 import { saveProductToCart } from "../share/utils/cart";
 import { saveToRecentViews } from "../share/utils/recentView";
 import { getUserPlan } from "../share/utils/getUserPlan";
 import { toast } from "sonner";
 
 const CoralShopGrid = ({ defaultCategory }) => {
+  const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("Featured");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [unlockProductOfCredit, { isLoading: unlocking }] = useUnlockProductOfCreditMutation();
+  const [unlockProductOfCredit, { isLoading: unlocking }] =
+    useUnlockProductOfCreditMutation();
   const [statusFilter, setStatusFilter] = useState("All");
   const { data: wallet } = useGetMyWalletQuery();
   const walletData = wallet?.data;
@@ -40,15 +48,26 @@ const CoralShopGrid = ({ defaultCategory }) => {
     productType: [],
   });
 
-  const [pageSize, setPageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(4);
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data: user } = useGetMyProfileQuery();
   const currentUser = user?.data;
   const userEmail = currentUser?.email;
 
+  // Get search term from URL
+  useEffect(() => {
+    const urlSearchTerm = searchParams?.get("searchTerm") || "";
+    setSearchTerm(urlSearchTerm);
+  }, [searchParams]);
+
   const queryParams = useMemo(() => {
     const params = [];
+
+    // Add search term if exists
+    if (searchTerm && searchTerm.trim()) {
+      params.push({ name: "searchTerm", value: searchTerm.trim() });
+    }
 
     if (filters.productType.length > 0) {
       params.push({
@@ -76,7 +95,7 @@ const CoralShopGrid = ({ defaultCategory }) => {
     params.push({ name: "page", value: currentPage });
 
     return params;
-  }, [filters, pageSize, currentPage]);
+  }, [filters, pageSize, currentPage, searchTerm]);
 
   useEffect(() => {
     if (defaultCategory && !filters.categories) {
@@ -95,7 +114,6 @@ const CoralShopGrid = ({ defaultCategory }) => {
     }));
   };
 
-
   const {
     data: allProduct,
     isLoading,
@@ -106,10 +124,9 @@ const CoralShopGrid = ({ defaultCategory }) => {
     refetchOnFocus: false,
     refetchOnReconnect: true,
   });
-  // console.log("All Products Data:", allProduct);
+  console.log("All Products Data:", allProduct);
 
   const productData = allProduct?.data || [];
-  
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -270,7 +287,7 @@ const CoralShopGrid = ({ defaultCategory }) => {
 
   const handleUnlockWithCredits = useCallback(
     async (product) => {
-      console.log(product, "product")
+      console.log(product, "product");
       try {
         // Require login
         if (!currentUser) {
@@ -279,16 +296,15 @@ const CoralShopGrid = ({ defaultCategory }) => {
         }
 
         const data = { itemId: product._id, credit: product.creditNeeds };
-        console.log(data, "data")
+        console.log(data, "data");
         const res = await unlockProductOfCredit(data).unwrap();
         if (res.success) {
           toast.success("Product unlocked successfully");
-        }else{
+        } else {
           toast.error("Product unlock failed");
         }
 
-
-        console.log(res, "res")
+        console.log(res, "res");
 
         // On success, refetch products and navigate to product details
         await refetch();
@@ -407,6 +423,59 @@ const CoralShopGrid = ({ defaultCategory }) => {
                 ))
               )}
             </div>
+            {allProduct?.meta?.totalPage > 1 && (
+              <div className="flex justify-center mt-8 space-x-2">
+                {/* Prev */}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1 rounded-md border ${
+                    currentPage === 1
+                      ? "text-white/20 border border-white/20 cursor-not-allowed"
+                      : `${classes.text} border-gray-600 hover:bg-gray-700`
+                  }`}
+                >
+                  Prev
+                </button>
+
+                {/* Pages */}
+                {Array.from(
+                  { length: allProduct?.meta?.totalPage },
+                  (_, i) => i + 1
+                ).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 rounded-md border ${
+                      page === currentPage
+                        ? `${classes.bg} text-${classes.text2}`
+                        : `${classes.text} border-gray-600 hover:bg-gray-700`
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                {/* Next */}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(prev + 1, allProduct?.meta?.totalPage)
+                    )
+                  }
+                  disabled={currentPage === allProduct?.meta?.totalPage}
+                  className={`px-3 py-1 rounded-md border ${
+                    currentPage === allProduct?.meta?.totalPage
+                      ? "text-white/20 border border-white/20 cursor-not-allowed"
+                      : `${classes.text} border-gray-600 hover:bg-gray-700`
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

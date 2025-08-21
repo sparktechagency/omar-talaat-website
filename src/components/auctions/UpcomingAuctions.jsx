@@ -1,12 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CoinsLogo, MainLogo } from "../share/svg/Logo";
 import Image from "next/image";
 import { useGetUpcomingAuctionsQuery } from "@/redux/featured/auctions/auctionsApi";
+import { getImageUrl } from "../share/imageUrl";
+import { useSearchParams } from "next/navigation";
 
 const UpcomingAuctions = ({ setActiveTab }) => {
-const {data,isLoading} = useGetUpcomingAuctionsQuery();
-const upcomingAuctions = data?.data || [];
+  const searchParams = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Get search term from URL params
+  useEffect(() => {
+    const urlSearchTerm = searchParams.get("searchTerm") || "";
+    setSearchTerm(urlSearchTerm);
+  }, [searchParams]);
+
+  const {data,isLoading} = useGetUpcomingAuctionsQuery(searchTerm);
+  const upcomingAuctions = data?.data || [];
+  console.log(upcomingAuctions)
+
 
   // const upcomingAuctions = [
   //   {
@@ -167,7 +180,7 @@ const upcomingAuctions = data?.data || [];
           <div className="relative aspect-square overflow-hidden">
             {!imageError ? (
               <Image
-                src={auction.image}
+                src={getImageUrl(auction.image)}
                 alt={auction.name}
                 height={300}
                 width={300}
