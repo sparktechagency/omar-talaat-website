@@ -164,7 +164,7 @@ const Banner = () => {
               className={`w-32   h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-8 `}
               color={svgColor}
             />
-            <h1 className={`text-[40px] md:text-6xl font-bold font-brush ${classes.text}  mb-2 lg:mb-6`}>
+            <h1 className={`text-[40px] md:text-6xl font-bold font-brush ${classes.text2} p-2 mb-2 lg:mb-6`}>
               Coral Stash
             </h1>
           </div>
@@ -184,7 +184,7 @@ const Banner = () => {
               onClick={handleShopClick}
               size="md"
               text="Shop Now"
-              className={`mb-6 ${classes.bg} ${classes.text2} cursor-pointer   lg:mb-16 shadow-xl hover:shadow-2xl`}
+              className={`mb-6 ${classes.bg} ${classes.text3} cursor-pointer   lg:mb-16 shadow-xl hover:shadow-2xl`}
             />
           </div>
 

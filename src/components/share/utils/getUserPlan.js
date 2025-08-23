@@ -17,11 +17,13 @@ export const getUserPlan = (wallet) => {
     return {
       plan: "normal",
       classes: {
-        border: "relative  p-[2px] bg-white",
-        inner: "bg-[#000]  w-full h-full flex items-center justify-center",
-        border2: "border border-white",
-        text: "text-black",
-        bg: "bg-white",
+        border: "relative  p-[2px] bg-gradient-to-l from-[#fff] to-[#fff]",
+        inner: "bg-[#000]  w-full h-full ",
+        border2: "border-transparent rounded-full bg-clip-border [border-image:linear-gradient(270deg,#fff,#fff)_1]",
+        text: "bg-gradient-to-l from-[#fff] to-[#fff] bg-clip-text text-transparent",
+         text3: "text-black",
+         text2: "text-white",
+        bg: "bg-gradient-to-l from-[#fff] to-[#fff]",
       },
       svgColor: "#fff",
       iconColor:"#fff",
@@ -39,6 +41,7 @@ export const getUserPlan = (wallet) => {
         "border-transparent rounded-full bg-clip-border [border-image:linear-gradient(270deg,#057199,#69CDFF)_1]",
         text: "bg-gradient-to-l from-[#057199] to-[#69CDFF] bg-clip-text text-transparent",
         text2: "text-white",
+        text3: "text-black",
      
         bg: "bg-gradient-to-l from-[#057199] to-[#69CDFF]",
       },
@@ -52,11 +55,13 @@ export const getUserPlan = (wallet) => {
     return {
       plan: "premium",
       classes: {
-        border: "relative  p-[2px] bg-gradient-to-r from-[#FEF488] to-[#DB9D17]",
-        inner: "bg-[#000]  w-full h-full flex items-start justify-start",
+        border: "relative  p-[2px] bg-gradient-to-l from-[#FEF488] to-[#DB9D17]",
+        inner: "bg-[#000]  w-full h-full ",
         border2:
-        "border-transparent bg-clip-border [border-image:linear-gradient(90deg,#FEF488,#DB9D17)_1]",
+        "border-transparent rounded-full bg-clip-border [border-image:linear-gradient(90deg,#FEF488,#DB9D17)_1]",
         text: "bg-gradient-to-r from-[#FEF488] to-[#DB9D17] bg-clip-text text-transparent",
+        text3: "text-black",
+
         text2: "text-white",
         bg: "bg-gradient-to-r from-[#FEF488] to-[#DB9D17]",
       },

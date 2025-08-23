@@ -54,7 +54,8 @@ const auctionsApi = api.injectEndpoints({
         url: `/auction/taking/unlock`,
         body: data,
       }),
-      invalidatesTags: ["Auctions"],
+      invalidatesTags: ["Auctions","Wallet"],
+
     }),
 
     createBidAuction: builder.mutation({

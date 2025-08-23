@@ -13,6 +13,7 @@ import { Toaster } from "sonner";
 import { UserProvider } from "@/components/share/UserProvider";
 import ClientHydration from "@/components/ClientHydration";
 import WalletInitializer from "@/components/share/utils/MyWallet";
+import LayoutWrapper from "@/components/share/LayoutWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,7 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 const comforterBrush = Comforter_Brush({
-  weight: "400", 
+  weight: "400",
   subsets: ["latin"],
   variable: "--font-comforter-brush",
 });
@@ -40,7 +41,6 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
 });
-
 
 export const metadata = {
   title: "Omor-Talaat",
@@ -53,19 +53,21 @@ export default function RootLayout({ children }) {
       <body
         className={` ${dmSans.variable} ${comforterBrush.variable} antialiased `}
       >
-        <UserProvider>
-          <Providers>
-            <WalletInitializer />
-            <div>
-           {/* <ClientHydration > */}
-               <div className="">
-                <Toaster richColors position="top-center" />
-                <main>{children}</main>
+        <LayoutWrapper>
+          <UserProvider>
+            <Providers>
+              <WalletInitializer />
+              <div>
+                {/* <ClientHydration > */}
+                <div className="">
+                  <Toaster richColors position="top-center" />
+                  <main>{children}</main>
+                </div>
+                {/* </ClientHydration> */}
               </div>
-           {/* </ClientHydration> */}
-            </div>
-          </Providers>
-        </UserProvider>
+            </Providers>
+          </UserProvider>
+        </LayoutWrapper>
       </body>
     </html>
   );

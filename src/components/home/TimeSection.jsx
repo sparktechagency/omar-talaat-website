@@ -526,7 +526,7 @@ const CountdownProgressTracker = ({
                     width={65}
                     height={105}
                     alt="second"
-                    className="hover:scale-125"
+                    className=""
                   />
                 </div>
                 <div>
@@ -535,7 +535,7 @@ const CountdownProgressTracker = ({
                     width={80}
                     height={132}
                     alt="first"
-                    className="hover:scale-125"
+                    className=""
                   />
                 </div>
                 <div>
@@ -544,7 +544,7 @@ const CountdownProgressTracker = ({
                     width={65}
                     height={105}
                     alt="third"
-                    className="hover:scale-125"
+                    className=""
                   />
                 </div>
               </div>

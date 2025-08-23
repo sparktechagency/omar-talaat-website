@@ -34,6 +34,12 @@ const DeliveryOptions = ({
   const deliveryCharge = cartSubtotal >= 1000 ? 0 : 10;
   const freeDeliveryThreshold = 1000;
 
+  // Get current date info
+  const today = new Date();
+  const currentDate = today.getDate();
+  const currentMonthIndex = today.getMonth();
+  const currentYear = today.getFullYear();
+
   // Handle promo code application
   const handlePromoCodeApply = () => {
     if (promoCode.trim()) {
@@ -74,7 +80,7 @@ const DeliveryOptions = ({
   ];
 
   const currentMonth = monthNames[calendarMonth];
-  const currentYear = calendarYear.toString();
+  const currentYearDisplay = calendarYear.toString();
   const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
   const firstDayOfMonth = new Date(calendarYear, calendarMonth, 1).getDay();
 
@@ -94,14 +100,56 @@ const DeliveryOptions = ({
     calendarDays.push(null);
   }
 
+  // Check if we can go to previous month (only if we're not in current month)
+  const canGoToPreviousMonth = () => {
+    // If we're viewing current month and current year, disable previous
+    if (calendarYear === currentYear && calendarMonth === currentMonthIndex) {
+      return false;
+    }
+    // Otherwise, we can go to previous month (as long as it doesn't go past current month)
+    return true;
+  };
+
+  // Check if a day is selectable (only future dates from tomorrow)
+  const isDaySelectable = (day) => {
+    if (!day) return false;
+    
+    // If viewing current month and year
+    if (calendarYear === currentYear && calendarMonth === currentMonthIndex) {
+      return day > currentDate; // Only days after today
+    }
+    
+    // If viewing future months/years, all days are selectable
+    if (calendarYear > currentYear || 
+        (calendarYear === currentYear && calendarMonth > currentMonthIndex)) {
+      return true;
+    }
+    
+    // Past months are not selectable
+    return false;
+  };
+
   // Navigation functions
   const goToPreviousMonth = () => {
+    if (!canGoToPreviousMonth()) return;
+    
+    let newMonth = calendarMonth;
+    let newYear = calendarYear;
+    
     if (calendarMonth === 0) {
-      setCalendarMonth(11);
-      setCalendarYear(calendarYear - 1);
+      newMonth = 11;
+      newYear = calendarYear - 1;
     } else {
-      setCalendarMonth(calendarMonth - 1);
+      newMonth = calendarMonth - 1;
     }
+    
+    // Don't go past current month
+    if (newYear < currentYear || (newYear === currentYear && newMonth < currentMonthIndex)) {
+      return;
+    }
+    
+    setCalendarMonth(newMonth);
+    setCalendarYear(newYear);
     setSelectedDate(null);
   };
 
@@ -142,15 +190,6 @@ const DeliveryOptions = ({
               </div>
             </button>
           </div>
-          {/* Show applied promo code info */}
-          {promoCodeData && (
-            <div className="mt-2 p-2 bg-green-800/20 rounded-lg border border-green-600">
-              <p className="text-green-400 text-sm">
-                ✓ Promo code "{promoCodeData.promoCode}" applied! 
-                ({promoCodeData.promoCodeId.percentageOff}% off)
-              </p>
-            </div>
-          )}
         </div>
 
         <h2 className="text-lg font-medium lg:text-xl mb-4">Delivery Options</h2>
@@ -243,25 +282,30 @@ const DeliveryOptions = ({
           <h3 className="text-lg lg:font-bold lg:text-[22px] text-[16px] font-medium">
             Select Delivery Date
           </h3>
-          <div className="flex items-center space-x-4 lg:space-x-6">
-            <div className="flex items-center space-x-3 lg:space-x-5">
+          <div className="flex items-center space-x-4 lg:space-x-2">
+            <div className="flex items-center space-x-3 lg:space-x-2">
               <span className="text-lg lg:font-bold lg:text-[22px] text-[16px] font-medium">
                 {currentMonth}
               </span>
               <span className="text-lg lg:font-bold lg:text-[22px] text-[16px] font-medium">
-                {currentYear}
+                {currentYearDisplay}
               </span>
             </div>
             <div className="flex items-center ">
               <button
                 onClick={goToPreviousMonth}
-                className="text-gray-400 hover:text-white transition-colors p-1"
+                disabled={!canGoToPreviousMonth()}
+                className={`transition-colors p-1 ${
+                  canGoToPreviousMonth() 
+                    ? "text-gray-400 hover:text-white" 
+                    : "text-gray-600 cursor-not-allowed opacity-50"
+                }`}
               >
                 <LeftSideArrow />
               </button>
               <button
                 onClick={goToNextMonth}
-                className="text-gray-400 hover:text-white transition-colors p-1"
+                className="text-white hover:text-white transition-colors p-1"
               >
                 <RightSideArrow />
               </button>
@@ -277,22 +321,27 @@ const DeliveryOptions = ({
               </div>
             ))}
 
-            {calendarDays.map((day, index) => (
-              <button
-                key={index}
-                onClick={() => day && setSelectedDate(day)}
-                className={`h-8 w-8 lg:h-12 lg:w-12 text-xs lg:text-sm rounded border-2 font-bold transition-colors flex items-center justify-center ${
-                  day
-                    ? day === selectedDate
-                      ? `${classes.bg} text-black border-white`
-                      : `text-white ${classes.border2} hover:${classes.bg} hover:text-black`
-                    : `${classes.border2} cursor-default`
-                }`}
-                disabled={!day}
-              >
-                {day ? day : ""}
-              </button>
-            ))}
+            {calendarDays.map((day, index) => {
+              const isSelectable = isDaySelectable(day);
+              return (
+                <button
+                  key={index}
+                  onClick={() => isSelectable && setSelectedDate(day)}
+                  className={`h-8 w-8 lg:h-12 lg:w-12 text-xs lg:text-sm rounded border-2 font-bold transition-colors flex items-center justify-center ${
+                    day
+                      ? isSelectable
+                        ? day === selectedDate
+                          ? `${classes.bg} text-black border-white`
+                          : `text-white ${classes.border2} hover:${classes.bg} rounded-lg hover:text-white cursor-pointer`
+                        : `text-gray-500 ${classes.border2} cursor-not-allowed rounded-lg opacity-50`
+                      : `${classes.border2} cursor-default`
+                  }`}
+                  disabled={!isSelectable}
+                >
+                  {day ? day : ""}
+                </button>
+              );
+            })}
           </div>
 
           {/* Time Selection */}

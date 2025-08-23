@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/redux/featured/auth/authSlice"; // Import your authSlice actions
 import { useRouter } from "next/navigation";
 import { MainLogo } from "../share/svg/Logo";
+import { toast } from "sonner";
 
 export default function LoginUser() {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,6 +44,7 @@ export default function LoginUser() {
       router.push("/");
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error(error || "Login failed");
     }
   };
 

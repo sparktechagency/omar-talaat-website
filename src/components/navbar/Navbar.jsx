@@ -424,7 +424,7 @@ export default function Navbar() {
                     <div className={`${classes.inner} rounded-full  text-xs text-white`}>
                      <Image
                       loading="lazy"
-                      src={getImageUrl(userData?.image) || "/assets/image 10.png"}
+                      src={getImageUrl(userData?.image) || "/assets/profile.jpg"}
                       height={55}
                       width={55}
                       className="drop-shadow-lg rounded-full p-1 hover:scale-125 transition-transform"
