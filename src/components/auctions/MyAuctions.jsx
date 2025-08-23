@@ -303,10 +303,7 @@ useEffect(() => {
       });
       
       // Make API call to place bid
-      const response = await createBidAuction({
-        id: currentAuctionId,
-        data: data
-      }).unwrap();
+      const response = await createBidAuction(data).unwrap();
       
       if (response.success) {
         toast.success("Bid placed successfully!");

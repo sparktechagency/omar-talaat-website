@@ -19,6 +19,9 @@ const AuctionsContainer = () => {
 
   const handleUnlockWithCredits = useCallback(
     async (auction) => {
+      console.log("auction", auction);
+      console.log("clicked")
+
       try {
         if (!currentUser) {
           router.push("/login");
@@ -26,11 +29,11 @@ const AuctionsContainer = () => {
         }
 
         const data = { itemId: auction.id, credit: auction.creditNeeds };
+        console.log("data", data);
         
-        const res = await unlockAuction({ 
-          id: auction.id, 
-          data: data 
-        }).unwrap();
+        const res = await unlockAuction(data).unwrap();
+        console.log("res", res);
+
         
         if (res.success) {
           toast.success("Auction unlocked successfully");

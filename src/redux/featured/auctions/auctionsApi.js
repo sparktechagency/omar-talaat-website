@@ -49,18 +49,18 @@ const auctionsApi = api.injectEndpoints({
       providesTags: ["Auctions"],
     }),
     unlockAuction: builder.mutation({
-      query: ({ id, data }) => ({
+      query: ( data ) => ({
         method: "POST",
-        url: `/auction/taking/unlock/${id}`,
+        url: `/auction/taking/unlock`,
         body: data,
       }),
       invalidatesTags: ["Auctions"],
     }),
 
     createBidAuction: builder.mutation({
-      query: ({ id, data }) => ({
+      query: ( data ) => ({
         method: "POST",
-        url: `/auction/bid/create/${id}`,
+        url: `/auction/bid/create`,
         body: data,
       }),
       invalidatesTags: ["Auctions"],

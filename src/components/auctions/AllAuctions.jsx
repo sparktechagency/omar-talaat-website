@@ -177,14 +177,13 @@ const AllAuctions = ({
     };
 
     const getBorderStyle = () => {
- if (auction.membership === "premium") {
-  return "border-trace"; // premium effect
-} else if (auction.membership === "advanced") {
-  return "border-trace"; 
-}
+      if (auction.membership === "premium") {
+        return "border-2 border-[var(--premium)]"; // premium color border
+      } else if (auction.membership === "advanced") {
+        return "border-2 border-[var(--advanced)]"; // advanced color border
+      }
 
-
-      return "border border-gray-700/50 hover:border-gray-600/50";
+      return "border-2 border-[var(--normal)]"; // normal color border
     };
 
     return (
@@ -257,12 +256,16 @@ const AllAuctions = ({
             {showCoinsOverlay && (
               <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center text-white text-center p-6">
                 <button
-                  disabled={unlocking}
+                  disabled={!auction.available || unlocking} // 🔥 এখন শুধু available থাকলে clickable
                   onClick={(e) => {
                     e.stopPropagation();
-                    onUnlockWithCredits?.(auction);
+                    if (auction.available) {
+                      // ✅ Safety check
+                      onUnlockWithCredits?.(auction);
+                    }
                   }}
-                  className="mb-4 hover:scale-105 transition-transform"
+                  className={`mb-4 hover:scale-105 transition-transform 
+    ${!auction.available ? "opacity-50 cursor-not-allowed" : ""}`} // UI feedback
                 >
                   {getCoinsDisplay(auction)}
                 </button>
