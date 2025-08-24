@@ -66,6 +66,14 @@ const auctionsApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Auctions"],
     }),
+    paymentAuction: builder.mutation({
+      query: ( id ) => ({
+        method: "POST",
+        url: `/auction/buy/${id}`,
+
+      }),
+      invalidatesTags: ["Auctions","Wallet"],
+    }),
   }),
 });
 
@@ -75,4 +83,6 @@ export const {
   useGetMyAuctionsQuery,
   useUnlockAuctionMutation,
   useCreateBidAuctionMutation,
+  usePaymentAuctionMutation,
+
 } = auctionsApi;

@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input";
 import { getImageUrl } from "../share/imageUrl";
 import { useSearchParams } from "next/navigation";
-import { useGetMyAuctionsQuery, useCreateBidAuctionMutation } from "@/redux/featured/auctions/auctionsApi";
+import { useGetMyAuctionsQuery, useCreateBidAuctionMutation, usePaymentAuctionMutation } from "@/redux/featured/auctions/auctionsApi";
 import { toast } from "sonner";
 import { useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
 
@@ -73,7 +73,8 @@ const AuctionInterface = () => {
     },
   ]);
   // Bid information state
-  const [bidInfo, setBidInfo] = useState({});  
+  const [bidInfo, setBidInfo] = useState({});
+
   
   // Initialize bid info from API data
   useEffect(() => {
@@ -126,6 +127,9 @@ const AuctionInterface = () => {
   
   // Create bid mutation
   const [createBidAuction, { isLoading: isPlacingBid }] = useCreateBidAuctionMutation();
+  
+  // Payment mutation
+  const [paymentAuction, { isLoading: isPaying }] = usePaymentAuctionMutation();
 
 
   const updateTimer = (timeLeft) => {
@@ -331,11 +335,20 @@ useEffect(() => {
   };
 
   // Handle checkout payment
-  const handleCheckoutPayment = (auctionId) => {
-    // You can implement payment checkout logic here
-    toast.success("Redirecting to payment checkout...");
-    // Example: redirect to payment page
-    // window.location.href = `/checkout/${auctionId}`;
+  const handleCheckoutPayment = async (auctionId) => {
+    try {
+      const response = await paymentAuction(auctionId).unwrap();
+      
+      if (response.success && response.data?.checkoutUrl) {
+        toast.success("Redirecting to payment checkout...");
+        // Navigate to the checkout URL
+        window.location.href = response.data.checkoutUrl;
+      } else {
+        toast.error("Failed to create payment link");
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to process payment");
+    }
   };
 
   // Handle bid submission
@@ -570,9 +583,10 @@ useEffect(() => {
                         auction.winner === userId ? (
                            <Button
                              onClick={() => handleCheckoutPayment(auction.id)}
-                             className={`w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white border-green-500 transition-all duration-200`}
+                             disabled={isPaying}
+                             className={`w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white border-green-500 transition-all duration-200 ${isPaying ? 'opacity-50 cursor-not-allowed' : ''}`}
                            >
-                             Please Checkout Payment
+                             {isPaying ? "Processing..." : "Please Checkout Payment"}
                            </Button>
                         ) : (
                           <Button
