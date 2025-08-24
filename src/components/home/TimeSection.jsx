@@ -232,11 +232,11 @@ const CountdownProgressTracker = ({
   }
 
   return (
-    <Container className="bg-black text-white mt-10 flex flex-col items-center justify-center overflow-hidden">
+    <Container className="bg-black text-white mt-0 lg:mt-10 flex flex-col items-center justify-center overflow-hidden">
       {/* Static top section with timer */}
       <div className="text-center w-full flex flex-col items-center">
         {/* Clickable Arrow Icon to Toggle Collapse - Centered */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-3 lg:mb-6">
           <motion.div
             initial={{ opacity: 1 }}
             animate={{ rotate: isCollapsed ? 180 : 0 }}
@@ -250,34 +250,40 @@ const CountdownProgressTracker = ({
 
         {/* Timer Section - Always visible */}
         <div className="text-center ">
-          <h1 className="text-3xl font-bold text-white mb-8">
+          <h1 className="text-xl lg:text-3xl font-bold text-white mb-4 lg:mb-8">
             The Month Ends in:
           </h1>
 
           <div className="flex items-center justify-center gap-6 mb-8">
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">
+              <div className="text-xl lg:text-3xl font-bold text-white mb-2">
                 {formatTime(timeLeft.days)}
               </div>
               <div className="text-[22px] font-medium text-gray-400">Days</div>
             </div>
-            <span className="text-3xl font-bold text-white mb-9">:</span>
+            <span className="text-xl lg:text-3xl font-bold text-white mb-9">:</span>
+
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">
+              <div className="text-xl lg:text-3xl font-bold text-white mb-2">
+
                 {formatTime(timeLeft.hours)}
               </div>
               <div className="text-[22px] font-medium text-gray-400">Hours</div>
             </div>
-            <span className="text-3xl font-bold text-white mb-9">:</span>
+            <span className="text-xl lg:text-3xl font-bold text-white mb-9">:</span>
+
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">
+              <div className="text-xl lg:text-3xl font-bold text-white mb-2">
+
                 {formatTime(timeLeft.minutes)}
               </div>
               <div className="text-[22px] font-medium text-gray-400">Mins</div>
             </div>
-            <span className="text-3xl font-bold text-white mb-9">:</span>
+            <span className="text-xl lg:text-3xl font-bold text-white mb-9">:</span>
+
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">
+              <div className="text-xl lg:text-3xl font-bold text-white mb-2">
+
                 {formatTime(timeLeft.seconds)}
               </div>
               <div className="text-[22px] font-medium text-gray-400">Secs</div>
@@ -300,7 +306,7 @@ const CountdownProgressTracker = ({
             className="w-full flex flex-col items-center"
           >
             {/* Warning Message */}
-            <p className="text-center text-2xl mb-10">
+            <p className="text-center  lg:text-2xl mb-10">
               If you do not place an order within the time frame, your CM Points
               will reset!
             </p>
@@ -363,11 +369,11 @@ const CountdownProgressTracker = ({
                 ></div>
 
                 {/* Step Numbers positioned on the progress line */}
-                <div className="absolute -left-6 top-[-30px] w-full grid grid-cols-4">
+                <div className="absolute lg:-left-6 -top-5 lg:top-[-30px] w-full grid grid-cols-4">
                   {scrolledVisibleSteps.map((step, index) => (
                     <div key={step.id} className="flex justify-between">
                       <div
-                        className={`w-16 h-16 sm:w-12 sm:h-12 rounded-full border-2 flex items-center justify-center bg-black relative
+                        className={`w-12 h-12 lg:w-16 lg:h-16 sm:w-12 sm:h-12 rounded-full border-2 flex items-center justify-center bg-black relative
                         ${
                           step.completed
                             ? "border-white bg-white text-black"
@@ -424,12 +430,12 @@ const CountdownProgressTracker = ({
 
             {/* Cards Section - Only show for eligible step */}
             {currentEligibleStep && currentEligibleStep.rewards && (
-              <div className="w-full mb-20">
+              <div className="w-full mb-10 lg:mb-20">
                 <div className="relative">
                   {/* Connection borders between cards */}
                   <div className="absolute top-1/2 right-2/4 w-1/3 h-[4px] bg-gradient-to-r from-[#69CDFF] to-[#DB9D17] transform -translate-y-1/2 hidden md:block"></div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl relative">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 max-w-4xl relative">
                     {currentEligibleStep.rewards.map((reward, index) => {
                       // Define dynamic border styles based on card position
                       let borderStyle = "";
@@ -456,7 +462,7 @@ const CountdownProgressTracker = ({
                             <div className={`${cardContent} text-center h-full flex flex-col justify-between`}>
                               {/* Vertical border inside first card */}
                               {index === 0 && (
-                                <div className="absolute left-1/2 top-[-67px] w-[4px] h-16 bg-gradient-to-b from-[#69CDFF] to-[#DB9D17] transform -translate-x-1/2"></div>
+                                <div className="absolute left-5 lg:left-1/2 -top-[57px] lg:top-[-67px] w-[4px] h-14 lg:h-16  bg-white transform -translate-x-1/2"></div>
                               )}
 
                               <h3 className="text-white mb-2">
@@ -515,7 +521,7 @@ const CountdownProgressTracker = ({
 
             {/* Monthly Rewards Section */}
             <div className="text-center">
-              <h2 className="text-2xl font-bold text-white mb-8">
+              <h2 className="text-xl lg:text-3xl font-bold text-white mb-4 lg:mb-8">
                 Monthly Rewards
               </h2>
 

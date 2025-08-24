@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const BannerButtonAnimation = ({
   onClick = () => {},
@@ -10,10 +10,17 @@ const BannerButtonAnimation = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  // ✅ mobile device detect করে auto animation চালানো
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsHovered(true); // mobile এ সবসময় animate থাকবে
+    }
+  }, []);
+
   const sizeClasses = {
     sm: "w-8 h-6 text-sm",
     md: "w-6 h-6 text-base",
-    lg: "w-40 h-10 text-lg", // <-- fix button width & height here
+    lg: "w-40 h-10 text-lg",
     xl: "w-44 h-12 text-xl",
   };
 
@@ -23,31 +30,25 @@ const BannerButtonAnimation = ({
     lg: "w-40 px-8",
     xl: "w-44 px-9",
   };
+
   return (
     <div
-      className="relative inline-block "
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        paddingLeft: "700px",
-        paddingRight: "700px",
-          }}
-          
+      className="relative inline-block"
+     
+      onMouseEnter={() => window.innerWidth >= 768 && setIsHovered(true)}
+      onMouseLeave={() => window.innerWidth >= 768 && setIsHovered(false)}
+      style={{ paddingLeft: "700px", paddingRight: "700px", }}
     >
       <button
         className={`
           ${sizeClasses[size]}
           ${isHovered ? expandedSizeClasses[size] : ""}
           bg-white text-primary
-          rounded-full
-          font-semibold
-          shadow-lg
+          rounded-full font-semibold shadow-lg
           transition-all duration-500 ease-in-out
           transform hover:scale-105
           flex items-center justify-center
-          overflow-hidden
-          relative
-          group
+          overflow-hidden relative group
           ${className}
         `}
         onClick={onClick}
@@ -58,9 +59,7 @@ const BannerButtonAnimation = ({
               transition-all duration-500 ease-in-out
               ${isHovered ? "mr-2 scale-90" : "scale-100"}
             `}
-            size={
-              size === "sm" ? 16 : size === "md" ? 18 : size === "lg" ? 20 : 24
-            }
+            size={size === "sm" ? 16 : size === "md" ? 18 : size === "lg" ? 20 : 24}
           />
         )}
 
@@ -68,11 +67,9 @@ const BannerButtonAnimation = ({
           className={`
             transition-all duration-500 ease-in-out
             whitespace-nowrap
-            ${
-              isHovered
-                ? "opacity-100 translate-x-0 max-w-xs"
-                : "opacity-0 -translate-x-4 max-w-0"
-            }
+            ${isHovered
+              ? "opacity-100 translate-x-0 max-w-xs"
+              : "opacity-0 -translate-x-4 max-w-0"}
           `}
         >
           {text}

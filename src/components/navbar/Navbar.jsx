@@ -140,11 +140,12 @@ export default function Navbar() {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { data: wallet } = useGetMyWalletQuery();
   const walletData = wallet?.data;
-  console.log(walletData)
+  console.log(walletData);
 
   const { plan, classes, svgColor } = getUserPlan(walletData);
-  const {data: user} = useGetMyProfileQuery();
+  const { data: user } = useGetMyProfileQuery();
   const userData = user?.data;
+  console.log(userData);
 
   // Refs for dropdown
   const dropdownRef = useRef(null);
@@ -233,11 +234,13 @@ export default function Navbar() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
       )}
 
-      <nav className={`fixed w-full z-50 top-0 left-0 transition-all duration-300 ${
-        isShopHovered 
-          ? 'backdrop-blur-[5px] bg-black shadow-2xl' 
-          : 'backdrop-blur-[5px] bg-black/30 shadow-2xl'
-      }`}>
+      <nav
+        className={`fixed w-full z-50 top-0 left-0 transition-all duration-300 ${
+          isShopHovered
+            ? "backdrop-blur-[5px] bg-black shadow-2xl"
+            : "backdrop-blur-[5px] bg-black/30 shadow-2xl"
+        }`}
+      >
         <div className="container mx-auto flex gap-12 justify-between items-center h-16 sm:h-20 md:h-24 px-3 sm:px-4 lg:px-0">
           {/* Left: Logo */}
           <div>
@@ -412,28 +415,93 @@ export default function Navbar() {
                 />
               </Link>
 
-              {/* Profile Dropdown */}
+              {/* Profile Dropdown or Login Button */}
               <div className="relative profile-menu">
-                <button
-                  className="text-xl flex items-center cursor-pointer justify-center w-[32px] h-[32px] sm:w-[45px] sm:h-[45px] md:w-[55px] md:h-[55px] text-white hover:scale-115 hover:text-white/80 transition-all duration-300"
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                >
-                  <div
-                    className={` border-2 rounded-full ${classes.border}`}
-                  >
-                    <div className={`${classes.inner} rounded-full  text-xs text-white`}>
-                     <Image
-                      loading="lazy"
-                      src={getImageUrl(userData?.image) || "/assets/profile.jpg"}
-                      height={55}
-                      width={55}
-                      className="drop-shadow-lg rounded-full p-1 hover:scale-125 transition-transform"
-                      alt="Cart Icon"
-                    />
-                    </div>
+                {userData ? (
+                  <div>
+                    <button
+                      className="text-xl flex items-center cursor-pointer justify-center w-[32px] h-[32px] sm:w-[45px] sm:h-[45px] md:w-[55px] md:h-[55px] text-white hover:scale-115 hover:text-white/80 transition-all duration-300"
+                      onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    >
+                      <div
+                        className={`border-2 rounded-full ${classes.border}`}
+                      >
+                        <div
+                          className={`${classes.inner} rounded-full text-xs text-white`}
+                        >
+                          <Image
+                            loading="lazy"
+                            src={
+                              getImageUrl(userData?.image) ||
+                              "/assets/profile.jpg"
+                            }
+                            height={55}
+                            width={55}
+                            className="drop-shadow-lg rounded-full p-1 hover:scale-125 transition-transform"
+                            alt="Profile Icon"
+                          />
+                        </div>
+                      </div>
+                    </button>
+
+                    {isProfileOpen && (
+                      <div
+                        ref={profileDropdownRef}
+                        className="absolute right-0 top-full mt-2 sm:mt-3 md:mt-5 w-48 sm:w-56 md:w-60 backdrop-blur-2xl bg-black/30 border border-white/20 text-white shadow-xl rounded-lg overflow-hidden z-[9999]"
+                      >
+                        {/* ✅ Dropdown এর ভিতরে কনটেন্ট দিন */}
+                        <ul className="py-2">
+                          <li>
+                            <button
+                              onClick={() => {
+                                setIsProfileModalOpen(true);
+                                setIsProfileOpen(false);
+                              }}
+                              className="block w-full text-left px-4 py-2 hover:bg-white/10 transition-colors duration-200"
+                            >
+                              Profile Dashboard
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => {
+                                router.push("/order-history");
+                              }}
+                              className="block w-full text-left px-4 py-2 hover:bg-white/10 transition-colors duration-200"
+                            >
+                              Order History
+                            </button>
+                          </li>
+                          <li>
+                            <Link
+                              href="/login"
+                              onClick={() => {
+                                if (typeof window !== "undefined") {
+                                  localStorage.removeItem("user");
+                                  localStorage.removeItem("token");
+                                }
+                                setIsProfileOpen(false);
+                              }}
+                              className="block px-4 py-2 mt-2 border-t border-white/20 hover:bg-white/10 text-red-400 transition-colors duration-200"
+                            >
+                              Logout
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                </button>
-                {isProfileOpen && (
+                ) : (
+                  <div>
+                    <Link href="/login">
+                      <button className="px-6 py-2 border  text-white rounded-full  transition-all duration-300 font-medium">
+                        Login
+                      </button>
+                    </Link>
+                  </div>
+                )}
+
+                {userData && isProfileOpen && (
                   <div
                     ref={profileDropdownRef}
                     className="absolute right-0 top-full mt-2 sm:mt-3 md:mt-5 w-48 sm:w-56 md:w-60 backdrop-blur-2xl bg-black/30 border border-white/20 text-white shadow-xl rounded-lg overflow-hidden z-[9999]"
@@ -544,6 +612,7 @@ export default function Navbar() {
                 { name: "Home", path: "/" },
                 { name: "Shop", path: "/shop" },
                 { name: "Auctions", path: "/auctions" },
+                { name: "Cart", path: "/cart" },
               ].map((item) => (
                 <li key={item.name}>
                   <Link

@@ -14,12 +14,12 @@ export const containerVariants = {
 export const cardVariants = {
   hidden: {
     opacity: 0,
-    y: 10,
+    y: 15,
     scale: 0.95, 
   },
   visible: {
     opacity: 1,
-    y: 10,
+    y: 15,
     scale: 1,
     transition: {
       duration: 0.8, 
@@ -45,7 +45,7 @@ export const imageVariants = {
 export const cartIconVariants = {
   hidden: {
     opacity: 0,
-    y: 10,
+    y: 15,
   },
   visible: {
     opacity: 1,

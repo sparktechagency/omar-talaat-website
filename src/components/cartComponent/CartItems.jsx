@@ -51,15 +51,18 @@ const CartItems = ({
   };
 
   return (
-    <div className="space-y-6 lg:space-y-8">
+    <div className="space-y-4 lg:space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-center gap-2 mb-6 lg:mb-8 lg:col-span-12">
+      <div className="flex items-center justify-center gap-2  lg:mb-8 lg:col-span-12">
         <div className={styles.imageWithBubbles}>
           <Image
             src="/assets/image 10.png"
             width={105}
             height={105}
             alt="Logo"
+            className="w-20 h-20 lg:w-[105px] lg:h-[105px]"
+
+
           />
         </div>
         <h1 className="text-3xl md:text-5xl lg:text-7xl font-medium">
@@ -76,20 +79,21 @@ const CartItems = ({
         <div className="space-y-4">
           {cartItems.map((item) => (
             <div key={item.id} className="space-y-3">
-              <div className="flex items-start justify-around space-x-3 lg:space-x-4 rounded-lg p-3 lg:p-4">
+              <div className="flex items-center space-x-2  rounded-lg p-2">
+
                 {/* Image on the left side */}
                 <div>
                   <Image
                     src={getImageUrl(item.images[0])}
                     alt={item.name}
-                    height={80}
-                    width={80}
-                    className="rounded-full lg:w-[80px] lg:h-[80px] w-[50px] h-[50px]"
+                    height={60}
+                    width={60}
+                    className="rounded-full lg:w-[80px] lg:h-[80px] w-[40px] h-[40px]"
                   />
                 </div>
 
                 {/* Content on the right side */}
-                <div className="flex-1 flex flex-col gap-3 ">
+                <div className="flex-1 flex flex-col items-center justify-center gap-3 ">
                   <div className="lg:w-[585px] w-full">
                     {/* Title */}
                     <h3 className="font-medium hidden lg:block text-sm lg:text-base mb-1">
@@ -105,8 +109,8 @@ const CartItems = ({
                   </div>
                 </div>
 
-                <div className="flex lg:gap-40 gap-4 items-center justify-between mt-2">
-                  <div className={`${classes.border} flex lg:w-[187px] w-full border h-12 justify-between rounded-full items-center space-x-`}>
+                <div className="flex lg:gap-40 gap-2 items-center justify-between mt-2">
+                  <div className={`${classes.border} flex lg:w-[187px] w-full border h-8 lg:h-12 justify-between rounded-full items-center space-x-`}>
                     {/* Quantity controls */}
                     <div className={`${classes.inner} rounded-full flex items-center justify-center`}>
                       <button
@@ -127,19 +131,19 @@ const CartItems = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-2 lg:space-x-3">
+                  <div className="flex items-center space-x-1 lg:space-x-1">
                     {/* Price - now shows total for this item */}
                     <div>
-                      <span className="font-medium lg:text-3xl">
+                      <span className="font-medium lg:text-xl">
                         ${(item.price * item.quantity).toFixed(2)}
                       </span>
                     </div>
                   </div>
 
                   {/* Edit button */}
-                  <div className="flex items-center space-x-2 lg:space-x-3">
+                  <div className="flex items-center space-x-1 lg:space-x-1">
                     <button className={`cursor-pointer transition-colors ${iconColor}`}>
-                      <MdOutlineModeEdit size={24} className={`lg:w-7 lg:h-7 `} />
+                      <MdOutlineModeEdit size={24} className={`w-5 h-5 lg:w-7 lg:h-7 `} />
                     </button>
 
                     {/* Delete button */}
@@ -147,7 +151,8 @@ const CartItems = ({
                       onClick={() => onRemoveItem(item._id || item.id)}
                       className=" cursor-pointer transition-colors"
                     >
-                      <RxCross2 size={24} className="lg:w-7 lg:h-7" />
+                      <RxCross2 size={24} className="w-5 h-5 lg:w-7 lg:h-7" />
+
                     </button>
                   </div>
                 </div>
@@ -191,7 +196,7 @@ const CartItems = ({
       </div>
 
       {/* Additional Corals Section */}
-      <div className="flex justify-center items-center space-y-7 mt-16">
+      <div className="flex justify-center items-center space-y-7 mt-8 lg:mt-16">
         <div className={`w-24 h-24 lg:w-36 lg-h-36 `}>
           <div className={styles.imageWithBubbles}>
             <Image
@@ -204,7 +209,7 @@ const CartItems = ({
           </div>
         </div>
         <div>
-          <h2 className="text-center text-xl md:text-xl lg:text-5xl xl:text-[56px] lg:font-bold mb-5">
+          <h2 className="text-center text-xl md:text-xl lg:text-5xl xl:text-[56px] lg:font-bold mb-3 lg:mb-5">
             You Can Fit Up To 4 More Corals
           </h2>
           <p className="text-[14px] text-center">

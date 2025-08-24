@@ -6,6 +6,7 @@ import { CoinsLogo, MainLogo } from "../share/svg/Logo";
 import { ClientOnlyIcon, createDynamicIcon } from "@/components/ui/client-only-icon";
 import { TbShoppingBagPlus } from "react-icons/tb";
 import { getImageUrl } from "../share/imageUrl";
+import { cardVariants, imageVariants, cartIconVariants } from "../share/utils/motionVariants";
 
 const ProductCard = ({ 
   product, 
@@ -86,13 +87,10 @@ const ProductCard = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={isGridInView ? { opacity: 1, y: 0 } : { opacity: 10, y: 15 }}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.1,
-        ease: "easeOut",
-      }}
+      variants={cardVariants}
+      initial="hidden"
+      animate={isGridInView ? "visible" : "hidden"}
+      custom={index}
       whileHover={{ y: -5, transition: { duration: 0.3, ease: "easeOut" } }}
       className={`relative group ${
         product.available ? "cursor-pointer" : "cursor-default"
@@ -105,16 +103,21 @@ const ProductCard = ({
         {/* Product Image */}
         <div className="relative aspect-square overflow-hidden">
           {!imageError ? (
-            <Image
-              src={getImageUrl(Array.isArray(product.images) ? product.images[0] : undefined)}
-              alt={product.name}
-              height={300}
-              width={300}
-              loading="lazy"
-              quality={80}
-              onError={handleImageError}
-              className="w-full h-full object-cover transition-transform duration-500"
-            />
+            <motion.div
+              variants={imageVariants}
+              whileHover="hover"
+            >
+              <Image
+                src={getImageUrl(Array.isArray(product.images) ? product.images[0] : undefined)}
+                alt={product.name}
+                height={300}
+                width={300}
+                loading="lazy"
+                quality={80}
+                onError={handleImageError}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
           ) : (
             /* Fallback coral pattern background */
             <div className="w-full h-full bg-[#181818] flex items-center justify-center relative">

@@ -20,28 +20,31 @@ const Ficilities = () => {
             
             <CarIcon className="" color={svgColor}/>
           </div>
-          <p>Shipping to AD, DxB and SHJ</p>
+          <p className="lg:text-xl text-[12px]">Shipping to AD, DxB and SHJ</p>
         </div>
         <div className="w-full mx-auto m-2 text-center ">
           <div className="text-center flex hover:scale-115 justify-center items-center mb-4">
             
             <TagIcon className="" color={svgColor}/>
           </div>
-          <p>150+ corals to pick from</p>
+          <p className="lg:text-xl text-[12px]">150+ corals to pick from</p>
+
         </div>
         <div className="w-full mx-auto m-2 text-center">
           <div className="flex justify-center items-center hover:scale-115 w-full  mb-4">
             
             <CoralsIcon  color={svgColor}/>
           </div>
-          <p>Rare and unique corals</p>
+          <p className="lg:text-xl text-[12px]">Rare and unique corals</p>
+
         </div>
         <div className="w-full mx-auto m-2 text-center">
           <div className="flex justify-center items-center hover:scale-115 w-full  mb-4">
             
             <GiftIcon  color={svgColor}/>
           </div>
-          <p>Established Frags</p>
+          <p className="lg:text-xl text-[12px]">Established Frags</p>
+
         </div>
       </div>
     </div>

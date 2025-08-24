@@ -12,10 +12,12 @@ const AllCategories = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const { data: categories, isLoading, isError } = useGetCategoriesQuery();
-  const router = useRouter(); // ✅ Router init
+  const router = useRouter();
   
   // Get category data from API
   const categoryData = useMemo(() => categories?.data || [], [categories]);
+  console.log(categoryData)
+
   
   const visibleCount = 4;
   const maxIndex = useMemo(() => 
@@ -84,7 +86,8 @@ const AllCategories = () => {
     <div className="container w-full mx-auto bg-black lg:my-20 my-10 flex flex-col justify-center">
       {/* Header */}
       <div className="text-center lg:mb-12 mb-5">
-        <h1 className="text-4xl font-bold bg-clip-text">Shop Categories</h1>
+        <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold bg-clip-text">Shop Categories</h1>
+
       </div>
 
       {/* Slider for Small/Medium Devices */}
@@ -119,11 +122,12 @@ const AllCategories = () => {
                   key={category._id}
                   className="flex-shrink-0 relative group cursor-pointer"
                   style={{ width: `${100 / categoryData.length}%` }}
-                  onClick={() => handleCategoryClick(category)} // ✅ Click event
+                  onClick={() => handleCategoryClick(category)} 
                 >
                   <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
                     <Image
-                      src={category.image}
+                      src={getImageUrl(category.image)}
+
                       alt={category.name}
                       height={130}
                       width={130}
@@ -174,7 +178,7 @@ const AllCategories = () => {
           <div
             key={category._id}
             className="flex flex-col items-center cursor-pointer group"
-            onClick={() => handleCategoryClick(category)} // ✅ Click event
+            onClick={() => handleCategoryClick(category)} 
           >
             <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
               <Image

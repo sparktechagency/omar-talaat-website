@@ -25,6 +25,7 @@ import { saveProductToCart } from "../share/utils/cart";
 import { saveToRecentViews } from "../share/utils/recentView";
 import { getUserPlan } from "../share/utils/getUserPlan";
 import { toast } from "sonner";
+import { containerVariants } from "../share/utils/motionVariants";
 
 const CoralShopGrid = ({ defaultCategory }) => {
   const searchParams = useSearchParams();
@@ -389,8 +390,11 @@ const CoralShopGrid = ({ defaultCategory }) => {
           </motion.div>
 
           <div className="flex-1">
-            <div
+            <motion.div
               ref={gridRef}
+              variants={containerVariants}
+              initial="hidden"
+              animate={isGridInView ? "visible" : "hidden"}
               className={`grid grid-cols-1 sm:grid-cols-2 ${
                 isFilterVisible
                   ? "lg:grid-cols-3 xl:grid-cols-4"
@@ -422,7 +426,7 @@ const CoralShopGrid = ({ defaultCategory }) => {
                   />
                 ))
               )}
-            </div>
+            </motion.div>
             {allProduct?.meta?.totalPage > 1 && (
               <div className="flex justify-center mt-8 space-x-2">
                 {/* Prev */}

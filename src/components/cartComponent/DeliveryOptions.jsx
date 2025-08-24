@@ -167,7 +167,7 @@ const DeliveryOptions = ({
     <div className="flex lg:gap-32 md:gap-8 flex-col lg:flex-row justify-between w-full">
       <div className="lg:w-5/8 w-full">
         {/* Promo Code */}
-        <div className="mb-10">
+        <div className="mb-4 lg:mb-10">
           <div className="flex space-x-6 lg:w-3/5 w-full">
             <div className={`flex-1 rounded-full ${classes.border}`}>
               <div className={`${classes.inner} rounded-full flex items-center pl-8`}>
@@ -194,9 +194,9 @@ const DeliveryOptions = ({
 
         <h2 className="text-lg font-medium lg:text-xl mb-4">Delivery Options</h2>
         <div className="space-y-4">
-          <div className="space-y-5 mb-8">
+          <div className="lg:space-y-5 space-y-2 mb-5 lg:mb-8 ">
             {/* Radio Buttons */}
-            <label className={`flex items-start justify-start ${classes.border} rounded-2xl h-12 lg:h-16 cursor-pointer transition-colors`}>
+            <label className={`flex items-center space-x-3 ${classes.border} rounded-2xl h-12 lg:h-16 cursor-pointer transition-colors`}>
               <div className={`${classes.inner} rounded-2xl flex items-center gap-2 pl-10`}>
                 <input
                   type="radio"
@@ -204,7 +204,7 @@ const DeliveryOptions = ({
                   value="Standard Delivery"
                   checked={deliveryType === "Standard Delivery"}
                   onChange={(e) => setDeliveryType(e.target.value)}
-                  className={`${classes.inner} text-orange-500 w-4 h-4 lg:w-5 lg:h-5`}
+                  className={` text-orange-500 w-4 h-4 lg:w-5 lg:h-5`}
                 />
                 <span className="text-sm lg:text-base">
                   Standard Delivery{" "}

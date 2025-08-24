@@ -32,7 +32,7 @@ const CheckoutSummary = ({
         </h3>
         <div className={`${classes.border} rounded-2xl `}>
           <div className={`${classes.inner} rounded-2xl p-4`}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 text-sm lg:text-base text-gray-400">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-4 text-sm lg:text-base text-gray-400">
               <div>
                 <span className="text-white font-medium">Delivery Address:</span>
                 <br />
@@ -67,12 +67,12 @@ const CheckoutSummary = ({
 
       <div className="flex flex-col lg:flex-row gap-10 justify-center w-full">
         {/* Comments */}
-        <div className="lg:w-[550px] w-full">
+        <div className="lg:w-[550px] w-full ">
           <h3 className="text-lg font-medium lg:text-[40px] lg:font-bold mb-6 text-center">
             Comments
           </h3>
           <div className={`rounded-lg ${classes.border} rounded-xl`}>
-            <div className={`${classes.inner} rounded-xl h-5 lg:p-9 `}>
+            <div className={`${classes.inner} rounded-xl h-5 p-6 lg:p-9 `}>
               <div className="">
                 <textarea
                   value={comments}
@@ -82,7 +82,7 @@ const CheckoutSummary = ({
                 />
               </div>
               <button
-                className={`mt-12 border flex justify-center items-center text-white px-4 py-2 lg:px-5 lg:py-3 rounded-lg text-sm lg:text-[22px] w-1/2 mx-auto transition-colors`}
+                className={`mt-6 lg:mt-12 border flex justify-center items-center text-white px-4 py-2 lg:px-5 lg:py-3 rounded-lg text-sm lg:text-[22px] w-1/2 mx-auto transition-colors`}
               >
                 Submit With Order
               </button>
@@ -92,23 +92,23 @@ const CheckoutSummary = ({
 
         {/* Order Summary */}
         <div className="lg:w-[550px] w-full">
-          <h3 className="text-lg font-medium lg:text-[40px] lg:font-bold mb-6 text-center">
+          <h3 className="text-lg font-medium lg:text-[40px] lg:font-bold mb-4 lg:mb-6 text-center">
             Sub Total
           </h3>
           <div className={`${classes.border} rounded-lg `}>
             <div className={`${classes.inner} p-4 lg:p-6 rounded-lg`}>
               <div className="space-y-3 text-sm lg:text-base">
-                <div className="flex justify-between text-[22px] font-bold">
+                <div className="flex justify-between  lg:text-[22px] font-bold">
                   <span className="">Quantity:</span>
                   <span className="text-white">
                     {cartItems.reduce((total, item) => total + item.quantity, 0)}
                   </span>
                 </div>
-                <div className="flex justify-between text-[22px] font-bold">
+                <div className="flex justify-between lg:text-[22px] font-bold">
                   <span className="">Amount:</span>
                   <span className="text-white">AED {cartSubtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-[22px] font-bold">
+                <div className="flex justify-between lg:text-[22px] font-bold">
                   <span className="">Discount:</span>
                   <span className={discountAmount > 0 ? "text-green-400" : "text-white"}>
                     {discountAmount > 0 ? `-AED ${discountAmount.toFixed(2)}` : 'No discount applied'}
@@ -120,7 +120,7 @@ const CheckoutSummary = ({
                     <span>{promoCodeData.promoCode} ({promoCodeData.promoCodeId.percentageOff}% off)</span>
                   </div>
                 )}
-                <div className="flex justify-between text-[22px] font-bold">
+                <div className="flex justify-between lg:text-[22px] font-bold">
                   <span className="">Delivery Charge:</span>
                   <span className={`${
                     deliveryCharge === 0 ? "text-green-400" : "text-white"
@@ -129,7 +129,7 @@ const CheckoutSummary = ({
                   </span>
                 </div>
                 <div className="border-t border-gray-600 pt-2">
-                  <div className="flex justify-between text-[22px] font-bold text-lg">
+                  <div className="flex justify-between lg:text-[22px] font-bold text-lg">
                     <span className="text-white">Final Amount:</span>
                     <span className="text-white">AED {total.toFixed(2)}</span>
                   </div>

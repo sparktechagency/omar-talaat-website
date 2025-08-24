@@ -144,7 +144,7 @@ const Banner = () => {
 
   return (
     <>
-      <div className={`h-[800px] lg:h-[1200px] z-20 pt-32 lg:pt-60 ${bg} overflow-hidden relative`}>
+      <div className={`h-[800px] lg:h-[1200px] z-20 pt-28 lg:pt-60 ${bg} overflow-hidden relative`}>
         <div className="absolute inset-0">
           <div
             className="absolute inset-0 bg-cover bg-center mt-0 lg:mt-24"
@@ -159,12 +159,12 @@ const Banner = () => {
           {/* Logo */}
 
 
-          <div className="mb:2 lg:mb-8">
+          <div className=" lg:mb-8">
             <MainLogo
-              className={`w-32   h-36 lg:w-[168px] lg:h-[182px] mx-auto mb-8 `}
+              className={`w-24   h-24  lg:w-[168px] lg:h-[182px] mx-auto mb-8 `}
               color={svgColor}
             />
-            <h1 className={`text-[40px] md:text-6xl font-bold font-brush ${classes.text2} p-2 mb-2 lg:mb-6`}>
+            <h1 className={`text-[30px] md:text-4xl lg:text-6xl font-bold font-brush ${classes.text} lg:p-2 mb-0 lg:mb-6`}>
               Coral Stash
             </h1>
           </div>
@@ -191,7 +191,8 @@ const Banner = () => {
           {/* Countdown Timer */}
           <div className="flex items-center justify-center space-x-8 mb-6 lg:mb-12">
             <div className="text-center">
-              <div className="text-[40px] flex justify-center gap-3 items-center md:text-[40px] font-bold text-white mb-1">
+              <div className="text-4xl md:text-[40px] flex justify-center gap-3 items-center  font-bold text-white mb-1">
+
                 {formatTime(timeLeft.days)}
                 <div className="text-white text-3xl">:</div>
               </div>
@@ -236,7 +237,7 @@ const Banner = () => {
             {discountOffers?.map((offer) => (
               <div
                 key={offer._id}
-                className="flex items-center justify-between pr-10 backdrop-blur-[5px] bg-black/30 border-2 border-white/50 rounded-full px-6 h-[67px] py-4"
+                className="flex items-center justify-between pr-10 backdrop-blur-[5px] bg-black/30 border-2 border-white/50 rounded-full px-6 h-12 lg:h-[67px] py-3"
               >
                 <span className="text-white font-medium">{offer?.title}</span>
 

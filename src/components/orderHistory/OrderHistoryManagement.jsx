@@ -10,7 +10,7 @@ import Spinner from "@/app/(commonLayout)/Spinner";
 const OrderHistoryManagement = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(5);
+  const [pageSize] = useState(10);
   const { data: wallet } = useGetMyWalletQuery();
   const walletData = wallet?.data;
   const { plan, classes, svgColor } = getUserPlan(walletData);
@@ -40,7 +40,7 @@ const OrderHistoryManagement = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (isLoading) <Spinner />
+  if (isLoading) <Spinner />;
 
   return (
     <div className="min-h-screen bg-black/30 text-white p-6">
@@ -56,15 +56,17 @@ const OrderHistoryManagement = () => {
           <Spinner />
         ) : (
           <>
-            <div className="space-y-3 ">
-              {orderData.map((order) => (
-                <div className={`${classes.border} rounded-lg p-4 h-16`}>
+            <div className="space-y-3">
+              {orderData.map((order, index) => (
+                <div
+                  key={order?._id || index}
+                  className={`${classes.border} rounded-lg p-4 h-16 md:h-16`}
+                >
                   <div
-                    className={`${classes.inner} flex items-center  rounded-lg`}
+                    className={`${classes.inner} flex items-center rounded-lg`}
                   >
-                    {/* Left side (Order details) */}
-                    <div className="flex flex-wrap items-center justify-around w-full">
-
+                    {/* Desktop view - same as original */}
+                    <div className="hidden md:flex flex-wrap items-center justify-around w-full">
                       <p className="text-white font-medium">
                         Order Number:{" "}
                         {order?.orderId?.replace("PRD#", "") || "N/A"}
@@ -81,14 +83,39 @@ const OrderHistoryManagement = () => {
                       <p className="text-white text-sm">
                         Delivery Status: {order?.status || "Pending"}
                       </p>
-                       <div className="text-right">
-                      <p className="text-white font-bold text-lg">
-                        ${order?.finalAmount || order?.totalAmount || 160}
-                      </p>
-                    </div>
+                      <div className="text-right">
+                        <p className="text-white font-bold text-lg">
+                          ${order?.finalAmount || order?.totalAmount || 160}
+                        </p>
+                      </div>
                     </div>
 
-                   
+                    {/* Mobile view - responsive */}
+                    <div className="md:hidden grid grid-cols-2 gap-2 w-full">
+                      <div className="flex flex-col">
+                        <p className="text-white font-medium text-xs">
+                          Order: {order?.orderId?.replace("PRD#", "") || "N/A"}
+                        </p>
+                        <p className="text-white text-sm">
+                          Trans.ID: {order?._id?.slice(-8) || "N/A"}
+                        </p>
+                        <p className="text-white text-xs">
+                          Date: {formatDate(order.createdAt)}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <p className="text-white text-xs">
+                          Status: {order?.status || "Pending"}
+                        </p>
+                        <p className="text-white text-sm">
+                          Payment Via:{" "}
+                          {order?.paymentId?.paymentMethod || "Cash"}
+                        </p>
+                        <p className="text-white font-bold text-sm">
+                          ${order?.finalAmount || order?.totalAmount || 160}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -110,22 +137,50 @@ const OrderHistoryManagement = () => {
                   Prev
                 </button>
 
-                {/* Pages */}
-                {Array.from({ length: meta.totalPage }, (_, i) => i + 1).map(
-                  (page) => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`px-3 py-1 rounded-md border ${
-                        page === currentPage
-                          ? `${classes.bg} text-${classes.text2} `
-                          : `${classes.text} `
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  )
-                )}
+                {/* Pages - Desktop view (same as original) */}
+                <div className="hidden md:flex space-x-2">
+                  {Array.from({ length: meta.totalPage }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-3 py-1 rounded-md border ${
+                          page === currentPage
+                            ? `${classes.bg} text-${classes.text2} `
+                            : `${classes.text} `
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+                </div>
+
+                {/* Pages - Mobile view (simplified) */}
+                <div className="flex md:hidden space-x-1">
+                  {Array.from({ length: meta.totalPage }, (_, i) => i + 1)
+                    .filter((page) => {
+                      // Show only current page, first, last, and adjacent pages
+                      return (
+                        page === 1 ||
+                        page === meta.totalPage ||
+                        Math.abs(page - currentPage) <= 1
+                      );
+                    })
+                    .map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-2 py-1 text-xs rounded-md border ${
+                          page === currentPage
+                            ? `${classes.bg} text-${classes.text2} `
+                            : `${classes.text} `
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                </div>
 
                 {/* Next */}
                 <button
@@ -136,7 +191,6 @@ const OrderHistoryManagement = () => {
                   className={`px-3 py-1 rounded-md border ${
                     currentPage === meta.totalPage
                       ? `text-white/20 border border-white/20 cursor-not-allowed`
-
                       : `${classes.text} `
                   }`}
                 >

@@ -7,6 +7,7 @@ import { useGetSingleCategoryQuery } from "@/redux/featured/category/categoryApi
 import { useParams } from "next/navigation";
 import { getImageUrl } from "@/components/share/imageUrl";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const AllCategories = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -197,9 +198,12 @@ useEffect(() => {
                   onClick={() => handleCategoryClick(mineral)}
                 >
                   <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
-                    <img
-                      src={mineral.image}
+                    <Image
+                      src={getImageUrl(mineral.image)}
                       alt={mineral.name}
+                      height={130}
+                      width={130}
+
                       className="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-125"
                     />
                     {mineral.isLock && (
@@ -250,8 +254,11 @@ useEffect(() => {
             onClick={() => handleCategoryClick(mineral)}
           >
             <div className="w-[130px] h-[130px] aspect-square rounded-xl overflow-hidden relative transform transition-all duration-300 group-hover:border-white/30 shadow-2xl">
-              <img
+              <Image
                 src={getImageUrl(mineral.image)}
+                height={130}
+                width={130}
+
                 alt={mineral.name}
                 className="absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-125"
               />

@@ -11,10 +11,16 @@ import { getImageUrl } from "../share/imageUrl";
 import { useSearchParams } from "next/navigation";
 import { useGetMyAuctionsQuery, useCreateBidAuctionMutation } from "@/redux/featured/auctions/auctionsApi";
 import { toast } from "sonner";
+import { useGetMyWalletQuery } from "@/redux/featured/auth/authApi";
 
 const AuctionInterface = () => {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
+  const {data:myData}=useGetMyWalletQuery()
+  const userId=myData?.data?.userId
+  console.log(myData)
+
+
 
   // Get search term from URL params
   useEffect(() => {
@@ -162,9 +168,13 @@ useEffect(() => {
       const startDate = new Date(auction.startDate);
       const isStarted = now >= startDate;
       
+      // Determine if auction has ended
+      const isEnded = diffTime === 0 || auction.status === "ended";
+      
       // Determine status
       let status = "STARTING SOON";
-      if (isStarted) status = "LIVE";
+      if (isEnded) status = "ENDED";
+      else if (isStarted) status = "LIVE";
       
       return {
         id: auction._id,
@@ -175,8 +185,11 @@ useEffect(() => {
         creditsWorth: auction.creditWorth || 0,
         csAuraWorth: auction.csAuraWorth || 0,
         isStarted: isStarted,
+        isEnded: isEnded,
         timeLeft: { days, hours, minutes, seconds },
         image: auction.image,
+        winner: auction.winner,
+        originalAuction: auction, // Keep reference to original auction data
       };
     });
     
@@ -197,10 +210,25 @@ useEffect(() => {
     setAuctionData((prevData) => {
       let allEnded = true;
       const updated = prevData.map((auction) => {
+        // Don't update timer for already ended auctions
+        if (auction.isEnded) {
+          return auction;
+        }
+        
         const updatedTime = updateTimer(auction.timeLeft);
-        if (updatedTime !== auction.timeLeft) allEnded = false;
-        return { ...auction, timeLeft: updatedTime };
+        const isNowEnded = updatedTime.days === 0 && updatedTime.hours === 0 && 
+                          updatedTime.minutes === 0 && updatedTime.seconds === 0;
+        
+        if (!isNowEnded) allEnded = false;
+        
+        return { 
+          ...auction, 
+          timeLeft: updatedTime,
+          isEnded: isNowEnded,
+          status: isNowEnded ? "ENDED" : auction.status
+        };
       });
+      
       if (allEnded) {
         clearInterval(timerRef.current);
         timerRef.current = null;
@@ -224,10 +252,25 @@ useEffect(() => {
       setAuctionData((prevData) => {
         let allEnded = true;
         const updated = prevData.map((auction) => {
+          // Don't update timer for already ended auctions
+          if (auction.isEnded) {
+            return auction;
+          }
+          
           const updatedTime = updateTimer(auction.timeLeft);
-          if (updatedTime !== auction.timeLeft) allEnded = false;
-          return { ...auction, timeLeft: updatedTime };
+          const isNowEnded = updatedTime.days === 0 && updatedTime.hours === 0 && 
+                            updatedTime.minutes === 0 && updatedTime.seconds === 0;
+          
+          if (!isNowEnded) allEnded = false;
+          
+          return { 
+            ...auction, 
+            timeLeft: updatedTime,
+            isEnded: isNowEnded,
+            status: isNowEnded ? "ENDED" : auction.status
+          };
         });
+        
         if (allEnded) {
           clearInterval(timerRef.current);
           timerRef.current = null;
@@ -274,6 +317,8 @@ useEffect(() => {
   const getStatusBadgeColor = (status, type) => {
     if (status === "STARTED" || status === "LIVE") {
       return type === "premium" ? "bg-yellow-400" : "bg-green-400";
+    } else if (status === "ENDED") {
+      return "bg-red-500";
     }
     return "bg-yellow-400";
   };
@@ -283,6 +328,14 @@ useEffect(() => {
     setCurrentAuctionId(auctionId);
     setBidAmount("");
     setIsModalOpen(true);
+  };
+
+  // Handle checkout payment
+  const handleCheckoutPayment = (auctionId) => {
+    // You can implement payment checkout logic here
+    toast.success("Redirecting to payment checkout...");
+    // Example: redirect to payment page
+    // window.location.href = `/checkout/${auctionId}`;
   };
 
   // Handle bid submission
@@ -295,12 +348,6 @@ useEffect(() => {
         itemId: currentAuctionId,
         amount: Number(bidAmount)
       };
-      
-      // Mark this auction as having a pending bid
-      setPendingBids({
-        ...pendingBids,
-        [currentAuctionId]: true
-      });
       
       // Make API call to place bid
       const response = await createBidAuction(data).unwrap();
@@ -326,17 +373,9 @@ useEffect(() => {
         setBidInfo(newBidInfo);
       } else {
         toast.error("Failed to place bid");
-        // Remove pending status
-        const newPendingBids = { ...pendingBids };
-        delete newPendingBids[currentAuctionId];
-        setPendingBids(newPendingBids);
       }
     } catch (error) {
       toast.error(error?.data?.message || "Failed to place bid");
-      // Remove pending status
-      const newPendingBids = { ...pendingBids };
-      delete newPendingBids[currentAuctionId];
-      setPendingBids(newPendingBids);
     }
     
     // Close modal
@@ -394,7 +433,11 @@ useEffect(() => {
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-white text-sm sm:text-base">Auction Status:</span>
-                      <p className="underline text-sm sm:text-base"> {auction.status}</p>
+                      <div className={`px-2 py-1 rounded text-xs font-bold text-white ${
+                        getStatusBadgeColor(auction.status, auction.type)
+                      }`}>
+                        {auction.status}
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap">
@@ -438,40 +481,44 @@ useEffect(() => {
 
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
                       <span className="text-white font-semibold text-sm sm:text-base">
-                        {auction.isStarted
+                        {auction.isEnded
+                          ? "Auction Ended"
+                          : auction.isStarted
                           ? "Auction Ends in:"
                           : "Auction Starts in:"}
                       </span>
 
-                      <div className="flex gap-2 sm:gap-3 text-center">
-                        <div className="flex flex-col">
-                          <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-                            {String(auction.timeLeft.days).padStart(2, "0")}
-                          </span>
-                          <span className="text-white text-[10px] sm:text-xs">Days</span>
+                      {!auction.isEnded && (
+                        <div className="flex gap-2 sm:gap-3 text-center">
+                          <div className="flex flex-col">
+                            <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+                              {String(auction.timeLeft.days).padStart(2, "0")}
+                            </span>
+                            <span className="text-white text-[10px] sm:text-xs">Days</span>
+                          </div>
+                          <span className="text-2xl sm:text-3xl text-white">:</span>
+                          <div className="flex flex-col">
+                            <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+                              {String(auction.timeLeft.hours).padStart(2, "0")}
+                            </span>
+                            <span className="text-white text-[10px] sm:text-xs">Hours</span>
+                          </div>
+                          <span className="text-2xl sm:text-3xl text-white">:</span>
+                          <div className="flex flex-col">
+                            <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+                              {String(auction.timeLeft.minutes).padStart(2, "0")}
+                            </span>
+                            <span className="text-white text-[10px] sm:text-xs">Mins</span>
+                          </div>
+                          <span className="text-2xl sm:text-3xl text-white">:</span>
+                          <div className="flex flex-col">
+                            <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+                              {String(auction.timeLeft.seconds).padStart(2, "0")}
+                            </span>
+                            <span className="text-white text-[10px] sm:text-xs">Secs</span>
+                          </div>
                         </div>
-                        <span className="text-2xl sm:text-3xl text-white">:</span>
-                        <div className="flex flex-col">
-                          <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-                            {String(auction.timeLeft.hours).padStart(2, "0")}
-                          </span>
-                          <span className="text-white text-[10px] sm:text-xs">Hours</span>
-                        </div>
-                        <span className="text-2xl sm:text-3xl text-white">:</span>
-                        <div className="flex flex-col">
-                          <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-                            {String(auction.timeLeft.minutes).padStart(2, "0")}
-                          </span>
-                          <span className="text-white text-[10px] sm:text-xs">Mins</span>
-                        </div>
-                        <span className="text-2xl sm:text-3xl text-white">:</span>
-                        <div className="flex flex-col">
-                          <span className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-                            {String(auction.timeLeft.seconds).padStart(2, "0")}
-                          </span>
-                          <span className="text-white text-[10px] sm:text-xs">Secs</span>
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -518,19 +565,38 @@ useEffect(() => {
                     </div>
 
                     <div className="flex justify-center mt-6 sm:mt-10">
-                      <Button
-                        onClick={() => openBidModal(auction.id)}
-                        disabled={isPending}
-                        className={`w-full sm:w-auto ${
-                          auction.type === "premium"
-                            ? "border border-yellow-500 text-white hover:bg-yellow-500/20"
-                            : auction.type === "advance"
-                            ? "border border-purple-500 text-white hover:bg-purple-500/20"
-                            : "border text-white hover:bg-white/10"
-                        } transition-all duration-200`}
-                      >
-                        {isPending ? "Pending" : "Click Here to Place a Bid"}
-                      </Button>
+                      {auction.isEnded ? (
+                        // Show different button text based on winner
+                        auction.winner === userId ? (
+                           <Button
+                             onClick={() => handleCheckoutPayment(auction.id)}
+                             className={`w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white border-green-500 transition-all duration-200`}
+                           >
+                             Please Checkout Payment
+                           </Button>
+                        ) : (
+                          <Button
+                            disabled
+                            className={`w-full sm:w-auto bg-red-600 text-white border-red-500 cursor-not-allowed transition-all duration-200`}
+                          >
+                            You Lose
+                          </Button>
+                        )
+                      ) : (
+                        // Show normal bid button for active auctions
+                        <Button
+                          onClick={() => openBidModal(auction.id)}
+                          className={`w-full sm:w-auto ${
+                            auction.type === "premium"
+                              ? "border border-yellow-500 text-white hover:bg-yellow-500/20"
+                              : auction.type === "advance"
+                              ? "border border-purple-500 text-white hover:bg-purple-500/20"
+                              : "border text-white hover:bg-white/10"
+                          } transition-all duration-200`}
+                        >
+                          Click Here to Place a Bid
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
