@@ -33,6 +33,9 @@ export const cardVariants = {
 
 
 export const imageVariants = {
+  initial: {
+    scale: 1,
+  },
   hover: {
     scale: 1.05,
     transition: {
