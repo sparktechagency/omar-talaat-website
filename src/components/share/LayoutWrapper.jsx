@@ -14,7 +14,7 @@ const LayoutWrapper = ({ children }) => {
     "/register",
 
     "/forgot-password",
-    "/verify-otp",
+    "/otp-verify",
     "/reset-password",
     "/user-create",
     // "/contact",
