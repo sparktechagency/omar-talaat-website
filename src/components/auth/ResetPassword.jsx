@@ -169,13 +169,13 @@ export default function ResetPasswordCom() {
             </div>
 
             {/* Submit Button */}
-            <Button
+            <button
               type="submit"
-              className="w-full h-10 md:h-12 bg-button mt-6 md:mt-10"
+              className="w-full h-10 md:h-12 border mt-6 md:mt-10"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Updating..." : "Update Password"}
-            </Button>
+            </button>
           </form>
         </div>
       </div>

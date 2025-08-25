@@ -128,13 +128,13 @@ export default function LoginUser() {
             </div>
 
             {/* Sign In Button */}
-            <Button
+            <button
               type="submit"
-              className="w-full h-10 md:h-12 bg-button text-white rounded-md"
+              className="w-full h-10 md:h-12 border text-white rounded-md"
               disabled={isLoading}
             >
               {isLoading ? "Signing In..." : "Sign In"}
-            </Button>
+            </button>
 
             {/* Links */}
             <div className="flex justify-between text-sm text-center mt-6 md:mt-8 gap-4 md:gap-0">

@@ -109,13 +109,13 @@ export default function ForgotPassword() {
               </div>
 
               {/* Submit Button */}
-              <Button
+              <button
                 type="submit"
-                className="w-full h-10 md:h-12 bg-button mt-4 md:mt-6"
+                className="w-full h-10 md:h-12 border mt-4 md:mt-6"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Sending OTP..." : "Send OTP"}
-              </Button>
+              </button>
             </form>
           </div>
         </div>

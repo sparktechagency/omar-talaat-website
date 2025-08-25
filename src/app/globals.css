@@ -154,7 +154,7 @@
 
 /* Hover Effect */
 .bg-button:hover {
-  background: #8c1921;
+  /* background: ; */
   transform: scale(1.05);
 }
 .text-red {

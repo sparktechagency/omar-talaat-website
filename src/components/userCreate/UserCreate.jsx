@@ -94,7 +94,7 @@ export default function UserCreate() {
         } else {
           // Auto-login successful
           toast?.success("Welcome! You're now logged in.");
-          router.push("/dashboard"); // or wherever you want to redirect
+          router.push("/"); // or wherever you want to redirect
         }
       }
     } catch (error) {
