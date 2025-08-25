@@ -1,9 +1,13 @@
+import { Suspense } from "react";
 import ResetPasswordCom from "@/components/auth/ResetPassword";
+import Spinner from "@/app/(commonLayout)/Spinner";
 
 const page = () => {
   return (
     <div>
-      <ResetPasswordCom />
+      <Suspense fallback={<Spinner />}>
+        <ResetPasswordCom />
+      </Suspense>
     </div>
   );
 };
