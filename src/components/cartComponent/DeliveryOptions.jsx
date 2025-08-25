@@ -269,7 +269,7 @@ const DeliveryOptions = ({
                     />
                   </div>
                 </div>
-                <Button className="h-[42px] px-10 mt-[10px]">Submit</Button>
+                <Button className={`h-[42px] ${classes.border} rounded-2xl  mt-[10px]`}><span className={`${classes.inner} rounded-2xl py-1 px-9 `}>Check</span></Button>
               </div>
             </div>
           </div>

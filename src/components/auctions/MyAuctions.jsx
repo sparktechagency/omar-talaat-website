@@ -20,8 +20,6 @@ const AuctionInterface = () => {
   const userId=myData?.data?.userId
   console.log(myData)
 
-
-
   // Get search term from URL params
   useEffect(() => {
     const urlSearchTerm = searchParams.get("searchTerm") || "";
@@ -118,7 +116,6 @@ const AuctionInterface = () => {
     },
   }
 
-
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bidAmount, setBidAmount] = useState("");
@@ -131,127 +128,83 @@ const AuctionInterface = () => {
   // Payment mutation
   const [paymentAuction, { isLoading: isPaying }] = usePaymentAuctionMutation();
 
-
   const updateTimer = (timeLeft) => {
-  if (timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0) {
-    return timeLeft; 
-  }
+    if (timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0) {
+      return timeLeft; 
+    }
 
-  if (timeLeft.seconds > 0) {
-    return { ...timeLeft, seconds: timeLeft.seconds - 1 };
-  } else if (timeLeft.minutes > 0) {
-    return { ...timeLeft, minutes: timeLeft.minutes - 1, seconds: 59 };
-  } else if (timeLeft.hours > 0) {
-    return { ...timeLeft, hours: timeLeft.hours - 1, minutes: 59, seconds: 59 };
-  } else if (timeLeft.days > 0) {
-    return { ...timeLeft, days: timeLeft.days - 1, hours: 23, minutes: 59, seconds: 59 };
-  }
-  return timeLeft;
-};
-
+    if (timeLeft.seconds > 0) {
+      return { ...timeLeft, seconds: timeLeft.seconds - 1 };
+    } else if (timeLeft.minutes > 0) {
+      return { ...timeLeft, minutes: timeLeft.minutes - 1, seconds: 59 };
+    } else if (timeLeft.hours > 0) {
+      return { ...timeLeft, hours: timeLeft.hours - 1, minutes: 59, seconds: 59 };
+    } else if (timeLeft.days > 0) {
+      return { ...timeLeft, days: timeLeft.days - 1, hours: 23, minutes: 59, seconds: 59 };
+    }
+    return timeLeft;
+  };
 
   // Update auction data from API
-useEffect(() => {
-  if (data?.data && data.data.length > 0) {
-    const formattedData = data.data.map(auction => {
-      // Calculate time left
-      const endDate = new Date(auction.endDate);
-      const now = new Date();
-      const diffTime = Math.max(0, endDate - now);
-      const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
-      
-      // Determine auction type
-      let type = "normal";
-      if (auction.premiumMembership) type = "premium";
-      else if (auction.advanceMembership) type = "advance";
-      
-      // Determine if auction has started
-      const startDate = new Date(auction.startDate);
-      const isStarted = now >= startDate;
-      
-      // Determine if auction has ended
-      const isEnded = diffTime === 0 || auction.status === "ended";
-      
-      // Determine status
-      let status = "STARTING SOON";
-      if (isEnded) status = "ENDED";
-      else if (isStarted) status = "LIVE";
-      
-      return {
-        id: auction._id,
-        title: auction.name,
-        status: status,
-        type: type,
-        creditsUsed: auction.creditNeeds || 0,
-        creditsWorth: auction.creditWorth || 0,
-        csAuraWorth: auction.csAuraWorth || 0,
-        isStarted: isStarted,
-        isEnded: isEnded,
-        timeLeft: { days, hours, minutes, seconds },
-        image: auction.image,
-        winner: auction.winner,
-        originalAuction: auction, // Keep reference to original auction data
-      };
-    });
-    
-    setAuctionData(formattedData);
-  }
-}, [data]);
-
-// Update timers for all auctions
-useEffect(() => {
-  // Clear existing timer if any
-  if (timerRef.current) {
-    clearInterval(timerRef.current);
-  }
-
-  if (auctionData.length === 0) return;
-  
-  timerRef.current = setInterval(() => {
-    setAuctionData((prevData) => {
-      let allEnded = true;
-      const updated = prevData.map((auction) => {
-        // Don't update timer for already ended auctions
-        if (auction.isEnded) {
-          return auction;
-        }
+  useEffect(() => {
+    if (data?.data && data.data.length > 0) {
+      const formattedData = data.data.map(auction => {
+        // Calculate time left
+        const endDate = new Date(auction.endDate);
+        const now = new Date();
+        const diffTime = Math.max(0, endDate - now);
+        const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
         
-        const updatedTime = updateTimer(auction.timeLeft);
-        const isNowEnded = updatedTime.days === 0 && updatedTime.hours === 0 && 
-                          updatedTime.minutes === 0 && updatedTime.seconds === 0;
+        // Determine auction type
+        let type = "normal";
+        if (auction.premiumMembership) type = "premium";
+        else if (auction.advanceMembership) type = "advance";
         
-        if (!isNowEnded) allEnded = false;
+        // Determine if auction has started
+        const startDate = new Date(auction.startDate);
+        const isStarted = now >= startDate;
         
-        return { 
-          ...auction, 
-          timeLeft: updatedTime,
-          isEnded: isNowEnded,
-          status: isNowEnded ? "ENDED" : auction.status
+        // Determine if auction has ended
+        const isEnded = diffTime === 0 || auction.status === "ended";
+        
+        // Determine status
+        let status = "STARTING SOON";
+        if (isEnded) status = "ENDED";
+        else if (isStarted) status = "LIVE";
+        
+        return {
+          id: auction._id,
+          title: auction.name,
+          status: status,
+          type: type,
+          creditsUsed: auction.creditNeeds || 0,
+          creditsWorth: auction.creditWorth || 0,
+          csAuraWorth: auction.csAuraWorth || 0,
+          isStarted: isStarted,
+          isEnded: isEnded,
+          timeLeft: { days, hours, minutes, seconds },
+          image: auction.image,
+          winner: auction.winner,
+          originalAuction: auction, // Keep reference to original auction data
         };
       });
       
-      if (allEnded) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      return updated;
-    });
-  }, 1000);
+      setAuctionData(formattedData);
+    }
+  }, [data]);
 
-  return () => {
+  // Update timers for all auctions
+  useEffect(() => {
+    // Clear existing timer if any
     if (timerRef.current) {
       clearInterval(timerRef.current);
-      timerRef.current = null;
     }
-  };
-}, []); // Empty dependency array
 
-// Start timer when auctionData changes
-useEffect(() => {
-  if (auctionData.length > 0 && !timerRef.current) {
+    if (auctionData.length === 0) return;
+    
     timerRef.current = setInterval(() => {
       setAuctionData((prevData) => {
         let allEnded = true;
@@ -282,10 +235,63 @@ useEffect(() => {
         return updated;
       });
     }, 1000);
-  }
-}, [auctionData.length]);
 
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, []); // Empty dependency array
 
+  // Start timer when auctionData changes
+  useEffect(() => {
+    if (auctionData.length > 0 && !timerRef.current) {
+      timerRef.current = setInterval(() => {
+        setAuctionData((prevData) => {
+          let allEnded = true;
+          const updated = prevData.map((auction) => {
+            // Don't update timer for already ended auctions
+            if (auction.isEnded) {
+              return auction;
+            }
+            
+            const updatedTime = updateTimer(auction.timeLeft);
+            const isNowEnded = updatedTime.days === 0 && updatedTime.hours === 0 && 
+                              updatedTime.minutes === 0 && updatedTime.seconds === 0;
+            
+            if (!isNowEnded) allEnded = false;
+            
+            return { 
+              ...auction, 
+              timeLeft: updatedTime,
+              isEnded: isNowEnded,
+              status: isNowEnded ? "ENDED" : auction.status
+            };
+          });
+          
+          if (allEnded) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+          }
+          return updated;
+        });
+      }, 1000);
+    }
+  }, [auctionData.length]);
+
+  // Get animated border classes based on auction type
+  const getBorderTraceClasses = (type) => {
+    switch (type) {
+      case "premium":
+        return "border-trace border-trace-premium";
+      case "advance":
+        return "border-trace border-trace-advanced";
+      case "normal":
+      default:
+        return "border-trace border-trace-normal";
+    }
+  };
 
   // Get card styling based on auction type
   const getCardStyles = (type) => {
@@ -404,15 +410,14 @@ useEffect(() => {
       <Card className="bg-black text-white overflow-hidden mb-8 rounded-xl">
         <CardContent className="p-0">
           <div className="flex flex-col lg:flex-row gap-4 ">
-            {/* Image Section */}
+            {/* Image Section with Animated Border */}
             <div className="w-full lg:w-[300px] xl:w-[390px] flex-shrink-0">
-              <div className="relative w-full h-[250px] sm:h-[300px] lg:h-[350px]">
+              <div className={`relative w-full h-[250px] sm:h-[300px] lg:h-[350px] ${getBorderTraceClasses(auction.type)}`}>
                 <Image
-                // src={auction?.image}
                   src={getImageUrl(auction?.image)}
                   alt={auction?.title}
                   fill
-                  className={`object-cover rounded-xl ${styles.gradientBorder}`}
+                  className="object-cover rounded-xl"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 {auction.type === "premium" && (

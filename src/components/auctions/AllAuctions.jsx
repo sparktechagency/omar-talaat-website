@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { cardVariants, imageVariants } from "@/components/share/utils/motionVariants";
-import { useInView } from "framer-motion"; // ✅ Add this import
-import { useRef } from "react"; // ✅ Add this import
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
 const AllAuctions = ({
   setActiveTab,
@@ -20,11 +20,9 @@ const AllAuctions = ({
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   
-  // ✅ Add ref and inView hook like ProductCard
   const gridRef = useRef(null);
   const isGridInView = useInView(gridRef, { once: true, amount: 0.1 });
 
-  // Get search term from URL params
   useEffect(() => {
     const urlSearchTerm = searchParams.get("searchTerm") || "";
     setSearchTerm(urlSearchTerm);
@@ -89,10 +87,132 @@ const AllAuctions = ({
     }
   };
 
-  // ✅ Move AuctionCard component outside and add proper props
+  // Separate Timer Component to avoid full re-render
+  const TimerDisplay = ({ auction }) => {
+    const [timeData, setTimeData] = useState(null);
+    
+    useEffect(() => {
+      const updateTimer = () => {
+        const startTime = new Date(auction.startDate);
+        const endTime = new Date(auction.endDate);
+        const now = new Date();
+        
+        const startTimePassed = now >= startTime;
+        
+        let targetTime, timeLabel, currentPhase;
+        
+        if (!startTimePassed) {
+          targetTime = startTime;
+          timeLabel = "Starts In:";
+          currentPhase = "upcoming";
+        } else if (now < endTime) {
+          targetTime = endTime;
+          timeLabel = "Ends In:";
+          currentPhase = "active";
+        } else {
+          currentPhase = "ended";
+        }
+        
+        if (currentPhase === "ended") {
+          setTimeData({ 
+            isEnded: true, 
+            message: "Auction Ended!",
+            currentPhase 
+          });
+          return;
+        }
+        
+        const timeDiff = targetTime - now;
+        const isTimeUp = timeDiff <= 0;
+        
+        if (isTimeUp) {
+          if (currentPhase === "upcoming") {
+            setTimeData({ 
+              isTransition: true, 
+              message: "Auction Started!",
+              currentPhase 
+            });
+          } else {
+            setTimeData({ 
+              isEnded: true, 
+              message: "Auction Ended!",
+              currentPhase 
+            });
+          }
+          return;
+        }
+        
+        const days = Math.max(0, Math.floor(timeDiff / (1000 * 60 * 60 * 24)));
+        const hours = Math.max(0, Math.floor((timeDiff / (1000 * 60 * 60)) % 24));
+        const mins = Math.max(0, Math.floor((timeDiff / (1000 * 60)) % 60));
+        const secs = Math.max(0, Math.floor((timeDiff / 1000) % 60));
+        
+        setTimeData({
+          days,
+          hours,
+          mins,
+          secs,
+          timeLabel,
+          currentPhase,
+          isEnded: false,
+          isTransition: false
+        });
+      };
+      
+      updateTimer();
+      const interval = setInterval(updateTimer, 1000);
+      return () => clearInterval(interval);
+    }, [auction.startDate, auction.endDate]);
+    
+    if (!timeData) return null;
+    
+    if (timeData.isEnded || timeData.isTransition) {
+      return (
+        <div className="absolute bottom-0 left-0 right-0 p-3 rounded-b-2xl">
+          <div className="text-center">
+            <div className="text-white text-sm font-bold">{timeData.message}</div>
+          </div>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="absolute bottom-0 left-0 right-0 p-3 rounded-b-2xl">
+        <div className="text-center flex items-center px-6 justify-between">
+          <div className="text-white text-xs mb-1">{timeData.timeLabel}</div>
+          <div>
+            <div className="flex justify-center gap-1 text-white font-black font-mono">
+              <span className="px-2 py-1 rounded">
+                {String(timeData.days).padStart(2, "0")}
+              </span>
+              <span className="text-gray-400 font-black">:</span>
+              <span className="px-2 py-1 rounded">
+                {String(timeData.hours).padStart(2, "0")}
+              </span>
+              <span className="text-gray-400 font-black">:</span>
+              <span className="px-2 py-1 rounded">
+                {String(timeData.mins).padStart(2, "0")}
+              </span>
+              <span className="text-gray-400 font-black">:</span>
+              <span className="px-2 py-1 rounded">
+                {String(timeData.secs).padStart(2, "0")}
+              </span>
+            </div>
+            <div className="flex justify-center gap-4 text-xs font-black text-gray-300 mt-1">
+              <span>Days</span>
+              <span>Hours</span>
+              <span>Mins</span>
+              <span>Secs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const AuctionCard = ({ auction, index, isGridInView }) => {
     const [imageError, setImageError] = useState(false);
-    const [isHovered, setIsHovered] = useState(false); // ✅ Add hover state
+    const [isHovered, setIsHovered] = useState(false);
 
     const showMembershipOverlay =
       !auction.available &&
@@ -139,141 +259,13 @@ const AllAuctions = ({
       return null;
     };
 
-    // Separate Timer Component to avoid full re-render
-    const TimerDisplay = ({ auction }) => {
-      const [timeData, setTimeData] = useState(null);
-      
-      useEffect(() => {
-        const updateTimer = () => {
-          const startTime = new Date(auction.startDate);
-          const endTime = new Date(auction.endDate);
-          const now = new Date();
-          
-          const startTimePassed = now >= startTime;
-          
-          let targetTime, timeLabel, currentPhase;
-          
-          if (!startTimePassed) {
-            targetTime = startTime;
-            timeLabel = "Starts In:";
-            currentPhase = "upcoming";
-          } else if (now < endTime) {
-            targetTime = endTime;
-            timeLabel = "Ends In:";
-            currentPhase = "active";
-          } else {
-            currentPhase = "ended";
-          }
-          
-          if (currentPhase === "ended") {
-            setTimeData({ 
-              isEnded: true, 
-              message: "Auction Ended!",
-              currentPhase 
-            });
-            return;
-          }
-          
-          const timeDiff = targetTime - now;
-          const isTimeUp = timeDiff <= 0;
-          
-          if (isTimeUp) {
-            if (currentPhase === "upcoming") {
-              setTimeData({ 
-                isTransition: true, 
-                message: "Auction Started!",
-                currentPhase 
-              });
-            } else {
-              setTimeData({ 
-                isEnded: true, 
-                message: "Auction Ended!",
-                currentPhase 
-              });
-            }
-            return;
-          }
-          
-          const days = Math.max(0, Math.floor(timeDiff / (1000 * 60 * 60 * 24)));
-          const hours = Math.max(0, Math.floor((timeDiff / (1000 * 60 * 60)) % 24));
-          const mins = Math.max(0, Math.floor((timeDiff / (1000 * 60)) % 60));
-          const secs = Math.max(0, Math.floor((timeDiff / 1000) % 60));
-          
-          setTimeData({
-            days,
-            hours,
-            mins,
-            secs,
-            timeLabel,
-            currentPhase,
-            isEnded: false,
-            isTransition: false
-          });
-        };
-        
-        updateTimer();
-        const interval = setInterval(updateTimer, 1000);
-        return () => clearInterval(interval);
-      }, [auction.startDate, auction.endDate]);
-      
-      if (!timeData) return null;
-      
-      if (timeData.isEnded || timeData.isTransition) {
-        return (
-          <div className="absolute bottom-0 left-0 right-0 p-3 rounded-b-2xl">
-            <div className="text-center">
-              <div className="text-white text-sm font-bold">{timeData.message}</div>
-            </div>
-          </div>
-        );
-      }
-      
-      return (
-        <div className="absolute bottom-0 left-0 right-0 p-3 rounded-b-2xl">
-          <div className="text-center flex items-center px-6 justify-between">
-            <div className="text-white text-xs mb-1">{timeData.timeLabel}</div>
-            <div>
-              <div className="flex justify-center gap-1 text-white font-black font-mono">
-                <span className="px-2 py-1 rounded">
-                  {String(timeData.days).padStart(2, "0")}
-                </span>
-                <span className="text-gray-400 font-black">:</span>
-                <span className="px-2 py-1 rounded">
-                  {String(timeData.hours).padStart(2, "0")}
-                </span>
-                <span className="text-gray-400 font-black">:</span>
-                <span className="px-2 py-1 rounded">
-                  {String(timeData.mins).padStart(2, "0")}
-                </span>
-                <span className="text-gray-400 font-black">:</span>
-                <span className="px-2 py-1 rounded">
-                  {String(timeData.secs).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="flex justify-center gap-4 text-xs font-black text-gray-300 mt-1">
-                <span>Days</span>
-                <span>Hours</span>
-                <span>Mins</span>
-                <span>Secs</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    const getBorderStyle = () => {
-      if (auction.membership === "premium") {
-        return "border-2 border-[var(--premium)]";
-      } else if (auction.membership === "advanced") {
-        return "border-2 border-[var(--advanced)]";
-      }
-      return "border-2 border-[var(--normal)]";
+    // Get dynamic border-trace classes based on membership
+    const getBorderTraceClasses = (membership) => {
+      return `border-trace border-trace-${membership}`;
     };
 
     return (
       <motion.div
-        // ✅ Use the same motion setup as ProductCard
         variants={cardVariants}
         initial="hidden"
         animate={isGridInView ? "visible" : "hidden"}
@@ -285,11 +277,11 @@ const AllAuctions = ({
             : "cursor-default"
         }`}
         onClick={() => handleAuctionClick(auction)}
-        onMouseEnter={() => setIsHovered(true)} // ✅ Add hover handlers
+        onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div
-          className={`backdrop-blur-sm rounded-2xl overflow-hidden ${getBorderStyle()} transition-all duration-300 hover:transform hover:scale-[1.02]`} // ✅ Add hover scale
+          className={`backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-300 hover:transform hover:scale-[1.02] ${getBorderTraceClasses(auction.membership)}`}
         >
           <p className="text-white text-sm mt-2 ml-2 text-start">
             {auction.name}
@@ -298,7 +290,7 @@ const AllAuctions = ({
             {!imageError ? (
               <motion.div
                 variants={imageVariants}
-                whileHover="hover" // ✅ Use proper whileHover
+                whileHover="hover"
               >
                 <Image
                   src={getImageUrl(auction.image)}
@@ -312,7 +304,7 @@ const AllAuctions = ({
             ) : (
               <motion.div
                 variants={imageVariants}
-                whileHover="hover" // ✅ Use proper whileHover
+                whileHover="hover"
                 className="w-full h-full bg-[#181818] flex items-center justify-center relative"
               >
                 <div className="absolute inset-0 bg-black/20"></div>
@@ -394,7 +386,7 @@ const AllAuctions = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="bg-gray-800 rounded-2xl h-80"></div>
+            <div className="bg-gray-800 rounded-2xl h-80 border-trace border-trace-normal"></div>
           </div>
         ))}
       </div>
@@ -419,7 +411,7 @@ const AllAuctions = ({
 
   return (
     <motion.div
-      ref={gridRef} // ✅ Add ref to the grid container
+      ref={gridRef}
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
       initial="hidden"
       animate="show"
@@ -434,8 +426,8 @@ const AllAuctions = ({
         <AuctionCard 
           key={auction.id} 
           auction={auction} 
-          index={index} // ✅ Pass index prop
-          isGridInView={isGridInView} // ✅ Pass isGridInView prop
+          index={index}
+          isGridInView={isGridInView}
         />
       ))}
     </motion.div>

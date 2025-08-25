@@ -142,9 +142,9 @@ const CartItems = ({
 
                   {/* Edit button */}
                   <div className="flex items-center space-x-1 lg:space-x-1">
-                    <button className={`cursor-pointer transition-colors ${iconColor}`}>
+                    {/* <button className={`cursor-pointer transition-colors ${iconColor}`}>
                       <MdOutlineModeEdit size={24} className={`w-5 h-5 lg:w-7 lg:h-7 `} />
-                    </button>
+                    </button> */}
 
                     {/* Delete button */}
                     <button

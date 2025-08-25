@@ -190,15 +190,73 @@ body {
   position: absolute;
   inset: 0;
   padding: 3px; /* Border thickness */
-  border: 3px solid transparent; /* Fixed border space */
+  border: 1px solid transparent; /* Fixed border space */
+  border-radius: 0.75rem; /* Match rounded-xl */
   background: linear-gradient(90deg, #FEF488, transparent, #FEF488)
               border-box;
   background-size: 300% ;
+  /* -webkit-mask: */
+  /* linear-gradient(#000 100%, transparent 100%) content-box,
+  linear-gradient(#000 100%, transparent 100%);
+  -webkit-mask-composite: destination-out; */
+  mask-composite: exclude;
+  animation: borderMove 5s linear infinite;
+  z-index: -1;
+}
+
+/* Premium Membership Border - Gold */
+.border-trace-premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  border: 1px solid transparent;
+  background: linear-gradient(90deg, #FFD700, transparent, #FFD700)
+              border-box;
+  background-size: 300%;
   -webkit-mask:
   linear-gradient(#000 100%, transparent 100%) content-box,
   linear-gradient(#000 100%, transparent 100%);
--webkit-mask-composite: destination-out;
-mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: borderMove 5s linear infinite;
+  z-index: 1;
+}
+
+/* Advanced Membership Border - Cyan */
+.border-trace-advanced::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  border: 1px solid transparent;
+  background: linear-gradient(90deg, #00FFFF, transparent, #00FFFF)
+              border-box;
+  background-size: 300%;
+  -webkit-mask:
+  linear-gradient(#000 100%, transparent 100%) content-box,
+  linear-gradient(#000 100%, transparent 100%);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: borderMove 5s linear infinite;
+  z-index: 1;
+}
+
+/* Normal Membership Border - White */
+.border-trace-normal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  border: 1px solid transparent;
+  background: linear-gradient(90deg, #FFFFFF, transparent, #FFFFFF)
+              border-box;
+  background-size: 300%;
+  -webkit-mask:
+  linear-gradient(#000 100%, transparent 100%) content-box,
+  linear-gradient(#000 100%, transparent 100%);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
   animation: borderMove 5s linear infinite;
   z-index: 1;
 }
