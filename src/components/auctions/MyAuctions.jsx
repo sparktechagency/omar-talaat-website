@@ -31,50 +31,13 @@ const AuctionInterface = () => {
 
   const timerRef = useRef(null);
 
-  // Auction data state
-  const [auctionData, setAuctionData] = useState([
-    {
-      id: 1,
-      title: "PLUM TREE ACRO CHUNK",
-      status: "STARTED",
-      type: "normal", // normal, advance, premium
-      creditsUsed: 235,
-      creditsWorth: 1000,
-      csAuraWorth: 90,
-      isStarted: true,
-      timeLeft: { days: 0, hours: 2, minutes: 45, seconds: 30 },
-      image: "/assets/category1.png",
-    },
-    {
-      id: 2,
-      title: "RAINBOW ACRO FRAG",
-      status: "STARTING SOON",
-      type: "advance", // normal, advance, premium
-      creditsUsed: 180,
-      creditsWorth: 800,
-      csAuraWorth: 75,
-      isStarted: false,
-      timeLeft: { days: 0, hours: 1, minutes: 15, seconds: 0 },
-      image: "/assets/category1.png",
-    },
-    {
-      id: 3,
-      title: "PREMIUM GOLD TORCH",
-      status: "LIVE",
-      type: "premium", // normal, advance, premium
-      creditsUsed: 450,
-      creditsWorth: 1500,
-      csAuraWorth: 120,
-      isStarted: true,
-      timeLeft: { days: 1, hours: 5, minutes: 30, seconds: 45 },
-      image: "/assets/category1.png",
-    },
-  ]);
+  // Auction data state - Only from API, no dummy data
+  const [auctionData, setAuctionData] = useState([]);
+  
   // Bid information state
   const [bidInfo, setBidInfo] = useState({});
 
-  
-  // Initialize bid info from API data
+  // Initialize bid info from API data only
   useEffect(() => {
     if (data?.data && data.data.length > 0) {
       const newBidInfo = {};
@@ -93,28 +56,6 @@ const AuctionInterface = () => {
       setBidInfo(newBidInfo);
     }
   }, [data]);
-  
-  // Legacy bid info structure for compatibility
-  const legacyBidInfo = {
-    1: {
-      totalBids: 3,
-      myLatestBid: "AED 250",
-      currentLeadingBid: "AED 316",
-      currentHighestBidder: "Sabbir Ahmed",
-    },
-    2: {
-      totalBids: 1,
-      myLatestBid: "AED 150",
-      currentLeadingBid: "AED 200",
-      currentHighestBidder: "Rashid Khan",
-    },
-    3: {
-      totalBids: 8,
-      myLatestBid: "AED 500",
-      currentLeadingBid: "AED 750",
-      currentHighestBidder: "Ahmed Ali",
-    },
-  }
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -145,7 +86,7 @@ const AuctionInterface = () => {
     return timeLeft;
   };
 
-  // Update auction data from API
+  // Update auction data from API only
   useEffect(() => {
     if (data?.data && data.data.length > 0) {
       const formattedData = data.data.map(auction => {
@@ -193,6 +134,9 @@ const AuctionInterface = () => {
       });
       
       setAuctionData(formattedData);
+    } else {
+      // Clear auction data if no data from API
+      setAuctionData([]);
     }
   }, [data]);
 
@@ -403,7 +347,7 @@ const AuctionInterface = () => {
 
   const AuctionCard = ({ auction }) => {
     const styles = getCardStyles(auction.type);
-    const bidData = bidInfo[auction.id] || legacyBidInfo[auction.id];
+    const bidData = bidInfo[auction.id]; // Only use API bid data
     const isPending = pendingBids[auction.id];
 
     return (
@@ -554,21 +498,21 @@ const AuctionInterface = () => {
                           Total Number of Bids:
                         </span>
                         <span className="text-white font-semibold">
-                          {bidData?.totalBids} Bid(s)
+                          {bidData?.totalBids || 0} Bid(s)
                         </span>
                       </div>
 
                       <div className="flex justify-between flex-wrap gap-1">
                         <span className="text-white">My Latest Bid:</span>
                         <span className="font-semibold">
-                          {bidData?.myLatestBid}
+                          {bidData?.myLatestBid || "No bids yet"}
                         </span>
                       </div>
 
                       <div className="flex justify-between flex-wrap gap-1">
                         <span className="text-white">Current Leading Bid:</span>
                         <span className="font-semibold">
-                          {bidData?.currentLeadingBid}
+                          {bidData?.currentLeadingBid || "No bids yet"}
                         </span>
                       </div>
 
@@ -577,7 +521,7 @@ const AuctionInterface = () => {
                           Current Highest Bidder:
                         </span>
                         <span className="text-white font-semibold">
-                          {bidData?.currentHighestBidder}
+                          {bidData?.currentHighestBidder || "No bidder yet"}
                         </span>
                       </div>
                     </div>
@@ -638,7 +582,11 @@ const AuctionInterface = () => {
             <AuctionCard key={auction?.id} auction={auction} />
           ))
         ) : (
-          <div className="text-white text-center py-10">No auctions available</div>
+          <div className="text-white text-center py-20">
+            <div className="text-6xl mb-4">📭</div>
+            <h2 className="text-2xl font-bold mb-2">No Data Available</h2>
+            <p className="text-gray-400">There are no auctions to display at the moment.</p>
+          </div>
         )}
       </div>
 

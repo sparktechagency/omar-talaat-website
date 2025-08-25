@@ -343,7 +343,7 @@ const CountdownProgressTracker = ({
                     duration: 1.6,
                   }}
                 >
-                  {wallet?.cmPoints || 7}
+                  {wallet?.cmPoints || 0}
                 </motion.span>
 
                 {isHovered && (
