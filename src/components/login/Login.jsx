@@ -51,7 +51,7 @@ export default function LoginUser() {
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row justify-center">
       {/* Left side image */}
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center">
+      {/* <div className="hidden lg:flex lg:w-1/2 items-center justify-center">
         <div className="h-auto max-h-[700px] w-full max-w-[700px] p-4">
           <Image
             src="/assests/loginImage.png"
@@ -62,11 +62,11 @@ export default function LoginUser() {
             priority
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Right side form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8">
-        <div className="border border-white/40 backdrop-blur-md rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
+        <div className="  rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
           <div className="flex justify-center mb-4">
             {/* <Image
               src="/assests/logo.png"
@@ -94,7 +94,7 @@ export default function LoginUser() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full py-2 md:py-6 text-black bg-white border border-red-700"
+                className="w-full py-2 md:py-6 text-white border "
                 required
               />
             </div>
@@ -114,7 +114,7 @@ export default function LoginUser() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full py-2 md:py-6 text-black bg-white border border-red-700"
+                  className="w-full py-2 md:py-6 text-white border "
                   required
                 />
                 <button
