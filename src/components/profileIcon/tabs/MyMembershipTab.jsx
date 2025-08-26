@@ -9,6 +9,8 @@ import {
 
 export default function MyMembershipTab() {
   const { data, isLoading } = useGetSubscriptionApiQuery();
+  console.log(data)
+
   const [subscriptionCheckout, { isLoading: creating } ] =
     useSubscriptionCheckoutMutation();
 
@@ -49,13 +51,13 @@ export default function MyMembershipTab() {
             <Card
               key={pkg?._id || idx}
               className={`bg-transparent rounded-2xl overflow-hidden h-full border-2 ${
-                isPremium ? "border-cyan-400" : "border-yellow-400"
+                isPremium ? "#facc15" : "#22d3ee"
               }`}
             >
               <CardContent className="lg:p-8 p-4 text-center h-full flex flex-col">
                 <h4
                   className={`lg:text-2xl text-xl font-bold lg:mb-4 mb-2 ${
-                    isPremium ? "text-cyan-400" : "text-yellow-400"
+                    isPremium ? "text-yellow-400" : "text-cyan-400"
                   }`}
                 >
                   {pkg?.title || "Membership"}
@@ -63,7 +65,7 @@ export default function MyMembershipTab() {
 
                 <MainLogo
                   className="w-12 h-12 lg:w-20 lg:h-20 mx-auto lg:mb-6 mb-2"
-                  color={isPremium ? "#22d3ee" : "#facc15"}
+                  color={isPremium ? "#facc15" : "#22d3ee"}
                 />
 
                 <p className="text-gray-300 lg:mb-6 mb-3 text-sm leading-relaxed flex-grow">
@@ -90,9 +92,9 @@ export default function MyMembershipTab() {
                     disabled={creating}
                     onClick={() => handleCheckout(pkg?._id)}
                     className={`w-full text-black font-bold py-4 rounded-xl text-lg transition-all duration-200 ${
-                      idx % 2 === 0
-                        ? "bg-cyan-400 hover:bg-cyan-500"
-                        : "bg-yellow-400 hover:bg-yellow-500"
+                      isPremium
+                        ? "bg-yellow-400 hover:bg-yellow-500"
+                        : "bg-cyan-400 hover:bg-cyan-500"
                     }`}
                   >
                     {`AED ${pkg?.price ?? "--"}`}
