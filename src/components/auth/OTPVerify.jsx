@@ -203,9 +203,9 @@ export default function OTPVerify() {
             <button
               type="submit"
               className="w-full h-10 md:h-12 border text-white  rounded-lg mt-6 md:mt-10"
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
-              {isSubmitting ? "Verifying..." : "Verify OTP"}
+              {isLoading ? "Verifying..." : "Verify OTP"}
             </button>
           </form>
         </div>

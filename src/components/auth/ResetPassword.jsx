@@ -15,7 +15,7 @@ export default function ResetPasswordCom() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
   const searchParams = useSearchParams();
   const email = searchParams.get("email"); 
   const router = useRouter();
@@ -160,9 +160,9 @@ export default function ResetPasswordCom() {
             <button
               type="submit"
               className="w-full h-10 md:h-12 border rounded-lg text-white  mt-6 "
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
-              {isSubmitting ? "Updating..." : "Update Password"}
+              {isLoading ? "Updating..." : "Update Password"}
             </button>
           </form>
         </div>

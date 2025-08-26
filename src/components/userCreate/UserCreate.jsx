@@ -152,27 +152,28 @@ export default function UserCreate() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row justify-center">
+    <div className=" w-full flex flex-col lg:flex-row justify-center">
       {/* Right side form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8">
-        <div className="rounded-lg p-6 md:p-8 w-full mx-auto">
-          <div className="flex justify-center mb-4">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 ">
+        <div className="rounded-lg p-2 xl:p-6 w-full mx-auto">
+          <div className="flex justify-center mb-2lxl:mb-4">
             <MainLogo className="w-20 h-20" />
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center text-white">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 xl:mb-6 text-center text-white">
             Create an account
           </h2>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-5 grid grid-cols-1 md:grid-cols-2 gap-4"
+            className="xl:space-y-2 grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             {/* First Name */}
             <div>
               <label htmlFor="firstName" className="block text-sm mb-2 text-white">
                 First Name*
               </label>
+              <p className="text-[12px] text-white mb-2">(Your First Name will be fully anonymous)</p>
               <Input
                 id="firstName"
                 placeholder="Enter your first name"
@@ -202,6 +203,8 @@ export default function UserCreate() {
               <label htmlFor="lastName" className="block text-sm mb-2 text-white">
                 Last Name*
               </label>
+              <p className="text-[12px] text-white mb-2">(Your Last Name will be fully anonymous)</p>
+
               <Input
                 id="lastName"
                 placeholder="Enter your last name"
@@ -231,6 +234,8 @@ export default function UserCreate() {
               <label htmlFor="userName" className="block text-sm mb-2 text-white">
                 Username*
               </label>
+              <p className="text-[12px] text-white mb-2">(Your Username can be viewed by the public through the Leaderboard)</p>
+
               <Input
                 id="userName"
                 placeholder="Enter your username"
@@ -264,6 +269,8 @@ export default function UserCreate() {
               <label htmlFor="email" className="block text-sm mb-2 text-white">
                 Email Address*
               </label>
+              <p className="text-[12px] text-white mb-2">(Your Email Address will be fully anonymous)</p>
+
               <Input
                 id="email"
                 placeholder="Enter your email address"
@@ -318,7 +325,7 @@ export default function UserCreate() {
             {/* Delivery Address */}
             <div>
               <label htmlFor="deliveryAddress" className="block text-sm mb-2 text-white">
-                Delivery Address*
+                Delivered to*
               </label>
               <textarea
                 id="deliveryAddress"
@@ -437,7 +444,7 @@ export default function UserCreate() {
             <div className="col-span-1 md:col-span-2 flex justify-center items-center">
               <Button
                 type="submit"
-                className="text-white border w-full md:w-60 h-10 md:h-12 rounded-md my-4 md:my-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-white border w-full md:w-60 lg:w-80 h-10 md:h-12 rounded-md my-2 md:my-3 lg:my-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -456,7 +463,7 @@ export default function UserCreate() {
           </form>
 
           {registrationStatus && (
-            <div className={`text-center mt-4 p-3 rounded ${
+            <div className={`text-center xl:mt-4 px-3 rounded ${
               registrationStatus.includes("successfully") || registrationStatus.includes("created") 
                 ? "text-green-500 bg-green-100/10" 
                 : "text-red-500 bg-red-100/10"

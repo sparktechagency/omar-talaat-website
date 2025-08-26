@@ -102,9 +102,11 @@ export default function ForgotPassword() {
               <button
                 type="submit"
                 className="w-full h-10 md:h-12 text-white rounded-lg border mt-4 md:mt-6"
-                disabled={isSubmitting}
+                disabled={isLoading}
+
               >
-                {isSubmitting ? "Sending OTP..." : "Send OTP"}
+                {isLoading ? "Sending OTP..." : "Send OTP"}
+
               </button>
             </form>
           </div>
