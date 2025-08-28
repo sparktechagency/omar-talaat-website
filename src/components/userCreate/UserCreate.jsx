@@ -152,7 +152,7 @@ export default function UserCreate() {
   };
 
   return (
-    <div className=" w-full flex flex-col lg:flex-row justify-center">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row justify-center bg-black">
       {/* Right side form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 ">
         <div className="rounded-lg p-2 xl:p-6 w-full mx-auto">

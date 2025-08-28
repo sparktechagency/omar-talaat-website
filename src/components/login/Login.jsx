@@ -49,7 +49,7 @@ export default function LoginUser() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row justify-center">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row justify-center bg-black">
       {/* Left side image */}
       {/* <div className="hidden lg:flex lg:w-1/2 items-center justify-center">
         <div className="h-auto max-h-[700px] w-full max-w-[700px] p-4">
