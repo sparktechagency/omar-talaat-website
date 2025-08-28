@@ -135,6 +135,48 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Ensure input fields allow text selection */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  textarea {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    cursor: text !important;
+  }
+  
+  /* Enhanced text selection styling */
+  input[type="text"]::selection,
+  input[type="email"]::selection,
+  input[type="password"]::selection,
+  input[type="number"]::selection,
+  input[type="tel"]::selection,
+  input[type="url"]::selection,
+  input[type="search"]::selection,
+  textarea::selection {
+    background-color: #3b82f6 !important; /* Blue-500 */
+    color: white !important;
+  }
+  
+  /* For webkit browsers */
+  input[type="text"]::-moz-selection,
+  input[type="email"]::-moz-selection,
+  input[type="password"]::-moz-selection,
+  input[type="number"]::-moz-selection,
+  input[type="tel"]::-moz-selection,
+  input[type="url"]::-moz-selection,
+  input[type="search"]::-moz-selection,
+  textarea::-moz-selection {
+    background-color: #3b82f6 !important; /* Blue-500 */
+    color: white !important;
+  }
 }
 
 

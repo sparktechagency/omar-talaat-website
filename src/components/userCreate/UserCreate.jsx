@@ -188,8 +188,9 @@ export default function UserCreate() {
                     message: "First name can only contain letters and spaces"
                   }
                 })}
-                className="w-full py-6 text-white border rounded-lg"
+                className="w-full py-6 text-white border rounded-lg select-text"
                 disabled={isLoading}
+                
               />
               {errors.firstName && (
                 <p className="text-red-500 text-xs mt-1">
